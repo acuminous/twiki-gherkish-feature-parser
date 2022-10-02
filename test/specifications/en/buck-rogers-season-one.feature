@@ -3,6 +3,9 @@
 @library=Buck Rogers Season One
 Feature: Buck Rogers - Season One
 
+Buck Rogers season one comprising of 24 episodes.
+It was first aired on September 20th, 1979.
+
 @timeout=5000
 Background: Introduction
   Given the year is 1987
