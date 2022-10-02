@@ -45,11 +45,12 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
       - name: Code Climate
-        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        run: chmod +x ./cc-test-reporter
-        run: ./cc-test-reporter before-build
-        run: npm run coverage
-        run: ./cc-test-reporter format-coverage -t lcov coverage/lcov.info
-        run: ./cc-test-reporter upload-coverage
+        run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter before-build
+          npm run coverage
+          ./cc-test-reporter format-coverage -t lcov coverage/lcov.info
+          ./cc-test-reporter upload-coverage
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
