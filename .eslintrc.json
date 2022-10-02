@@ -19,7 +19,6 @@
     "prefer-destructuring": 0,
     "max-len": 0,
     "object-curly-newline": 0,
-    "no-extra-semi": 0,
     "padded-blocks": 0,
     "object-curly-spacing": 0
   }
