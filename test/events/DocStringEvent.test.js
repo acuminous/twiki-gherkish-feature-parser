@@ -1,7 +1,7 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
 import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js'
+import StubState from '../stubs/StubState.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { DocStringEvent } = Events;

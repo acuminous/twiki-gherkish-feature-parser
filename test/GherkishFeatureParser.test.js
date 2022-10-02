@@ -8,7 +8,7 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 
 describe('FeatureParser', () => {
   it('should parse English by default', () => {
-    const file = readFeatureFile('buck-rogers-season-one.feature')
+    const file = readFeatureFile('buck-rogers-season-one.feature');
     const parser = new GherkishFeatureParser();
     const feature = parser.parse(file);
 
@@ -96,8 +96,8 @@ describe('FeatureParser', () => {
           ]
         }
       ]
-    })
-  })
+    });
+  });
 });
 
 function readFeatureFile(filename) {

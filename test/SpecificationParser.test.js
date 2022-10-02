@@ -2,7 +2,7 @@ import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
 import { SpecificationParser, Languages, StateMachine } from '../lib/index.js';
-import StubState from './stubs/StubState.js'
+import StubState from './stubs/StubState.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 

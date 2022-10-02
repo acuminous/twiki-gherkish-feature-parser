@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint-config-airbnb-base", "prettier"],
+  "extends": ["eslint-config-airbnb-base"],
   "env": {
     "node": true
   },
@@ -16,6 +16,16 @@
     "no-underscore-dangle": 0,
     "no-unused-vars": ["error", { "varsIgnorePattern": "^debug|xdescribe|xit|odescribe|oit|before|beforeEach|after|afterEach|eq|deq$", "argsIgnorePattern": "^_\\w+" }],
     "no-use-before-define": 0,
-    "prefer-destructuring": 0
+    "prefer-destructuring": 0,
+    "max-len": 0,
+    "object-curly-newline": 0,
+    "no-extra-semi": 0,
+    "quotes": 0,
+    "comma-dangle": 0,
+    "key-spacing": 0,
+    "padded-blocks": 0,
+    "eol-last": 0,
+    "no-multi-spaces": 0,
+    "object-curly-spacing": 0
   }
 }
