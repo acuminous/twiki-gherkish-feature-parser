@@ -8,10 +8,10 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 
 describe('FeatureParser', () => {
   it('should parse English by default', () => {
-    const file = readFeatureFile('buck-rogers-season-one.feature');
-    const parser = new GherkishFeatureParser();
-    const actual = parser.parse(file);
     const expected = readJsonFile('buck-rogers-season-one.json');
+    const source = readFeatureFile('buck-rogers-season-one.feature');
+    const parser = new GherkishFeatureParser();
+    const actual = parser.parse(source);
 
     deq(actual, expected);
   });
