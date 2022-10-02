@@ -22,7 +22,7 @@ describe('FeatureParser', () => {
       description: undefined,
       background: {
         annotations: [
-          { name: 'timeout', value:"5000" },
+          { name: 'timeout', value:'5000' },
         ],
         title: 'Introduction',
         description: undefined,

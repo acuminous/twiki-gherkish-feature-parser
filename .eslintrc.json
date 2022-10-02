@@ -20,7 +20,6 @@
     "max-len": 0,
     "object-curly-newline": 0,
     "no-extra-semi": 0,
-    "quotes": 0,
     "comma-dangle": 0,
     "key-spacing": 0,
     "padded-blocks": 0,
