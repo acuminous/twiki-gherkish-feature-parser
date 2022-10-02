@@ -21,7 +21,6 @@
     "object-curly-newline": 0,
     "no-extra-semi": 0,
     "padded-blocks": 0,
-    "eol-last": 0,
     "no-multi-spaces": 0,
     "object-curly-spacing": 0
   }
