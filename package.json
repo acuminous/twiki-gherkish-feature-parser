@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "coverage": "nyc --report html --reporter lcov --reporter text-summary npm test",
+    "coverage": "NODE_OPTIONS='--experimental-loader @istanbuljs/esm-loader-hook' nyc --report html --reporter lcov --reporter text-summary npm test",
     "test": "zUnit",
     "lint": "eslint .",
     "prepare": "husky install"
@@ -27,6 +27,7 @@
   "author": "Stephen Cresswell",
   "license": "ISC",
   "devDependencies": {
+    "@istanbuljs/esm-loader-hook": "^0.2.0",
     "eslint": "^8.24.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
