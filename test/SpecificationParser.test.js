@@ -246,7 +246,7 @@ describe('Specification Parser', () => {
 
   it('should not allow multiple DocStrings in scenario steps', () => {
     const text = ['@skip', 'Feature: Some feature', '', '   Scenario: First scenario', '      First step', '         ---', '         DocString 1', '            DocString 2', '         DocString 3   ', '         ---', '         ---', '         Should error', '         ---', '     Second step'].join(
-      os.EOL
+      os.EOL,
     );
 
     throws(() => new SpecificationParser().parse(text), { message: "'         ---' was unexpected in state: AfterScenarioStepDocStringState on line 11'" });

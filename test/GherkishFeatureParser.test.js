@@ -31,71 +31,71 @@ describe('FeatureParser', () => {
             annotations: [],
             text: 'Given the year is 1987',
             generalised: 'Given the year is 1987',
-            docString: ''
+            docString: '',
           },
           {
             annotations: [],
             text: 'And NASA launches the last of America\'s deep space probes',
             generalised: 'And NASA launches the last of America\'s deep space probes',
-            docString: ''
+            docString: '',
           },
           {
             annotations: [
-              { name: 'skip', value: true }
+              { name: 'skip', value: true },
             ],
             text: 'When a freak mishap occurs',
             generalised: 'When a freak mishap occurs',
-            docString: ''
+            docString: '',
           },
           {
             annotations: [],
             text: 'Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems',
             generalised: 'Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems',
-            docString: ''
+            docString: '',
           },
           {
             annotations: [],
             text: 'And returns Buck Rogers to Earth 500 years later',
             generalised: 'And returns Buck Rogers to Earth 500 years later',
-            docString: ''
+            docString: '',
           },
-        ]
+        ],
       },
       scenarios: [
         {
           title: 'Awakening',
           description: undefined,
           annotations: [
-            { name: 'skip', value: true }
+            { name: 'skip', value: true },
           ],
           steps: [
             {
               annotations: [],
               text: 'Given the Draconians have planted a homing beacon aboard Buck\'s shuttle',
               generalised: 'Given the Draconians have planted a homing beacon aboard Buck\'s shuttle',
-              docString: ''
+              docString: '',
             },
             {
               annotations: [],
               text: 'When Buck arrives on Earth',
               generalised: 'When Buck arrives on Earth',
-              docString: ''
+              docString: '',
             },
             {
               annotations: [],
               text: 'Then he must adjust to the 25th century',
               generalised: 'Then he must adjust to the 25th century',
-              docString: ''
+              docString: '',
             },
             {
               annotations: [],
               text: 'And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them',
               generalised: 'And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them',
-              docString: ''
-            }
-          ]
-        }
-      ]
+              docString: '',
+            },
+          ],
+        },
+      ],
     });
   });
 });
