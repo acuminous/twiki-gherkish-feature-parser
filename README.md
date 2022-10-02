@@ -1,4 +1,4 @@
-# twiki-gherkish-parser
+# twiki-gherkish-feature-parser
 
 ## TL;DR
 ```js
