@@ -42,8 +42,8 @@ jobs:
           path: ./node_modules
           key: npm-${{ hashFiles('package-lock.json') }}
       - name: Install Dependencies
-          if: steps.cache.outputs.cache-hit != 'true'
-          run: npm ci --ignore-scripts
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
       - name: Code Climate
         run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         run: chmod +x ./cc-test-reporter
