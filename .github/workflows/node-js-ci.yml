@@ -20,12 +20,12 @@ jobs:
           path: ./node_modules
           key: npm-${{ hashFiles('package-lock.json') }}
       - name: Install Dependencies
-          if: steps.cache.outputs.cache-hit != 'true'
-          run: npm ci --ignore-scripts
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
       - name: Lint
-          run: npm run lint
+        run: npm run lint
       - name: Tests
-          run: npm test
+        run: npm test
 
   code-climate:
     needs: build
@@ -45,11 +45,11 @@ jobs:
           if: steps.cache.outputs.cache-hit != 'true'
           run: npm ci --ignore-scripts
       - name: Code Climate
-          run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          run: chmod +x ./cc-test-reporter
-          run: ./cc-test-reporter before-build
-          run: npm run coverage
-          run: ./cc-test-reporter format-coverage -t lcov coverage/lcov.info
-          run: ./cc-test-reporter upload-coverage
-          env:
-            CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        run: chmod +x ./cc-test-reporter
+        run: ./cc-test-reporter before-build
+        run: npm run coverage
+        run: ./cc-test-reporter format-coverage -t lcov coverage/lcov.info
+        run: ./cc-test-reporter upload-coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
