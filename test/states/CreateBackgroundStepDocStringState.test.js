@@ -1,7 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
-import {  SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { CreateBackgroundStepDocStringState } = States;
