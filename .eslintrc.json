@@ -1,0 +1,21 @@
+{
+  "extends": ["eslint-config-airbnb-base", "prettier"],
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "2020"
+  },
+  "rules": {
+    "import/extensions": 0,
+    "class-methods-use-this": 0,
+    "no-prototype-builtins": 0,
+    "no-control-regex": 0,
+    "no-param-reassign": ["error", { "ignorePropertyModificationsFor": ["session"] }],
+    "no-plusplus": 0,
+    "no-underscore-dangle": 0,
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^debug|xdescribe|xit|odescribe|oit|before|beforeEach|after|afterEach|eq|deq$", "argsIgnorePattern": "^_\\w+" }],
+    "no-use-before-define": 0,
+    "prefer-destructuring": 0
+  }
+}
