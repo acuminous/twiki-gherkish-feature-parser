@@ -76,7 +76,7 @@ describe('DocStringTokenStartEvent', () => {
     });
     const event = new DocStringTokenStartEvent();
 
-    event.handle({ line: '   """   ', indentation: 3, number: 1}, session, state);
+    event.handle({ line: '   """   ', indentation: 3, number: 1 }, session, state);
 
     eq(session.docString.token, '"""');
     eq(state.count, 1);
