@@ -2,10 +2,10 @@
 
 ## TL;DR
 ```js
-import { GherkishFeatureParser, English } from 'twiki-gherkish-parser';
+import { GherkishFeatureParser } from '@twiki-bdd/twiki-gherkish-feature-parser';
 import * as fs from 'node:fs';
 
 const file = fs.readFileSync('./buck-rogers-season-one.feature');
-const parser = new GherkishFeatureParser({ language: English });
-const document = parser.parse(specification);
+const parser = new GherkishFeatureParser();
+const feature = parser.parse(specification);
 ```
