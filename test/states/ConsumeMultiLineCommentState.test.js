@@ -19,7 +19,7 @@ describe('ConsumeMultiLineCommentState', () => {
 
     state = new ConsumeMultiLineCommentState({ featureBuilder, machine });
 
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {

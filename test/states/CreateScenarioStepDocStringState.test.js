@@ -23,7 +23,7 @@ describe('CreateScenarioStepDocStringState', () => {
 
     state = new CreateScenarioStepDocStringState({ featureBuilder, machine });
 
-    session = { language: Languages.None, indentation: 0 };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('Blank Line Events', () => {

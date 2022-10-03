@@ -2,7 +2,7 @@ import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
-const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
+const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { AfterScenarioStepState } = States;
 
 describe('AfterScenarioStepState', () => {
@@ -22,7 +22,7 @@ describe('AfterScenarioStepState', () => {
 
     state = new AfterScenarioStepState({ featureBuilder, machine });
 
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {
@@ -150,10 +150,10 @@ describe('AfterScenarioStepState', () => {
       handle('Second step');
 
       const exported = featureBuilder.build();
+
       eq(exported.scenarios[0].steps.length, 2);
       eq(exported.scenarios[0].steps[0].text, 'First step');
       eq(exported.scenarios[0].steps[1].text, 'Second step');
-      eq(exported.scenarios[0].steps[1].generalised, 'Second step');
     });
 
     it('should capture steps with annotations', () => {

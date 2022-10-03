@@ -28,13 +28,11 @@
         {
            "annotations" : [],
            "docString" : "",
-           "generalised" : "Given the year is 1987",
-           "text" : "Given the year is 1987"
+           "text" : "Giveth the year is 1987"
         },
         {
            "annotations" : [],
            "docString" : "",
-           "generalised" : "And NASA launches the last of America's deep space probes",
            "text" : "And NASA launches the last of America's deep space probes"
         },
         {
@@ -45,19 +43,16 @@
               }
            ],
            "docString" : "",
-           "generalised" : "When a freak mishap occurs",
-           "text" : "When a freak mishap occurs"
+           "text" : "Whence a freak mishap occurs"
         },
         {
            "annotations" : [],
            "docString" : "",
-           "generalised" : "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems",
-           "text" : "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems"
+           "text" : "Thence Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems"
         },
         {
            "annotations" : [],
            "docString" : "",
-           "generalised" : "And returns Buck Rogers to Earth 500 years later",
            "text" : "And returns Buck Rogers to Earth 500 years later"
         }
      ]
@@ -76,25 +71,21 @@
            {
               "annotations" : [],
               "docString" : "",
-              "generalised" : "Given the Draconians have planted a homing beacon aboard Buck's shuttle",
-              "text" : "Given the Draconians have planted a homing beacon aboard Buck's shuttle"
+              "text" : "Giveth the Draconians have planted a homing beacon aboard Buck's shuttle"
            },
            {
               "annotations" : [],
               "docString" : "",
-              "generalised" : "When Buck arrives on Earth",
-              "text" : "When Buck arrives on Earth"
+              "text" : "Whence Buck arrives on Earth"
            },
            {
               "annotations" : [],
               "docString" : "",
-              "generalised" : "Then he must adjust to the 25th century",
-              "text" : "Then he must adjust to the 25th century"
+              "text" : "Thence he must adjust to the 25th century"
            },
            {
               "annotations" : [],
               "docString" : "",
-              "generalised" : "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them",
               "text" : "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them"
            }
         ]

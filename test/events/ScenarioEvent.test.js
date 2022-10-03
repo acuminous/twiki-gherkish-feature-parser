@@ -9,7 +9,7 @@ const { ScenarioEvent } = Events;
 describe('ScenarioEvent', () => {
 
   it('should recognise scenarios', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState();
     const event = new ScenarioEvent();
 
@@ -35,7 +35,7 @@ describe('ScenarioEvent', () => {
   });
 
   it('should handle scenarios', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState((event) => {
       eq(event.name, 'ScenarioEvent');
       eq(event.source.line, 'Scenario:  Some scenario ');

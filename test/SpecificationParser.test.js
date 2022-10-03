@@ -152,14 +152,10 @@ describe('FeatureParser', () => {
     const document = new FeatureParser().parse(text, { language: Languages.English });
 
     eq(document.background.steps.length, 2);
-    eq(document.background.steps[0].generalised, 'a background step');
     eq(document.background.steps[0].docString, ['Given a DocString', 'Given another DocString', '                       '].join(os.EOL));
-    eq(document.background.steps[1].generalised, 'another background step');
 
     eq(document.scenarios.length, 1);
     eq(document.scenarios[0].steps.length, 2);
-    eq(document.scenarios[0].steps[0].generalised, 'a step');
     eq(document.scenarios[0].steps[0].docString, ['Given a DocString', 'Given another DocString', '                       '].join(os.EOL));
-    eq(document.scenarios[0].steps[1].generalised, 'another step');
   });
 });

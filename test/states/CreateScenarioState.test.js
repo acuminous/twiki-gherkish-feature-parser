@@ -21,7 +21,7 @@ describe('CreateScenarioState', () => {
 
     state = new CreateScenarioState({ featureBuilder, machine });
 
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {
@@ -116,7 +116,6 @@ describe('CreateScenarioState', () => {
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps.length, 1);
       eq(exported.scenarios[0].steps[0].text, 'First step');
-      eq(exported.scenarios[0].steps[0].generalised, 'First step');
     });
 
     it('should capture steps with annotations', () => {

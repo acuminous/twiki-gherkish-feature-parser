@@ -23,7 +23,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
     state = new CreateBackgroundStepDocStringState({ featureBuilder, machine });
 
-    session = { language: Languages.None, indentation: 0 };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('Blank Line Events', () => {

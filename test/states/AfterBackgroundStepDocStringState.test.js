@@ -22,7 +22,7 @@ describe('AfterBackgroundStepDocStringState', () => {
 
     state = new AfterBackgroundStepDocStringState({ featureBuilder, machine });
 
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {

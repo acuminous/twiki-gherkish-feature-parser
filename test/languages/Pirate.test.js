@@ -6,12 +6,6 @@ const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = z
 const { Pirate } = Languages;
 
 describe('Pirate', () => {
-  it('should generalise text', () => {
-    eq(Pirate.generalise('Giveth A'), 'A');
-    eq(Pirate.generalise('Whence A'), 'A');
-    eq(Pirate.generalise('Thence A'), 'A');
-  });
-
   it('should answer to name', () => {
     eq(Pirate.answersToName('Pirate'), true);
     eq(Pirate.answersToName('pirate'), true);

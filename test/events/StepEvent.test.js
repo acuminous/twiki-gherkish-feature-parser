@@ -9,7 +9,7 @@ const { StepEvent } = Events;
 describe('StepEvent', () => {
 
   it('should recognise steps', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState();
     const event = new StepEvent();
 
@@ -30,7 +30,7 @@ describe('StepEvent', () => {
   });
 
   it('should recognise unlocalised steps', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState();
     const event = new StepEvent();
 
@@ -45,7 +45,6 @@ describe('StepEvent', () => {
       eq(event.source.line, ' Given some step  ');
       eq(event.source.number, 1);
       eq(event.data.text, 'Given some step');
-      eq(event.data.generalised, 'some step');
     });
     const event = new StepEvent();
 
@@ -55,7 +54,7 @@ describe('StepEvent', () => {
   });
 
   it('should handle unlocalised steps', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState((event) => {
       eq(event.name, 'StepEvent');
       eq(event.source.line, '  Some step  ');

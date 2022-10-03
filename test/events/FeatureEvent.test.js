@@ -9,7 +9,7 @@ const { FeatureEvent } = Events;
 describe('FeatureEvent', () => {
 
   it('should recognise features', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState();
     const event = new FeatureEvent();
 
@@ -35,7 +35,7 @@ describe('FeatureEvent', () => {
   });
 
   it('should handle features', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState((event) => {
       eq(event.name, 'FeatureEvent');
       eq(event.source.line, 'Feature:  Some feature ');

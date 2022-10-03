@@ -9,7 +9,7 @@ const { BackgroundEvent } = Events;
 describe('BackgroundEvent', () => {
 
   it('should recognise backgrounds', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState();
     const event = new BackgroundEvent();
 
@@ -35,7 +35,7 @@ describe('BackgroundEvent', () => {
   });
 
   it('should handle backgrounds', () => {
-    const session = { language: Languages.None };
+    const session = { language: Languages.English };
     const state = new StubState((event) => {
       eq(event.name, 'BackgroundEvent');
       eq(event.source.line, 'Background:  Some background ');

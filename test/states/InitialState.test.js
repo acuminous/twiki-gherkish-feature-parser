@@ -16,7 +16,7 @@ describe('InitialState', () => {
     featureBuilder = new FeatureBuilder();
     machine = new StateMachine({ parser, featureBuilder });
     state = new InitialState({ featureBuilder, machine });
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {

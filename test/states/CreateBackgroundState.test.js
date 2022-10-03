@@ -20,7 +20,7 @@ describe('CreateBackgroundState', () => {
 
     state = new CreateBackgroundState({ machine, featureBuilder });
 
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {
@@ -115,7 +115,6 @@ describe('CreateBackgroundState', () => {
       const exported = featureBuilder.build();
       eq(exported.background.steps.length, 1);
       eq(exported.background.steps[0].text, 'First step');
-      eq(exported.background.steps[0].generalised, 'First step');
     });
 
     it('should capture steps with annotations', () => {

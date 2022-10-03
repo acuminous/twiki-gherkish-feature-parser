@@ -10,7 +10,7 @@ describe('BlankLineEvent', () => {
   let session;
 
   beforeEach(() => {
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   it('should recognise blank lines', () => {

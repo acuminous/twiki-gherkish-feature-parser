@@ -7,8 +7,8 @@ import { FeatureParser, Languages } from '../index.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('FeatureParser', () => {
-  it('should parse features without a language by default', () => {
-    const expected = readJsonFile('en', 'buck-rogers-season-one-ungeneralised.json');
+  it('should parse features in English by default', () => {
+    const expected = readJsonFile('en', 'buck-rogers-season-one.json');
     const source = readFeatureFile('en', 'buck-rogers-season-one.feature');
     const parser = new FeatureParser();
     const actual = parser.parse(source);
@@ -16,17 +16,8 @@ describe('FeatureParser', () => {
     deq(actual, expected);
   });
 
-  it('should parse features in English', () => {
-    const expected = readJsonFile('en', 'buck-rogers-season-one-generalised.json');
-    const source = readFeatureFile('en', 'buck-rogers-season-one.feature');
-    const parser = new FeatureParser({ language: Languages.English });
-    const actual = parser.parse(source);
-
-    deq(actual, expected);
-  });
-
   it('should parse features in Pirate', () => {
-    const expected = readJsonFile('bv', 'buck-rogers-season-one-generalised.json');
+    const expected = readJsonFile('bv', 'buck-rogers-season-one.json');
     const source = readFeatureFile('bv', 'buck-rogers-season-one.feature');
     const parser = new FeatureParser({ language: Languages.Pirate });
     const actual = parser.parse(source);

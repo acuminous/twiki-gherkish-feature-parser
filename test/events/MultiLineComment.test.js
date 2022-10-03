@@ -10,7 +10,7 @@ describe('MultiLineCommentEvent', () => {
   let session;
 
   beforeEach(() => {
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   it('should recognise multi line comments', () => {

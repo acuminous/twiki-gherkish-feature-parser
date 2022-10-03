@@ -6,12 +6,6 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 const { English } = Languages;
 
 describe('English', () => {
-  it('should generalise text', () => {
-    eq(English.generalise('Given A'), 'A');
-    eq(English.generalise('When A'), 'A');
-    eq(English.generalise('Then A'), 'A');
-  });
-
   it('should answer to name', () => {
     eq(English.answersToName('English'), true);
     eq(English.answersToName('english'), true);

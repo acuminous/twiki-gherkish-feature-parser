@@ -21,7 +21,7 @@ describe('AfterScenarioStepDocStringState', () => {
     machine.toAfterScenarioStepDocStringState();
     state = new AfterScenarioStepDocStringState({ featureBuilder, machine });
 
-    session = { language: Languages.None };
+    session = { language: Languages.English };
   });
 
   describe('Annotation Events', () => {
@@ -148,7 +148,6 @@ describe('AfterScenarioStepDocStringState', () => {
       eq(exported.scenarios[0].steps.length, 2);
       eq(exported.scenarios[0].steps[0].text, 'First step');
       eq(exported.scenarios[0].steps[1].text, 'Second step');
-      eq(exported.scenarios[0].steps[1].generalised, 'Second step');
     });
 
     it('should capture steps with annotations', () => {
