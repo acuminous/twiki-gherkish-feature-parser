@@ -2,8 +2,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { deepStrictEqual as deq } from 'node:assert';
 import zunit from 'zunit';
-import GherkishFeatureParser from '../index.js';
-import { Languages } from '../lib/index.js';
+import { GherkishFeatureParser, Languages } from '../index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 

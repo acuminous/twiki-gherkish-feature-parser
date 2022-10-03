@@ -21,7 +21,7 @@ describe('AfterScenarioStepDocStringState', () => {
     machine.toAfterScenarioStepDocStringState();
     state = new AfterScenarioStepDocStringState({ specification, machine });
 
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   describe('Annotation Events', () => {
@@ -95,12 +95,6 @@ describe('AfterScenarioStepDocStringState', () => {
     it('should transition to ConsumeMultiLineCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeMultiLineCommentState');
-    });
-  });
-
-  describe('Language Events', () => {
-    it('should error', () => {
-      throws(() => handle('# Language: English'), { message: "'# Language: English' was unexpected in state: AfterScenarioStepDocStringState on line 1'" });
     });
   });
 

@@ -19,7 +19,7 @@ describe('InitialState', () => {
 
     state = new InitialState({ specification, machine });
 
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   describe('Annotation Events', () => {
@@ -100,18 +100,6 @@ describe('InitialState', () => {
       eq(exported.annotations[0].value, '1');
       eq(exported.annotations[1].name, 'two');
       eq(exported.annotations[1].value, '2');
-    });
-  });
-
-  describe('Language Events', () => {
-    it('should not cause transition', () => {
-      handle('# Language: English');
-      eq(machine.state, 'InitialState');
-    });
-
-    it('should set language', () => {
-      handle('# Language: English');
-      eq(session.language.name, 'English');
     });
   });
 

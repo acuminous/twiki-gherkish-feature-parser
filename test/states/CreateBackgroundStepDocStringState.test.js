@@ -23,7 +23,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
     state = new CreateBackgroundStepDocStringState({ specification, machine });
 
-    session = { language: Languages.utils.getDefault(), indentation: 0 };
+    session = { language: Languages.None, indentation: 0 };
   });
 
   describe('Blank Line Events', () => {

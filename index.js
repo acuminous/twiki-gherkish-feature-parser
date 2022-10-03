@@ -1,3 +1,6 @@
-import GherkishFeatureParser from './lib/SpecificationParser.js';
+import { SpecificationParser as GherkishFeatureParser, Languages } from './lib/index.js';
 
-export default GherkishFeatureParser;
+export {
+  GherkishFeatureParser,
+  Languages,
+};

@@ -19,7 +19,7 @@ describe('ConsumeMultiLineCommentState', () => {
 
     state = new ConsumeMultiLineCommentState({ specification, machine });
 
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   describe('Annotation Events', () => {
@@ -84,13 +84,6 @@ describe('ConsumeMultiLineCommentState', () => {
   describe('Feature Events', () => {
     it('should not cause transition', () => {
       handle('Feature: foo');
-      eq(machine.state, 'ConsumeMultiLineCommentState');
-    });
-  });
-
-  describe('Language Events', () => {
-    it('should not cause transition', () => {
-      handle('# Language: English');
       eq(machine.state, 'ConsumeMultiLineCommentState');
     });
   });

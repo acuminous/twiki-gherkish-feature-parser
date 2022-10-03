@@ -11,7 +11,7 @@ describe('DocStringEvent', () => {
 
   beforeEach(() => {
     session = {
-      language: Languages.utils.getDefault(),
+      language: Languages.None,
       docString: {
         indentation: 3,
       },

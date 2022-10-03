@@ -10,7 +10,7 @@ describe('SingleLineCommentEvent', () => {
   let session;
 
   beforeEach(() => {
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   it('should recognise single line comments', () => {

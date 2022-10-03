@@ -22,7 +22,7 @@ describe('CreateScenarioState', () => {
 
     state = new CreateScenarioState({ specification, machine });
 
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   describe('Annotation Events', () => {
@@ -82,12 +82,6 @@ describe('CreateScenarioState', () => {
   describe('Feature Events', () => {
     it('should error', () => {
       throws(() => handle('Feature: foo'), { message: "'Feature: foo' was unexpected in state: CreateScenarioState on line 1'" });
-    });
-  });
-
-  describe('Language Events', () => {
-    it('should error', () => {
-      throws(() => handle('# Language: English'), { message: "'# Language: English' was unexpected in state: CreateScenarioState on line 1'" });
     });
   });
 

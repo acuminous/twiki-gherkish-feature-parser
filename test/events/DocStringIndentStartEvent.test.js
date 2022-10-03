@@ -11,7 +11,7 @@ describe('DocStringIndentStartEvent', () => {
 
   beforeEach(() => {
     session = {
-      language: Languages.utils.getDefault(),
+      language: Languages.None,
       indentation: 0,
     };
   });

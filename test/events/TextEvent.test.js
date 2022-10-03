@@ -9,7 +9,7 @@ const { TextEvent } = Events;
 describe('TextEvent', () => {
 
   it('should recognise text', () => {
-    const session = { language: Languages.utils.getDefault() };
+    const session = { language: Languages.None };
     const state = new StubState();
     const event = new TextEvent();
 
@@ -18,7 +18,7 @@ describe('TextEvent', () => {
   });
 
   it('should recognise localised text', () => {
-    const session = { language: Languages.utils.get('English') };
+    const session = { language: Languages.English };
     const state = new StubState();
     const event = new TextEvent();
 
@@ -31,7 +31,7 @@ describe('TextEvent', () => {
   });
 
   it('should handle text', () => {
-    const session = { language: Languages.utils.getDefault() };
+    const session = { language: Languages.None };
     const state = new StubState((event) => {
       eq(event.name, 'TextEvent');
       eq(event.source.line, '  Some text  ');

@@ -9,7 +9,7 @@ const { ScenarioEvent } = Events;
 describe('ScenarioEvent', () => {
 
   it('should recognise scenarios', () => {
-    const session = { language: Languages.utils.getDefault() };
+    const session = { language: Languages.None };
     const state = new StubState();
     const event = new ScenarioEvent();
 
@@ -22,7 +22,7 @@ describe('ScenarioEvent', () => {
   });
 
   it('should recognise localised scenarios', () => {
-    const session = { language: Languages.utils.get('Pirate') };
+    const session = { language: Languages.Pirate };
     const state = new StubState();
     const event = new ScenarioEvent();
 
@@ -35,7 +35,7 @@ describe('ScenarioEvent', () => {
   });
 
   it('should handle scenarios', () => {
-    const session = { language: Languages.utils.getDefault() };
+    const session = { language: Languages.None };
     const state = new StubState((event) => {
       eq(event.name, 'ScenarioEvent');
       eq(event.source.line, 'Scenario:  Some scenario ');

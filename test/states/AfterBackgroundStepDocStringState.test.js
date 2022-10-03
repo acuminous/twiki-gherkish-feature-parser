@@ -22,7 +22,7 @@ describe('AfterBackgroundStepDocStringState', () => {
 
     state = new AfterBackgroundStepDocStringState({ specification, machine });
 
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   describe('Annotation Events', () => {
@@ -89,12 +89,6 @@ describe('AfterBackgroundStepDocStringState', () => {
     it('should transition to ConsumeMultiLineCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeMultiLineCommentState');
-    });
-  });
-
-  describe('Language Events', () => {
-    it('should error', () => {
-      throws(() => handle('# Language: English'), { message: "'# Language: English' was unexpected in state: AfterBackgroundStepDocStringState on line 1'" });
     });
   });
 

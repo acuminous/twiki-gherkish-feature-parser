@@ -10,7 +10,7 @@ describe('DocStringTokenStopEvent', () => {
   let session;
 
   beforeEach(() => {
-    session = { language: Languages.utils.getDefault() };
+    session = { language: Languages.None };
   });
 
   it('should handle --- DocStrings', () => {
