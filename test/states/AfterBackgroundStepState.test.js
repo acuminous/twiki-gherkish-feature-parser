@@ -1,6 +1,6 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { AfterBackgroundStepState } = States;
@@ -166,7 +166,7 @@ describe('AfterBackgroundStepState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });
