@@ -10,6 +10,11 @@ describe('AfterScenarioStepDocStringState', () => {
   let machine;
   let state;
   let session;
+  const expectedEvents = [
+    ' - foo',
+    ' - bar',
+    ' - baz',
+  ].join('\n');
 
   beforeEach(() => {
     featureBuilder = new FeatureBuilder();
@@ -33,7 +38,7 @@ describe('AfterScenarioStepDocStringState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: Meh'), { message: "'Background: Meh' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('Background: Meh'), { message: `'Background: Meh' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -47,7 +52,7 @@ describe('AfterScenarioStepDocStringState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('   Some text'), { message: `'   Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -55,26 +60,26 @@ describe('AfterScenarioStepDocStringState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('Some text'), { message: `'Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: "'---' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: "'---' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('Feature Events', () => {
     it('should error on feature event', () => {
-      throws(() => handle('Feature: foo'), { message: "'Feature: foo' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('Feature: foo'), { message: `'Feature: foo' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -87,7 +92,7 @@ describe('AfterScenarioStepDocStringState', () => {
 
   describe('Feature Events', () => {
     it('should error', () => {
-      throws(() => handle('Feature: Meh'), { message: "'Feature: Meh' was unexpected in state: AfterScenarioStepDocStringState on line undefined:1'" });
+      throws(() => handle('Feature: Meh'), { message: `'Feature: Meh' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 

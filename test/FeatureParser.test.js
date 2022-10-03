@@ -51,13 +51,15 @@ describe('FeatureParser', () => {
     };
     const source = readFeatureFile('en', 'invalid.feature');
     const parser = new FeatureParser();
+    const expectedEvents = [
+      ' - foo',
+      ' - bar',
+      ' - baz',
+    ].join('\n');
 
     throws(() => {
       parser.parse(source, metadata);
-    }, (err) => {
-      eq(err.message, 'Premature end of feature in state: CreateScenarioState on line invalid.feature:11');
-      return true;
-    });
+    }, { message: `Unexpected end of feature at invalid.feature:11\nExpected one of:\n${expectedEvents}\n` });
   });
 
 });

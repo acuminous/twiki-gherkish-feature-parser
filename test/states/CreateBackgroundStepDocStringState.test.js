@@ -11,6 +11,11 @@ describe('CreateBackgroundStepDocStringState', () => {
   let machine;
   let state;
   let session;
+  let expectedEvents = [
+    ' - A DocString line',
+    ' - The end of an explicit DocString delinated by """',
+    ' - The end of an indented DocString',
+  ].join('\n');
 
   beforeEach(() => {
     featureBuilder = new FeatureBuilder();
@@ -36,8 +41,12 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
+      expectedEvents = [
+        ' - A DocString line',
+        ' - The end of an indented DocString',
+      ].join('\n');
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: CreateBackgroundStepDocStringState on line undefined:1'" });
+      throws(() => handle('   Some text'), { message: `'   Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -52,7 +61,11 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundStepDocStringState on line undefined:1'" });
+      expectedEvents = [
+        ' - A DocString line',
+        ' - The end of an explicit DocString delinated by ---',
+      ].join('\n');
+      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -66,7 +79,11 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('End Events', () => {
     it('should transition to final on end event', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundStepDocStringState on line undefined:1' });
+      expectedEvents = [
+        ' - A DocString line',
+        ' - The end of an indented DocString',
+      ].join('\n');
+      throws(() => handle('\u0000'), { message: `Unexpected end of feature at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 

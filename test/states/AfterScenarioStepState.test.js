@@ -10,6 +10,11 @@ describe('AfterScenarioStepState', () => {
   let machine;
   let state;
   let session;
+  const expectedEvents = [
+    ' - foo',
+    ' - bar',
+    ' - baz',
+  ].join('\n');
 
   beforeEach(() => {
     featureBuilder = new FeatureBuilder();
@@ -34,7 +39,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: Meh'), { message: "'Background: Meh' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
+      throws(() => handle('Background: Meh'), { message: `'Background: Meh' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -65,7 +70,7 @@ describe('AfterScenarioStepState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
+      throws(() => handle('Some text'), { message: `'Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -79,7 +84,7 @@ describe('AfterScenarioStepState', () => {
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: "'---' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
+      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -92,7 +97,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('Feature Events', () => {
     it('should error', () => {
-      throws(() => handle('Feature: Meh'), { message: "'Feature: Meh' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
+      throws(() => handle('Feature: Meh'), { message: `'Feature: Meh' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 

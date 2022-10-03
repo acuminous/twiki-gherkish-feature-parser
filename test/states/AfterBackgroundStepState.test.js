@@ -10,6 +10,16 @@ describe('AfterBackgroundStepState', () => {
   let machine;
   let state;
   let session;
+  const expectedEvents = [
+    ' - An annotation',
+    ' - A blank line',
+    ' - A block comment',
+    ' - The start of an indented DocString',
+    ' - The start of an explicit DocString',
+    ' - A single line comment',
+    ' - A scenario',
+    ' - A step',
+  ].join('\n');
 
   beforeEach(() => {
     featureBuilder = new FeatureBuilder();
@@ -34,7 +44,7 @@ describe('AfterBackgroundStepState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: foo'), { message: "'Background: foo' was unexpected in state: AfterBackgroundStepState on line undefined:1'" });
+      throws(() => handle('Background: foo'), { message: `'Background: foo' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -65,7 +75,7 @@ describe('AfterBackgroundStepState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: AfterBackgroundStepState on line undefined:1'" });
+      throws(() => handle('Some text'), { message: `'Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -79,19 +89,19 @@ describe('AfterBackgroundStepState', () => {
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: "'---' was unexpected in state: AfterBackgroundStepState on line undefined:1'" });
+      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('End Events', () => {
     it('should transition to final on end event', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: AfterBackgroundStepState on line undefined:1' });
+      throws(() => handle('\u0000'), { message: `Unexpected end of feature at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('Feature Events', () => {
     it('should error on feature event', () => {
-      throws(() => handle('Feature: foo'), { message: "'Feature: foo' was unexpected in state: AfterBackgroundStepState on line undefined:1'" });
+      throws(() => handle('Feature: foo'), { message: `'Feature: foo' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 

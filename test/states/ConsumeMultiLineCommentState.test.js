@@ -9,6 +9,11 @@ describe('ConsumeBlockCommentState', () => {
   let machine;
   let state;
   let session;
+  const expectedEvents = [
+    ' - foo',
+    ' - bar',
+    ' - baz',
+  ].join('\n');
 
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder();
@@ -77,7 +82,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: ConsumeBlockCommentState on line undefined:1' });
+      throws(() => handle('\u0000'), { message: `Unexpected end of feature at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
