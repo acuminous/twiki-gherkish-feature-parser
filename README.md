@@ -35,7 +35,7 @@ const feature = parser.parse(file);
 
 | Syntax                       | Supported                                      |
 | ---------------------------- | ---------------------------------------------- |
-| Language                     | No - use the parser option instead             |
+| Language                     | No - use the parser 'language' option instead  |
 | Feature                      | Yes                                            |
 | Feature descriptions         | Yes                                            |
 | Feature tags/annotations     | Yes                                            |
