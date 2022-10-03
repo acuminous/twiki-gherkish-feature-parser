@@ -7,23 +7,23 @@ const { English } = Languages;
 
 describe('English', () => {
   it('should generalise text', () => {
-    eq(new English().generalise('Given A'), 'A');
-    eq(new English().generalise('When A'), 'A');
-    eq(new English().generalise('Then A'), 'A');
+    eq(English.generalise('Given A'), 'A');
+    eq(English.generalise('When A'), 'A');
+    eq(English.generalise('Then A'), 'A');
   });
 
   it('should answer to name', () => {
-    eq(new English().answersToName('English'), true);
-    eq(new English().answersToName('english'), true);
-    eq(new English().answersToName('other'), false);
+    eq(English.answersToName('English'), true);
+    eq(English.answersToName('english'), true);
+    eq(English.answersToName('other'), false);
   });
 
   it('should have answer to code', () => {
-    eq(new English().answersToCode('en'), true);
-    eq(new English().answersToCode('EN'), true);
-    eq(new English().answersToCode(null), false);
-    eq(new English().answersToCode(undefined), false);
-    eq(new English().answersToCode(''), false);
-    eq(new English().answersToCode('other'), false);
+    eq(English.answersToCode('en'), true);
+    eq(English.answersToCode('EN'), true);
+    eq(English.answersToCode(null), false);
+    eq(English.answersToCode(undefined), false);
+    eq(English.answersToCode(''), false);
+    eq(English.answersToCode('other'), false);
   });
 });
