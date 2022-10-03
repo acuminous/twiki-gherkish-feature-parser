@@ -6,18 +6,9 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 const { English } = Languages;
 
 describe('English', () => {
-  it('should answer to name', () => {
-    eq(English.answersToName('English'), true);
-    eq(English.answersToName('english'), true);
-    eq(English.answersToName('other'), false);
-  });
-
-  it('should have answer to code', () => {
-    eq(English.answersToCode('en'), true);
-    eq(English.answersToCode('EN'), true);
-    eq(English.answersToCode(null), false);
-    eq(English.answersToCode(undefined), false);
-    eq(English.answersToCode(''), false);
-    eq(English.answersToCode('other'), false);
+  it('should map keywords', () => {
+    deq(English.regexp('feature'), /^\s*(?:feature)\s*:\s*(.*)/i);
+    deq(English.regexp('background'), /^\s*(?:background)\s*:\s*(.*)/i);
+    deq(English.regexp('scenario'), /^\s*(?:scenario)\s*:\s*(.*)/i);
   });
 });

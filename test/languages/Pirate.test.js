@@ -6,16 +6,9 @@ const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = z
 const { Pirate } = Languages;
 
 describe('Pirate', () => {
-  it('should answer to name', () => {
-    eq(Pirate.answersToName('Pirate'), true);
-    eq(Pirate.answersToName('pirate'), true);
-    eq(Pirate.answersToName('other'), false);
-  });
-
-  it("should have no code (they're more guidelines really)", () => {
-    eq(Pirate.answersToCode(null), false);
-    eq(Pirate.answersToCode(undefined), false);
-    eq(Pirate.answersToCode(''), false);
-    eq(Pirate.answersToCode('other'), false);
+  it('should map keywords', () => {
+    deq(Pirate.regexp('feature'), /^\s*(?:tale|yarn)\s*:\s*(.*)/i);
+    deq(Pirate.regexp('background'), /^\s*(?:lore)\s*:\s*(.*)/i);
+    deq(Pirate.regexp('scenario'), /^\s*(?:adventure|sortie)\s*:\s*(.*)/i);
   });
 });
