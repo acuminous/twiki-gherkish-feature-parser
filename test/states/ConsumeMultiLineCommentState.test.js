@@ -2,7 +2,7 @@ import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
-const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
+const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ConsumeBlockCommentState } = States;
 
 describe('ConsumeBlockCommentState', () => {

@@ -3,7 +3,7 @@ import os from 'node:os';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
-const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
+const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { CreateBackgroundStepDocStringState } = States;
 
 describe('CreateBackgroundStepDocStringState', () => {
