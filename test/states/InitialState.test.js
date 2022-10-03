@@ -82,7 +82,7 @@ describe('InitialState', () => {
     it('should capture feature title', () => {
       handle('Feature: Some feature');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.title, 'Some feature');
     });
 
@@ -91,7 +91,7 @@ describe('InitialState', () => {
       handle('@two = 2');
       handle('Feature: First scenario');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.annotations.length, 2);
       eq(exported.annotations[0].name, 'one');
       eq(exported.annotations[0].value, '1');

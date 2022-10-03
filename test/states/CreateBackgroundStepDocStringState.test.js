@@ -82,7 +82,7 @@ describe('CreateBackgroundStepDocStringState', () => {
       handle('Some text');
       handle('Some more text');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.background.steps[0].docString, ['Some text', 'Some more text'].join(os.EOL));
     });
   });

@@ -101,7 +101,7 @@ describe('AfterBackgroundStepDocStringState', () => {
     it('should capture scenarios', () => {
       handle('Scenario: First scenario');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
     });
@@ -111,7 +111,7 @@ describe('AfterBackgroundStepDocStringState', () => {
       handle('@two = 2');
       handle('Scenario: First scenario');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       eq(exported.scenarios[0].annotations[0].name, 'one');
@@ -137,7 +137,7 @@ describe('AfterBackgroundStepDocStringState', () => {
     it('should capture step', () => {
       handle('Given some text');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.background.steps.length, 2);
       eq(exported.background.steps[1].text, 'Given some text');
     });
@@ -147,7 +147,7 @@ describe('AfterBackgroundStepDocStringState', () => {
       handle('@two = 2');
       handle('Given some text');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.background.steps[1].annotations.length, 2);
       eq(exported.background.steps[1].annotations[0].name, 'one');
       eq(exported.background.steps[1].annotations[0].value, '1');

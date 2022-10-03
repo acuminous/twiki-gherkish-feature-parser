@@ -113,7 +113,7 @@ describe('CreateScenarioState', () => {
     it('should capture steps', () => {
       handle('First step');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps.length, 1);
       eq(exported.scenarios[0].steps[0].text, 'First step');
       eq(exported.scenarios[0].steps[0].generalised, 'First step');
@@ -124,7 +124,7 @@ describe('CreateScenarioState', () => {
       handle('@two=2');
       handle('First step');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].annotations.length, 2);
       eq(exported.scenarios[0].steps[0].annotations[0].name, 'one');
       eq(exported.scenarios[0].steps[0].annotations[0].value, '1');

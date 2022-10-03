@@ -41,7 +41,7 @@ describe('CreateFeatureState', () => {
       handle('@two=2');
       handle('Background: First background');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.background.annotations.length, 2);
       eq(exported.background.annotations[0].name, 'one');
       eq(exported.background.annotations[0].value, '1');
@@ -113,7 +113,7 @@ describe('CreateFeatureState', () => {
     it('should capture scenarios', () => {
       handle('Scenario: First scenario');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
     });
@@ -123,7 +123,7 @@ describe('CreateFeatureState', () => {
       handle('@two=2');
       handle('Scenario: First scenario');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       eq(exported.scenarios[0].annotations[0].name, 'one');
@@ -150,7 +150,7 @@ describe('CreateFeatureState', () => {
       handle('Some text');
       handle('Some more text');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.description, 'Some text\nSome more text');
     });
   });

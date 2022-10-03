@@ -82,7 +82,7 @@ describe('CreateScenarioStepDocStringState', () => {
       handle('Some text');
       handle('Some more text');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docString, ['Some text', 'Some more text'].join(os.EOL));
     });
   });

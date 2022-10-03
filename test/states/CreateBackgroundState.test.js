@@ -112,7 +112,7 @@ describe('CreateBackgroundState', () => {
     it('should capture steps', () => {
       handle('First step');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.background.steps.length, 1);
       eq(exported.background.steps[0].text, 'First step');
       eq(exported.background.steps[0].generalised, 'First step');
@@ -123,7 +123,7 @@ describe('CreateBackgroundState', () => {
       handle('@two=2');
       handle('First step');
 
-      const exported = featureBuilder.serialise();
+      const exported = featureBuilder.build();
       eq(exported.background.steps[0].annotations.length, 2);
       eq(exported.background.steps[0].annotations[0].name, 'one');
       eq(exported.background.steps[0].annotations[0].value, '1');
