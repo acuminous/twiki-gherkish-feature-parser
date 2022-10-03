@@ -1,11 +1,11 @@
 import { States, Events } from '../../lib/index.js';
 
 const { BaseState } = States;
-const { AnnotationEvent, BackgroundEvent, BlankLineEvent, DocStringTokenStartEvent, EndEvent, FeatureEvent, MultiLineCommentEvent, ScenarioEvent, SingleLineCommentEvent, StepEvent, TextEvent } = Events;
+const { AnnotationEvent, BackgroundEvent, BlankLineEvent, DocStringTokenStartEvent, EndEvent, FeatureEvent, BlockCommentEvent, ScenarioEvent, SingleLineCommentEvent, StepEvent, TextEvent } = Events;
 
 export default class StubState extends BaseState {
   constructor(assertions = []) {
-    super({ events: [EndEvent, DocStringTokenStartEvent, MultiLineCommentEvent, SingleLineCommentEvent, AnnotationEvent, FeatureEvent, BackgroundEvent, ScenarioEvent, BlankLineEvent, StepEvent, TextEvent] });
+    super({ events: [EndEvent, DocStringTokenStartEvent, BlockCommentEvent, SingleLineCommentEvent, AnnotationEvent, FeatureEvent, BackgroundEvent, ScenarioEvent, BlankLineEvent, StepEvent, TextEvent] });
     this.count = 0;
     this.assertions = [].concat(assertions);
   }
@@ -54,7 +54,7 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onMultiLineComment(event) {
+  onBlockComment(event) {
     return this.handleEvent(event);
   }
 

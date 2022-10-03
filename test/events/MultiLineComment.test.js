@@ -4,9 +4,9 @@ import { Events, Languages } from '../../lib/index.js';
 import StubState from '../stubs/StubState.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { MultiLineCommentEvent } = Events;
+const { BlockCommentEvent } = Events;
 
-describe('MultiLineCommentEvent', () => {
+describe('BlockCommentEvent', () => {
   let session;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('MultiLineCommentEvent', () => {
 
   it('should recognise multi line comments', () => {
     const state = new StubState();
-    const event = new MultiLineCommentEvent();
+    const event = new BlockCommentEvent();
 
     eq(event.handle({ line: '### Some comment' }, session, state), true);
     eq(event.handle({ line: ' ### Some comment' }, session, state), true);
@@ -27,12 +27,12 @@ describe('MultiLineCommentEvent', () => {
 
   it('should handle multi line comments', () => {
     const state = new StubState((event) => {
-      eq(event.name, 'MultiLineCommentEvent');
+      eq(event.name, 'BlockCommentEvent');
       eq(event.source.line, '### Some comment ');
       eq(event.source.number, 1);
       eq(event.data.text, 'Some comment');
     });
-    const event = new MultiLineCommentEvent();
+    const event = new BlockCommentEvent();
 
     event.handle({ line: '### Some comment ', number: 1 }, session, state);
 

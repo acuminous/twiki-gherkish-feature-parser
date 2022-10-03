@@ -92,9 +92,9 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('Multi Line Comment Events', () => {
-    it('should transition to ConsumeMultiLineCommentState', () => {
+    it('should transition to ConsumeBlockCommentState', () => {
       handle('###');
-      eq(machine.state, 'ConsumeMultiLineCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
