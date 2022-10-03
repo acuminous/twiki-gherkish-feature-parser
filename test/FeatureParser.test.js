@@ -34,6 +34,15 @@ describe('FeatureParser', () => {
     deq(actual, expected);
   });
 
+  it('should parse docstrings', () => {
+    const expected = readJsonFile('en', 'docstrings.json');
+    const source = readFeatureFile('en', 'docstrings.feature');
+    const parser = new FeatureParser();
+    const actual = parser.parse(source);
+
+    deq(actual, expected);
+  });
+
 });
 
 function readFeatureFile(countryCode, filename) {
