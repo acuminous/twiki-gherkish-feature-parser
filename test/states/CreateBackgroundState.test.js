@@ -2,7 +2,7 @@ import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
-const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
+const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { CreateBackgroundState } = States;
 
 describe('CreateBackgroundState', () => {
@@ -105,11 +105,16 @@ describe('CreateBackgroundState', () => {
 
   describe('Step Events', () => {
     it('should transition to AfterBackgroundStepState on step event', () => {
+      featureBuilder.createBackground({ annotations: [] });
+
       handle('First step');
+
       eq(machine.state, 'AfterBackgroundStepState');
     });
 
     it('should capture steps', () => {
+      featureBuilder.createBackground({ annotations: [] });
+
       handle('First step');
 
       const exported = featureBuilder.build();
@@ -118,6 +123,8 @@ describe('CreateBackgroundState', () => {
     });
 
     it('should capture steps with annotations', () => {
+      featureBuilder.createBackground({ annotations: [] });
+
       handle('@one=1');
       handle('@two=2');
       handle('First step');

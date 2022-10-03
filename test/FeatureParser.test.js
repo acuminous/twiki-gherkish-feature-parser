@@ -25,6 +25,15 @@ describe('FeatureParser', () => {
     deq(actual, expected);
   });
 
+  it('should parse minimal features', () => {
+    const expected = readJsonFile('en', 'minimal.json');
+    const source = readFeatureFile('en', 'minimal.feature');
+    const parser = new FeatureParser();
+    const actual = parser.parse(source);
+
+    deq(actual, expected);
+  });
+
 });
 
 function readFeatureFile(countryCode, filename) {

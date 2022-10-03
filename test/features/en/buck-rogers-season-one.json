@@ -1,94 +1,95 @@
 {
-  "annotations" : [
-     {
-        "name" : "only",
-        "value" : true
-     },
-     {
-        "name" : "library",
-        "value" : "Buck Rogers Common"
-     },
-     {
-        "name" : "library",
-        "value" : "Buck Rogers Season One"
-     }
-  ],   
-  "title" : "Buck Rogers - Season One",
-  "description": "Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
-  "background" : {
-     "annotations" : [
-        {
-           "name" : "timeout",
-           "value" : "5000"
-        }
-     ],
-     "title" : "Introduction",
-     "description": null,     
-     "steps" : [
-        {
-           "annotations" : [],
-           "docString" : "",
-           "text" : "Given the year is 1987"
-        },
-        {
-           "annotations" : [],
-           "docString" : "",
-           "text" : "And NASA launches the last of America's deep space probes"
-        },
-        {
-           "annotations" : [
-              {
-                 "name" : "skip",
-                 "value" : true
-              }
-           ],
-           "docString" : "",
-           "text" : "When a freak mishap occurs"
-        },
-        {
-           "annotations" : [],
-           "docString" : "",
-           "text" : "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems"
-        },
-        {
-           "annotations" : [],
-           "docString" : "",
-           "text" : "And returns Buck Rogers to Earth 500 years later"
-        }
-     ]
-  },
-  "scenarios" : [
-     {
-        "annotations" : [
-           {
-              "name" : "skip",
-              "value" : true
-           }
+  "annotations":[
+    {
+      "name":"only",
+      "value":true
+    },
+    {
+      "name":"library",
+      "value":"Buck Rogers Common"
+    },
+    {
+      "name":"library",
+      "value":"Buck Rogers Season One"
+    }
+  ],
+  "title":"Buck Rogers - Season One",
+  "description":"Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
+  "background":{
+    "annotations":[
+      {
+        "name":"timeout",
+        "value":"5000"
+      }
+    ],
+    "title":"Introduction",
+    "description":null,
+    "steps":[
+      {
+        "annotations":[],
+        "docString":null,
+        "text":"Given the year is 1987"
+      },
+      {
+        "annotations":[],
+        "docString":null,
+        "text":"And NASA launches the last of America's deep space probes"
+      },
+      {
+        "annotations":[
+          {
+            "name":"skip",
+            "value":true
+          }
         ],
-        "title" : "Awakening",
-         "description": null,        
-        "steps" : [
-           {
-              "annotations" : [],
-              "docString" : "",
-              "text" : "Given the Draconians have planted a homing beacon aboard Buck's shuttle"
-           },
-           {
-              "annotations" : [],
-              "docString" : "",
-              "text" : "When Buck arrives on Earth"
-           },
-           {
-              "annotations" : [],
-              "docString" : "",
-              "text" : "Then he must adjust to the 25th century"
-           },
-           {
-              "annotations" : [],
-              "docString" : "",
-              "text" : "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them"
-           }
-        ]
-     }
+        "docString":null,
+        "text":"When a freak mishap occurs"
+      },
+      {
+        "annotations":[],
+        "docString":null,
+        "text":"Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems"
+      },
+      {
+        "annotations":[          
+        ],
+        "docString":null,
+        "text":"And returns Buck Rogers to Earth 500 years later"
+      }
+    ]
+  },
+  "scenarios":[
+    {
+      "annotations":[
+        {
+          "name":"skip",
+          "value":true
+        }
+      ],
+      "title":"Awakening",
+      "description":null,
+      "steps":[
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"Given the Draconians have planted a homing beacon aboard Buck's shuttle"
+        },
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"When Buck arrives on Earth"
+        },
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"Then he must adjust to the 25th century"
+        },
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them"
+        }
+      ]
+    }
   ]
 }

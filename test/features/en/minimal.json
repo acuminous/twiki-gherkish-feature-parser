@@ -1,0 +1,37 @@
+{
+  "annotations":[    
+  ],
+  "title":"Buck Rogers - Season One",
+  "description": null,
+  "background":null,
+  "scenarios":[
+    {
+      "annotations":[],
+      "title":"Awakening",
+      "description": null,
+      "steps":[
+        {
+          "annotations":[            
+          ],
+          "docString":null,
+          "text":"Given the Draconians have planted a homing beacon aboard Buck's shuttle"
+        },
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"When Buck arrives on Earth"
+        },
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"Then he must adjust to the 25th century"
+        },
+        {
+          "annotations":[],
+          "docString":null,
+          "text":"And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them"
+        }
+      ]
+    }
+  ]
+}
