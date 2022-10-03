@@ -13,7 +13,7 @@ describe('EndEvent', () => {
     session = { language: Languages.None };
   });
 
-  it('should recognise end of specification', () => {
+  it('should recognise end of feature', () => {
     const state = new StubState();
     const event = new EndEvent();
 
@@ -23,7 +23,7 @@ describe('EndEvent', () => {
     eq(event.handle({ line: '\u0000 ' }, session, state), false);
   });
 
-  it('should handle end of specification', () => {
+  it('should handle end of feature', () => {
     const state = new StubState((event) => {
       eq(event.name, 'EndEvent');
       eq(event.source.line, '\u0000');

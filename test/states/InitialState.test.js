@@ -1,24 +1,21 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { InitialState } = States;
 
 describe('InitialState', () => {
-  let specification;
+  let featureBuilder;
   let machine;
   let state;
   let session;
 
   beforeEach(() => {
-    const parser = new SpecificationParser();
-    specification = new Specification();
-
-    machine = new StateMachine({ parser, specification });
-
-    state = new InitialState({ specification, machine });
-
+    const parser = new FeatureParser();
+    featureBuilder = new FeatureBuilder();
+    machine = new StateMachine({ parser, featureBuilder });
+    state = new InitialState({ featureBuilder, machine });
     session = { language: Languages.None };
   });
 
@@ -72,7 +69,7 @@ describe('InitialState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: InitialState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: InitialState on line 1' });
     });
   });
 
@@ -85,7 +82,7 @@ describe('InitialState', () => {
     it('should capture feature title', () => {
       handle('Feature: Some feature');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.title, 'Some feature');
     });
 
@@ -94,7 +91,7 @@ describe('InitialState', () => {
       handle('@two = 2');
       handle('Feature: First scenario');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.annotations.length, 2);
       eq(exported.annotations[0].name, 'one');
       eq(exported.annotations[0].value, '1');
@@ -129,7 +126,7 @@ describe('InitialState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = SpecificationParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });

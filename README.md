@@ -12,5 +12,15 @@ import * as fs from 'node:fs';
 
 const file = fs.readFileSync('./buck-rogers-season-one.feature');
 const parser = new GherkishFeatureParser();
-const feature = parser.parse(specification);
+const feature = parser.parse(file);
+```
+
+### Language Support
+```js
+import { GherkishFeatureParser, Languages } from '@twiki-bdd/twiki-gherkish-feature-parser';
+import * as fs from 'node:fs';
+
+const file = fs.readFileSync('./buck-rogers-season-one.feature');
+const parser = new GherkishFeatureParser({ language: Languages.English });
+const feature = parser.parse(file);
 ```

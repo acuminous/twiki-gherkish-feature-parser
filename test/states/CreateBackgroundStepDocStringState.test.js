@@ -1,27 +1,27 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
-import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { CreateBackgroundStepDocStringState } = States;
 
 describe('CreateBackgroundStepDocStringState', () => {
-  let specification;
+  let featureBuilder;
   let machine;
   let state;
   let session;
 
   beforeEach(() => {
-    specification = new Specification();
-    specification.createFeature({ annotations: [], title: 'Meh' });
-    specification.createBackground({ annotations: [], title: 'Meh' });
-    specification.createBackgroundStep({ annotations: [], text: 'Meh' });
+    featureBuilder = new FeatureBuilder();
+    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
+    featureBuilder.createBackground({ annotations: [], title: 'Meh' });
+    featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
-    machine = new StateMachine({ specification });
+    machine = new StateMachine({ featureBuilder });
     machine.toCreateBackgroundStepDocStringState();
 
-    state = new CreateBackgroundStepDocStringState({ specification, machine });
+    state = new CreateBackgroundStepDocStringState({ featureBuilder, machine });
 
     session = { language: Languages.None, indentation: 0 };
   });
@@ -66,7 +66,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('End Events', () => {
     it('should transition to final on end event', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: CreateBackgroundStepDocStringState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundStepDocStringState on line 1' });
     });
   });
 
@@ -82,12 +82,12 @@ describe('CreateBackgroundStepDocStringState', () => {
       handle('Some text');
       handle('Some more text');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.background.steps[0].docString, ['Some text', 'Some more text'].join(os.EOL));
     });
   });
 
-  function handle(line, number = 1, indentation = SpecificationParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });

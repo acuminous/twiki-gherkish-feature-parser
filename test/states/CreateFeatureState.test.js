@@ -1,24 +1,24 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { CreateFeatureState } = States;
 
 describe('CreateFeatureState', () => {
-  let specification;
+  let featureBuilder;
   let machine;
   let state;
   let session;
 
   beforeEach(() => {
-    specification = new Specification();
-    specification.createFeature({ annotations: [], title: 'Meh' });
+    featureBuilder = new FeatureBuilder();
+    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
 
-    machine = new StateMachine({ specification });
+    machine = new StateMachine({ featureBuilder });
     machine.toCreateFeatureState();
 
-    state = new CreateFeatureState({ specification, machine });
+    state = new CreateFeatureState({ featureBuilder, machine });
 
     session = { language: Languages.None };
   });
@@ -41,7 +41,7 @@ describe('CreateFeatureState', () => {
       handle('@two=2');
       handle('Background: First background');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.background.annotations.length, 2);
       eq(exported.background.annotations[0].name, 'one');
       eq(exported.background.annotations[0].value, '1');
@@ -87,7 +87,7 @@ describe('CreateFeatureState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: CreateFeatureState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateFeatureState on line 1' });
     });
   });
 
@@ -113,7 +113,7 @@ describe('CreateFeatureState', () => {
     it('should capture scenarios', () => {
       handle('Scenario: First scenario');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
     });
@@ -123,7 +123,7 @@ describe('CreateFeatureState', () => {
       handle('@two=2');
       handle('Scenario: First scenario');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       eq(exported.scenarios[0].annotations[0].name, 'one');
@@ -150,12 +150,12 @@ describe('CreateFeatureState', () => {
       handle('Some text');
       handle('Some more text');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.description, 'Some text\nSome more text');
     });
   });
 
-  function handle(line, number = 1, indentation = SpecificationParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });

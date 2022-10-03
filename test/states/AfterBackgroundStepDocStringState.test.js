@@ -1,26 +1,26 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { AfterBackgroundStepDocStringState } = States;
 
 describe('AfterBackgroundStepDocStringState', () => {
-  let specification;
+  let featureBuilder;
   let machine;
   let state;
   let session;
 
   beforeEach(() => {
-    specification = new Specification();
-    specification.createFeature({ annotations: [], title: 'Meh' });
-    specification.createBackground({ annotations: [], title: 'Meh' });
-    specification.createBackgroundStep({ annotations: [], text: 'Meh' });
+    featureBuilder = new FeatureBuilder();
+    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
+    featureBuilder.createBackground({ annotations: [], title: 'Meh' });
+    featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
-    machine = new StateMachine({ specification });
+    machine = new StateMachine({ featureBuilder });
     machine.toAfterBackgroundStepDocStringState();
 
-    state = new AfterBackgroundStepDocStringState({ specification, machine });
+    state = new AfterBackgroundStepDocStringState({ featureBuilder, machine });
 
     session = { language: Languages.None };
   });
@@ -75,7 +75,7 @@ describe('AfterBackgroundStepDocStringState', () => {
 
   describe('End Events', () => {
     it('should transition to final on end event', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: AfterBackgroundStepDocStringState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: AfterBackgroundStepDocStringState on line 1' });
     });
   });
 
@@ -101,7 +101,7 @@ describe('AfterBackgroundStepDocStringState', () => {
     it('should capture scenarios', () => {
       handle('Scenario: First scenario');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
     });
@@ -111,7 +111,7 @@ describe('AfterBackgroundStepDocStringState', () => {
       handle('@two = 2');
       handle('Scenario: First scenario');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       eq(exported.scenarios[0].annotations[0].name, 'one');
@@ -137,7 +137,7 @@ describe('AfterBackgroundStepDocStringState', () => {
     it('should capture step', () => {
       handle('Given some text');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.background.steps.length, 2);
       eq(exported.background.steps[1].text, 'Given some text');
     });
@@ -147,7 +147,7 @@ describe('AfterBackgroundStepDocStringState', () => {
       handle('@two = 2');
       handle('Given some text');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.background.steps[1].annotations.length, 2);
       eq(exported.background.steps[1].annotations[0].name, 'one');
       eq(exported.background.steps[1].annotations[0].value, '1');
@@ -156,7 +156,7 @@ describe('AfterBackgroundStepDocStringState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = SpecificationParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });

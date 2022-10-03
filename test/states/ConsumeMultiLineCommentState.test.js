@@ -1,6 +1,6 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { ConsumeMultiLineCommentState } = States;
@@ -11,13 +11,13 @@ describe('ConsumeMultiLineCommentState', () => {
   let session;
 
   beforeEach(() => {
-    const specification = new Specification();
+    const featureBuilder = new FeatureBuilder();
 
-    machine = new StateMachine({ specification });
+    machine = new StateMachine({ featureBuilder });
     machine.toCreateFeatureState();
     machine.toConsumeMultiLineCommentState();
 
-    state = new ConsumeMultiLineCommentState({ specification, machine });
+    state = new ConsumeMultiLineCommentState({ featureBuilder, machine });
 
     session = { language: Languages.None };
   });
@@ -77,7 +77,7 @@ describe('ConsumeMultiLineCommentState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: ConsumeMultiLineCommentState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: ConsumeMultiLineCommentState on line 1' });
     });
   });
 

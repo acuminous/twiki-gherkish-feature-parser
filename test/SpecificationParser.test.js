@@ -1,11 +1,11 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
-import { SpecificationParser, Languages } from '../lib/index.js';
+import { FeatureParser, Languages } from '../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('Specification Parser', () => {
+describe('FeatureParser', () => {
 
   it('should support DocStrings', () => {
     const text = [
@@ -35,7 +35,7 @@ describe('Specification Parser', () => {
       '     Second step',
     ].join(os.EOL);
 
-    const document = new SpecificationParser().parse(text);
+    const document = new FeatureParser().parse(text);
 
     eq(document.background.steps.length, 2);
     eq(document.background.steps[0].text, 'First background step');
@@ -70,7 +70,7 @@ describe('Specification Parser', () => {
       '     First step',
     ].join(os.EOL);
 
-    throws(() => new SpecificationParser().parse(text), { message: "'         ---' was unexpected in state: AfterBackgroundStepDocStringState on line 11'" });
+    throws(() => new FeatureParser().parse(text), { message: "'         ---' was unexpected in state: AfterBackgroundStepDocStringState on line 11'" });
   });
 
   it('should not allow multiple DocStrings in scenario steps', () => {
@@ -78,7 +78,7 @@ describe('Specification Parser', () => {
       os.EOL,
     );
 
-    throws(() => new SpecificationParser().parse(text), { message: "'         ---' was unexpected in state: AfterScenarioStepDocStringState on line 11'" });
+    throws(() => new FeatureParser().parse(text), { message: "'         ---' was unexpected in state: AfterScenarioStepDocStringState on line 11'" });
   });
 
   it('should support indented DocStrings', () => {
@@ -107,7 +107,7 @@ describe('Specification Parser', () => {
       '     Second step',
     ].join(os.EOL);
 
-    const document = new SpecificationParser().parse(text);
+    const document = new FeatureParser().parse(text);
 
     eq(document.background.steps.length, 2);
     eq(document.background.steps[0].text, 'First background step');
@@ -149,7 +149,7 @@ describe('Specification Parser', () => {
       '     Given another step',
     ].join(os.EOL);
 
-    const document = new SpecificationParser().parse(text, { language: Languages.English });
+    const document = new FeatureParser().parse(text, { language: Languages.English });
 
     eq(document.background.steps.length, 2);
     eq(document.background.steps[0].generalised, 'a background step');

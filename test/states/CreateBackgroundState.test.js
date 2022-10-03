@@ -1,24 +1,24 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { CreateBackgroundState } = States;
 
 describe('CreateBackgroundState', () => {
-  let specification;
+  let featureBuilder;
   let machine;
   let state;
   let session;
 
   beforeEach(() => {
-    specification = new Specification();
-    specification.createFeature({ annotations: [], title: 'Meh' });
+    featureBuilder = new FeatureBuilder();
+    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
 
-    machine = new StateMachine({ specification });
-    machine.toCreateBackgroundState({ specification });
+    machine = new StateMachine({ featureBuilder });
+    machine.toCreateBackgroundState({ featureBuilder });
 
-    state = new CreateBackgroundState({ machine, specification });
+    state = new CreateBackgroundState({ machine, featureBuilder });
 
     session = { language: Languages.None };
   });
@@ -73,7 +73,7 @@ describe('CreateBackgroundState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: CreateBackgroundState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundState on line 1' });
     });
   });
 
@@ -112,7 +112,7 @@ describe('CreateBackgroundState', () => {
     it('should capture steps', () => {
       handle('First step');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.background.steps.length, 1);
       eq(exported.background.steps[0].text, 'First step');
       eq(exported.background.steps[0].generalised, 'First step');
@@ -123,7 +123,7 @@ describe('CreateBackgroundState', () => {
       handle('@two=2');
       handle('First step');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.background.steps[0].annotations.length, 2);
       eq(exported.background.steps[0].annotations[0].name, 'one');
       eq(exported.background.steps[0].annotations[0].value, '1');
@@ -132,7 +132,7 @@ describe('CreateBackgroundState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = SpecificationParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });

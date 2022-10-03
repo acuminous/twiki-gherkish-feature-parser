@@ -1,26 +1,25 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { SpecificationParser, Specification, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureParser, FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, before, beforeEach, after, afterEach } = zunit;
 const { CreateScenarioState } = States;
 
 describe('CreateScenarioState', () => {
-  let specification;
+  let featureBuilder;
   let machine;
   let state;
   let session;
 
   beforeEach(() => {
-    specification = new Specification();
+    featureBuilder = new FeatureBuilder();
+    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
+    featureBuilder.createScenario({ annotations: [], title: 'Meh' });
 
-    specification.createFeature({ annotations: [], title: 'Meh' });
-    specification.createScenario({ annotations: [], title: 'Meh' });
-
-    machine = new StateMachine({ specification });
+    machine = new StateMachine({ featureBuilder });
     machine.toCreateScenarioState();
 
-    state = new CreateScenarioState({ specification, machine });
+    state = new CreateScenarioState({ featureBuilder, machine });
 
     session = { language: Languages.None };
   });
@@ -75,7 +74,7 @@ describe('CreateScenarioState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of specification in state: CreateScenarioState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateScenarioState on line 1' });
     });
   });
 
@@ -114,7 +113,7 @@ describe('CreateScenarioState', () => {
     it('should capture steps', () => {
       handle('First step');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.scenarios[0].steps.length, 1);
       eq(exported.scenarios[0].steps[0].text, 'First step');
       eq(exported.scenarios[0].steps[0].generalised, 'First step');
@@ -125,7 +124,7 @@ describe('CreateScenarioState', () => {
       handle('@two=2');
       handle('First step');
 
-      const exported = specification.serialise();
+      const exported = featureBuilder.serialise();
       eq(exported.scenarios[0].steps[0].annotations.length, 2);
       eq(exported.scenarios[0].steps[0].annotations[0].name, 'one');
       eq(exported.scenarios[0].steps[0].annotations[0].value, '1');
@@ -134,7 +133,7 @@ describe('CreateScenarioState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = SpecificationParser.getIndentation(line)) {
+  function handle(line, number = 1, indentation = FeatureParser.getIndentation(line)) {
     state.handle({ line, number, indentation }, session);
   }
 });
