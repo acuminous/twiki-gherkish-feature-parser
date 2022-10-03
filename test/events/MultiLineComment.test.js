@@ -13,7 +13,7 @@ describe('BlockCommentEvent', () => {
     session = { language: Languages.English };
   });
 
-  it('should recognise multi line comments', () => {
+  it('should recognise block comments', () => {
     const state = new StubState();
     const event = new BlockCommentEvent();
 
@@ -25,7 +25,7 @@ describe('BlockCommentEvent', () => {
     eq(event.handle({ line: '## No commment' }, session, state), false);
   });
 
-  it('should handle multi line comments', () => {
+  it('should handle block comments', () => {
     const state = new StubState((event) => {
       eq(event.name, 'BlockCommentEvent');
       eq(event.source.line, '### Some comment ');

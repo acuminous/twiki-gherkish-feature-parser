@@ -88,7 +88,7 @@ describe('ConsumeBlockCommentState', () => {
     });
   });
 
-  describe('Multi Line Comment Events', () => {
+  describe('Block Comment Events', () => {
     it('should transition to previous state', () => {
       handle('###');
       eq(machine.state, 'CreateFeatureState');

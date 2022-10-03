@@ -83,7 +83,7 @@ describe('CreateBackgroundState', () => {
     });
   });
 
-  describe('Multi Line Comment Events', () => {
+  describe('Block Comment Events', () => {
     it('should transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
