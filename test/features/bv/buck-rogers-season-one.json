@@ -1,92 +1,92 @@
 {
-  "annotations":[
+  "annotations": [
     {
-      "name":"only",
-      "value":true
+      "name": "only",
+      "value": true
     },
     {
-      "name":"library",
-      "value":"Buck Rogers Common"
+      "name": "library",
+      "value": "Buck Rogers Common"
     },
     {
-      "name":"library",
-      "value":"Buck Rogers Season One"
+      "name": "library",
+      "value": "Buck Rogers Season One"
     }
   ],
-  "title":"Buck Rogers - Season One",
-  "description":"Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
-  "background":{
-    "annotations":[
+  "title": "Buck Rogers - Season One",
+  "description": "Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
+  "background": {
+    "title": "Introduction",
+    "description": null,
+    "annotations": [
       {
-        "name":"timeout",
-        "value":"5000"
+        "name": "timeout",
+        "value": "5000"
       }
     ],
-    "title":"Introduction",
-    "description":null,
-    "steps":[
+    "steps": [
       {
-        "annotations":[],
-        "docString":null,
-        "text":"Giveth the year is 1987"
+        "annotations": [],
+        "text": "Giveth the year is 1987",
+        "docString": null
       },
       {
-        "annotations":[],
-        "docString":null,
-        "text":"And NASA launches the last of America's deep space probes"
+        "annotations": [],
+        "text": "And NASA launches the last of America's deep space probes",
+        "docString": null
       },
       {
-        "annotations":[
+        "annotations": [
           {
-            "name":"skip",
-            "value":true
+            "name": "skip",
+            "value": true
           }
         ],
-        "docString":null,
-        "text":"Whence a freak mishap occurs"
+        "text": "Whence a freak mishap occurs",
+        "docString": null
       },
       {
-        "annotations":[],
-        "docString":null,
-        "text":"Thence Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems"
+        "annotations": [],
+        "text": "Thence Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems",
+        "docString": null
       },
       {
-        "annotations":[],
-        "docString":null,
-        "text":"And returns Buck Rogers to Earth 500 years later"
+        "annotations": [],
+        "text": "And returns Buck Rogers to Earth 500 years later",
+        "docString": null
       }
     ]
   },
-  "scenarios":[
+  "scenarios": [
     {
-      "annotations":[
+      "title": "Awakening",
+      "description": null,
+      "annotations": [
         {
-          "name":"skip",
-          "value":true
+          "name": "skip",
+          "value": true
         }
       ],
-      "title":"Awakening",
-      "description":null,
-      "steps":[
+      "steps": [
         {
-          "annotations":[],
-          "docString":null,
-          "text":"Giveth the Draconians have planted a homing beacon aboard Buck's shuttle"
+          "annotations": [],
+          "text": "Giveth the Draconians have planted a homing beacon aboard Buck's shuttle",
+          "docString": null
         },
         {
-          "annotations":[],
-          "docString":null,
-          "text":"Whence Buck arrives on Earth"
+          "annotations": [],
+          "text": "Whence Buck arrives on Earth",
+          "docString": null
         },
         {
-          "annotations":[],
-          "docString":null,
-          "text":"Thence he must adjust to the 25th century"
+          "annotations": [],
+          "text": "Thence he must adjust to the 25th century",
+          "docString": null
         },
         {
-          "annotations":[],
-          "docString":null,
-          "text":"And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them"
+          "annotations": [],
+          "text": "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them",
+          "docString": null
         }
       ]
     }
