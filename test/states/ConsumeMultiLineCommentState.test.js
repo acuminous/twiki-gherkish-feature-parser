@@ -77,7 +77,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: ConsumeBlockCommentState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: ConsumeBlockCommentState on line undefined:1' });
     });
   });
 

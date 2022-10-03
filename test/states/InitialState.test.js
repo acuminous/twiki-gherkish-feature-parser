@@ -28,7 +28,7 @@ describe('InitialState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: foo'), { message: "'Background: foo' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('Background: foo'), { message: "'Background: foo' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 
@@ -42,7 +42,7 @@ describe('InitialState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 
@@ -50,26 +50,26 @@ describe('InitialState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: "'---' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('---'), { message: "'---' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: "'---' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('---'), { message: "'---' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: InitialState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: InitialState on line undefined:1' });
     });
   });
 
@@ -109,7 +109,7 @@ describe('InitialState', () => {
 
   describe('Scenario Events', () => {
     it('should error', () => {
-      throws(() => handle('Scenario: foo'), { message: "'Scenario: foo' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('Scenario: foo'), { message: "'Scenario: foo' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 
@@ -122,7 +122,7 @@ describe('InitialState', () => {
 
   describe('Text Events', () => {
     it('should error', () => {
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: InitialState on line 1'" });
+      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: InitialState on line undefined:1'" });
     });
   });
 

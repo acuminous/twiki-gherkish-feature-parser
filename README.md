@@ -11,9 +11,15 @@
 import { FeatureParser } from "@twiki-bdd/gherkish-feature-parser";
 import * as fs from "node:fs";
 
-const file = fs.readFileSync("./buck-rogers-season-one.feature");
+const featureFilePath = "./buck-rogers-season-one.feature";
+const featureFile = fs.readFileSync(featureFilePath);
 const parser = new FeatureParser();
-const feature = parser.parse(file);
+const metadata = {
+  source: { 
+  	uri: featureFilePath,
+  }
+}
+const feature = parser.parse(featureFile, metadata);
 ```
 
 ## Parser Options
@@ -26,9 +32,15 @@ const feature = parser.parse(file);
 import { FeatureParser, Languages } from "@twiki-bdd/gherkish-feature-parser";
 import * as fs from "node:fs";
 
-const file = fs.readFileSync("./buck-rogers-season-one.feature");
+const featureFilePath = "./buck-rogers-season-one.feature";
+const featureFile = fs.readFileSync(featureFilePath);
 const parser = new FeatureParser({ language: Languages.English });
-const feature = parser.parse(file);
+const metadata = {
+  source: { 
+  	uri: featureFilePath,
+  }
+}
+const feature = parser.parse(file, metadata);
 ```
 
 ## Gherkin Compatability

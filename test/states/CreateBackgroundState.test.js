@@ -32,7 +32,7 @@ describe('CreateBackgroundState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: foo'), { message: "'Background: foo' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('Background: foo'), { message: "'Background: foo' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 
@@ -46,7 +46,7 @@ describe('CreateBackgroundState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 
@@ -54,32 +54,32 @@ describe('CreateBackgroundState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundState on line undefined:1' });
     });
   });
 
   describe('Feature Events', () => {
     it('should error', () => {
-      throws(() => handle('Feature: foo'), { message: "'Feature: foo' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('Feature: foo'), { message: "'Feature: foo' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 
@@ -92,7 +92,7 @@ describe('CreateBackgroundState', () => {
 
   describe('Scenario Events', () => {
     it('should error on scenario event', () => {
-      throws(() => handle('Scenario: First scenario'), { message: "'Scenario: First scenario' was unexpected in state: CreateBackgroundState on line 1'" });
+      throws(() => handle('Scenario: First scenario'), { message: "'Scenario: First scenario' was unexpected in state: CreateBackgroundState on line undefined:1'" });
     });
   });
 

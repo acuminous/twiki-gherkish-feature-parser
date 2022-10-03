@@ -34,7 +34,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: Meh'), { message: "'Background: Meh' was unexpected in state: AfterScenarioStepState on line 1'" });
+      throws(() => handle('Background: Meh'), { message: "'Background: Meh' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
     });
   });
 
@@ -65,7 +65,7 @@ describe('AfterScenarioStepState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: AfterScenarioStepState on line 1'" });
+      throws(() => handle('Some text'), { message: "'Some text' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
     });
   });
 
@@ -79,7 +79,7 @@ describe('AfterScenarioStepState', () => {
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: "'---' was unexpected in state: AfterScenarioStepState on line 1'" });
+      throws(() => handle('---'), { message: "'---' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
     });
   });
 
@@ -92,7 +92,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('Feature Events', () => {
     it('should error', () => {
-      throws(() => handle('Feature: Meh'), { message: "'Feature: Meh' was unexpected in state: AfterScenarioStepState on line 1'" });
+      throws(() => handle('Feature: Meh'), { message: "'Feature: Meh' was unexpected in state: AfterScenarioStepState on line undefined:1'" });
     });
   });
 

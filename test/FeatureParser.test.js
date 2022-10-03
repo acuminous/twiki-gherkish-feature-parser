@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { deepStrictEqual as deq } from 'node:assert';
+import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureParser, Languages } from '../index.js';
 
@@ -41,6 +41,23 @@ describe('FeatureParser', () => {
     const actual = parser.parse(source);
 
     deq(actual, expected);
+  });
+
+  it('should report parse errors', () => {
+    const metadata = {
+      source: {
+        uri: 'invalid.feature',
+      },
+    };
+    const source = readFeatureFile('en', 'invalid.feature');
+    const parser = new FeatureParser();
+
+    throws(() => {
+      parser.parse(source, metadata);
+    }, (err) => {
+      eq(err.message, 'Premature end of feature in state: CreateScenarioState on line invalid.feature:11');
+      return true;
+    });
   });
 
 });

@@ -37,7 +37,7 @@ describe('CreateBackgroundStepDocStringState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: CreateBackgroundStepDocStringState on line 1'" });
+      throws(() => handle('   Some text'), { message: "'   Some text' was unexpected in state: CreateBackgroundStepDocStringState on line undefined:1'" });
     });
   });
 
@@ -52,7 +52,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundStepDocStringState on line 1'" });
+      throws(() => handle('---'), { message: "'---' was unexpected in state: CreateBackgroundStepDocStringState on line undefined:1'" });
     });
   });
 
@@ -66,7 +66,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('End Events', () => {
     it('should transition to final on end event', () => {
-      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundStepDocStringState on line 1' });
+      throws(() => handle('\u0000'), { message: 'Premature end of feature in state: CreateBackgroundStepDocStringState on line undefined:1' });
     });
   });
 
