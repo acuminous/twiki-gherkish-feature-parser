@@ -10,9 +10,8 @@ describe('ConsumeBlockCommentState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - foo',
-    ' - bar',
-    ' - baz',
+    ' - A block comment',
+    ' - Some text',
   ].join('\n');
 
   beforeEach(() => {

@@ -11,10 +11,10 @@ describe('CreateBackgroundStepDocStringState', () => {
   let machine;
   let state;
   let session;
-  let expectedEvents = [
+  const expectedEvents = [
     ' - A DocString line',
-    ' - The end of an explicit DocString delinated by """',
     ' - The end of an indented DocString',
+    ' - The end of an explicit DocString',
   ].join('\n');
 
   beforeEach(() => {
@@ -41,10 +41,6 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
-      expectedEvents = [
-        ' - A DocString line',
-        ' - The end of an indented DocString',
-      ].join('\n');
       session.indentation = 0;
       throws(() => handle('   Some text'), { message: `'   Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
@@ -61,10 +57,6 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      expectedEvents = [
-        ' - A DocString line',
-        ' - The end of an explicit DocString delinated by ---',
-      ].join('\n');
       throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
@@ -79,10 +71,6 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('End Events', () => {
     it('should transition to final on end event', () => {
-      expectedEvents = [
-        ' - A DocString line',
-        ' - The end of an indented DocString',
-      ].join('\n');
       throws(() => handle('\u0000'), { message: `Unexpected end of feature at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });

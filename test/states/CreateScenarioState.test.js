@@ -11,9 +11,11 @@ describe('CreateScenarioState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - foo',
-    ' - bar',
-    ' - baz',
+    ' - An annotation',
+    ' - A blank line',
+    ' - A block comment',
+    ' - A single line comment',
+    ' - A step',
   ].join('\n');
 
   beforeEach(() => {
