@@ -10,43 +10,43 @@ export default class StubState extends BaseState {
     this.assertions = [].concat(assertions);
   }
 
-  onAnnotation(event) {
+  onAnnotation(session, event) {
     return this.handleEvent(event);
   }
 
-  onBackground(event) {
+  onBackground(session, event) {
     return this.handleEvent(event);
   }
 
-  onBlankLine(event) {
+  onBlankLine(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocStringTokenStart(event) {
+  onDocStringTokenStart(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocStringIndentStart(event) {
+  onDocStringIndentStart(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocString(event) {
+  onDocString(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocStringTokenStop(event) {
+  onDocStringTokenStop(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocStringIndentStop(event) {
+  onDocStringIndentStop(session, event) {
     return this.handleEvent(event);
   }
 
-  onEnd(event) {
+  onEnd(session, event) {
     return this.handleEvent(event);
   }
 
-  onFeature(event) {
+  onFeature(session, event) {
     return this.handleEvent(event);
   }
 
@@ -54,27 +54,27 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onBlockComment(event) {
+  onBlockComment(session, event) {
     return this.handleEvent(event);
   }
 
-  onScenario(event) {
+  onScenario(session, event) {
     return this.handleEvent(event);
   }
 
-  onSingleLineComment(event) {
+  onSingleLineComment(session, event) {
     return this.handleEvent(event);
   }
 
-  onStep(event) {
+  onStep(session, event) {
     return this.handleEvent(event);
   }
 
-  onText(event) {
+  onText(session, event) {
     return this.handleEvent(event);
   }
 
-  onUnexpectedEvent(event) {
+  onUnexpectedEvent(session, event) {
     return this.handleEvent(event);
   }
 
