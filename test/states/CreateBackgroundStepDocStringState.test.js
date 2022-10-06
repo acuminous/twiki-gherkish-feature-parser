@@ -42,7 +42,7 @@ describe('CreateBackgroundStepDocStringState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: `'   Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('   Some text'), { message: `The start of an indented DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -57,7 +57,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `The start of an explicit DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 

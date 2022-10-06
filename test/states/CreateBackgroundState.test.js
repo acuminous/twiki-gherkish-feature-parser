@@ -39,7 +39,7 @@ describe('CreateBackgroundState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: foo'), { message: `'Background: foo' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Background: foo'), { message: `A background was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -53,7 +53,7 @@ describe('CreateBackgroundState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   Some text'), { message: `'   Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('   Some text'), { message: `The start of an indented DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -61,20 +61,20 @@ describe('CreateBackgroundState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: `'Some text' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Some text'), { message: `The end of an indented DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `The start of an explicit DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `The end of an explicit DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -86,7 +86,7 @@ describe('CreateBackgroundState', () => {
 
   describe('Feature Events', () => {
     it('should error', () => {
-      throws(() => handle('Feature: foo'), { message: `'Feature: foo' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Feature: foo'), { message: `A feature was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -99,7 +99,7 @@ describe('CreateBackgroundState', () => {
 
   describe('Scenario Events', () => {
     it('should error on scenario event', () => {
-      throws(() => handle('Scenario: First scenario'), { message: `'Scenario: First scenario' was unexpected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Scenario: First scenario'), { message: `A scenario was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 
