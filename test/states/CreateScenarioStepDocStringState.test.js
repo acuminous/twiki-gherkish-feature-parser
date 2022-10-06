@@ -75,7 +75,7 @@ describe('CreateScenarioStepDocStringState', () => {
     });
   });
 
-  describe('DocString Events', () => {
+  describe('DocString Text Events', () => {
     it('should not cause transition', () => {
       session.docString = { token: '---' };
       handle('some text');

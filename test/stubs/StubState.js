@@ -30,7 +30,7 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onDocString(session, event) {
+  onDocStringText(session, event) {
     return this.handleEvent(event);
   }
 

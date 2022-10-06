@@ -4,9 +4,9 @@ import { Events, Languages } from '../../lib/index.js';
 import StubState from '../stubs/StubState.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { DocStringEvent } = Events;
+const { DocStringTextEvent } = Events;
 
-describe('DocStringEvent', () => {
+describe('DocStringTextEvent', () => {
   let session;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('DocStringEvent', () => {
 
   it('should recognise DocStrings', () => {
     const state = new StubState();
-    const event = new DocStringEvent();
+    const event = new DocStringTextEvent();
 
     eq(event.handle({ line: 'some text' }, session, state), true);
     eq(event.handle({ line: ' some text ' }, session, state), true);
@@ -28,12 +28,12 @@ describe('DocStringEvent', () => {
 
   it('should handle DocStrings', () => {
     const state = new StubState((event) => {
-      eq(event.name, 'DocStringEvent');
+      eq(event.name, 'DocStringTextEvent');
       eq(event.source.line, '   some text   ');
       eq(event.source.indentation, 3);
       eq(event.source.number, 1);
     });
-    const event = new DocStringEvent();
+    const event = new DocStringTextEvent();
 
     event.handle({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
 
