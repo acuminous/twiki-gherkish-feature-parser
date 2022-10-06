@@ -81,7 +81,7 @@ describe('CreateScenarioState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: `Unexpected end of feature at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('\u0000'), { message: `The end of the feature was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
     });
   });
 

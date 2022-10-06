@@ -61,7 +61,7 @@ describe('FeatureParser', () => {
 
     throws(() => {
       parser.parse(source, metadata);
-    }, { message: `Unexpected end of feature at invalid.feature:11\nExpected one of:\n${expectedEvents}\n` });
+    }, { message: `The end of the feature was not expected at invalid.feature:11\nExpected one of:\n${expectedEvents}\n` });
   });
 
 });
