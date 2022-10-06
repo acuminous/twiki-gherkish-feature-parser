@@ -35,7 +35,7 @@ describe('InitialState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: foo'), { message: `'Background: foo' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Background: foo'), { message: `${state.name} has no event handler for 'Background: foo' at undefined:1` });
     });
   });
 
@@ -49,7 +49,7 @@ describe('InitialState', () => {
   describe('DocString Indent Start Events', () => {
     it('should error on DocStringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   some text'), { message: `'   some text' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('   some text'), { message: `${state.name} has no event handler for '   some text' at undefined:1` });
     });
   });
 
@@ -57,20 +57,20 @@ describe('InitialState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('some text'), { message: `'some text' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
     });
   });
 
   describe('DocString Token Start Events', () => {
     it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: `'---' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
   });
 
@@ -116,7 +116,7 @@ describe('InitialState', () => {
 
   describe('Scenario Events', () => {
     it('should error', () => {
-      throws(() => handle('Scenario: foo'), { message: `'Scenario: foo' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Scenario: foo'), { message: `${state.name} has no event handler for 'Scenario: foo' at undefined:1` });
     });
   });
 
@@ -129,7 +129,7 @@ describe('InitialState', () => {
 
   describe('Text Events', () => {
     it('should error', () => {
-      throws(() => handle('some text'), { message: `'some text' was unexpected at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
     });
   });
 
