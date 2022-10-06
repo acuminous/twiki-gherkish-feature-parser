@@ -13,8 +13,8 @@ describe('TextEvent', () => {
     const state = new StubState();
     const event = new TextEvent();
 
-    eq(event.handle({ line: 'Some text' }, session, state), true);
-    eq(event.handle({ line: ' Some text ' }, session, state), true);
+    eq(event.handle({ line: 'some text' }, session, state), true);
+    eq(event.handle({ line: ' some text ' }, session, state), true);
   });
 
   it('should recognise localised text', () => {
@@ -27,20 +27,20 @@ describe('TextEvent', () => {
     eq(event.handle({ line: 'Then some text' }, session, state), true);
     eq(event.handle({ line: 'And some text' }, session, state), true);
     eq(event.handle({ line: '  Given some text  ' }, session, state), true);
-    eq(event.handle({ line: 'Some text' }, session, state), true);
+    eq(event.handle({ line: 'some text' }, session, state), true);
   });
 
   it('should handle text', () => {
     const session = { language: Languages.English };
     const state = new StubState((event) => {
       eq(event.name, 'TextEvent');
-      eq(event.source.line, '  Some text  ');
+      eq(event.source.line, '  some text  ');
       eq(event.source.number, 1);
-      eq(event.data.text, '  Some text  ');
+      eq(event.data.text, '  some text  ');
     });
     const event = new TextEvent();
 
-    event.handle({ line: '  Some text  ', number: 1 }, { ...session, indentation: 0 }, state);
+    event.handle({ line: '  some text  ', number: 1 }, { ...session, indentation: 0 }, state);
 
     eq(state.count, 1);
   });

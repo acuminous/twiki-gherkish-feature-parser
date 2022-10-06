@@ -11,15 +11,15 @@ describe('AfterScenarioStepState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - An annotation',
-    ' - A blank line',
-    ' - A block comment',
-    ' - The start of an explicit DocString',
-    ' - The start of an indented DocString',
-    ' - The end of the feature',
-    ' - A scenario',
-    ' - A single line comment',
-    ' - A step',
+    ' - an annotation',
+    ' - a blank line',
+    ' - a block comment',
+    ' - the start of an explicit DocString',
+    ' - the start of an indented DocString',
+    ' - the end of the feature',
+    ' - a scenario',
+    ' - a single line comment',
+    ' - a step',
   ].join('\n');
 
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('Background Events', () => {
     it('should error', () => {
-      throws(() => handle('Background: Meh'), { message: `A background was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Background: Meh'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -59,16 +59,16 @@ describe('AfterScenarioStepState', () => {
   describe('DocString Indent Start Events', () => {
     it('should transition to new CreateScenarioStepDocStringState on DocStringIndentStart event', () => {
       session.indentation = 0;
-      handle('   Some text');
+      handle('   some text');
       eq(machine.state, 'CreateScenarioStepDocStringState');
     });
 
     it('should capture DocStrings', () => {
       session.indentation = 0;
-      handle('   Some text');
+      handle('   some text');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docString, 'Some text');
+      eq(exported.scenarios[0].steps[0].docString, 'some text');
     });
   });
 
@@ -76,7 +76,7 @@ describe('AfterScenarioStepState', () => {
     it('should error on DocStringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('Some text'), { message: `The end of an indented DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('some text'), { message: `I did not expect the end of an indented DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -90,7 +90,7 @@ describe('AfterScenarioStepState', () => {
   describe('DocString Token Stop Events', () => {
     it('should error on DocStringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: `The end of an explicit DocString was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `I did not expect the end of an explicit DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -103,7 +103,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('Feature Events', () => {
     it('should error', () => {
-      throws(() => handle('Feature: Meh'), { message: `A feature was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('Feature: Meh'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

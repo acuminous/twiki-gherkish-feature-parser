@@ -34,8 +34,8 @@ describe('StepEvent', () => {
     const state = new StubState();
     const event = new StepEvent();
 
-    eq(event.handle({ line: 'Some text' }, session, state), true);
-    eq(event.handle({ line: ' Some text ' }, session, state), true);
+    eq(event.handle({ line: 'some text' }, session, state), true);
+    eq(event.handle({ line: ' some text ' }, session, state), true);
   });
 
   it('should handle localised steps', () => {

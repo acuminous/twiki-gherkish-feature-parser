@@ -52,16 +52,16 @@ describe('FeatureParser', () => {
     const source = readFeatureFile('en', 'invalid.feature');
     const parser = new FeatureParser();
     const expectedEvents = [
-      ' - An annotation',
-      ' - A blank line',
-      ' - A block comment',
-      ' - A single line comment',
-      ' - A step',
+      ' - an annotation',
+      ' - a blank line',
+      ' - a block comment',
+      ' - a single line comment',
+      ' - a step',
     ].join('\n');
 
     throws(() => {
       parser.parse(source, metadata);
-    }, { message: `The end of the feature was not expected at invalid.feature:11\nExpected one of:\n${expectedEvents}\n` });
+    }, { message: `I did not expect the end of the feature at invalid.feature:11\nInstead, I expected one of:\n${expectedEvents}\n` });
   });
 
 });

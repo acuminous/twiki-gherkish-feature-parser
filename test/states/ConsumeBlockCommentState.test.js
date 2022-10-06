@@ -10,8 +10,8 @@ describe('ConsumeBlockCommentState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - A block comment',
-    ' - Some text',
+    ' - a block comment',
+    ' - some text',
   ].join('\n');
 
   beforeEach(() => {
@@ -50,7 +50,7 @@ describe('ConsumeBlockCommentState', () => {
   describe('DocString Indent Start Events', () => {
     it('should not cause transition', () => {
       session.indentation = 0;
-      handle('   Some text');
+      handle('   some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
@@ -59,7 +59,7 @@ describe('ConsumeBlockCommentState', () => {
     it('should not cause transition', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      handle('Some text');
+      handle('some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
@@ -81,7 +81,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('End Events', () => {
     it('should error', () => {
-      throws(() => handle('\u0000'), { message: `The end of the feature was not expected at undefined:1\nExpected one of:\n${expectedEvents}\n` });
+      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -122,7 +122,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('Text Events', () => {
     it('should not cause transition', () => {
-      handle('Some text');
+      handle('some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
