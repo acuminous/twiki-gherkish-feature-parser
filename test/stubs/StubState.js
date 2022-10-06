@@ -74,7 +74,7 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onUnexpectedEvent(session, event) {
+  onMissingEventHandlerEvent(session, event) {
     return this.handleEvent(event);
   }
 
