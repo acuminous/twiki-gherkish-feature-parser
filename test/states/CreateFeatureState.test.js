@@ -29,7 +29,7 @@ describe('CreateFeatureState', () => {
 
     state = new CreateFeatureState({ featureBuilder, machine });
 
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -66,31 +66,9 @@ describe('CreateFeatureState', () => {
     });
   });
 
-  describe('An indented blank line', () => {
-    it('should be unexpected', () => {
-      session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
   describe('A docstring token', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Token Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -149,18 +127,24 @@ describe('CreateFeatureState', () => {
     });
   });
 
-  describe('Text Events', () => {
+  describe('A line of text', () => {
     it('should not cause a state transition', () => {
       handle('some text');
       eq(machine.state, 'CreateFeatureState');
     });
 
-    it('should capture description', () => {
+    it('should be captured in the feature description', () => {
       handle('some text');
-      handle('Some more text');
+      handle('some more text');
 
       const exported = featureBuilder.build();
-      eq(exported.description, 'some text\nSome more text');
+      eq(exported.description, 'some text\nsome more text');
+    });
+  });
+
+  describe('An indented line of text', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

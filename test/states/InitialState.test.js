@@ -23,7 +23,7 @@ describe('InitialState', () => {
     featureBuilder = new FeatureBuilder();
     machine = new StateMachine({ parser, featureBuilder });
     state = new InitialState({ featureBuilder, machine });
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -46,30 +46,8 @@ describe('InitialState', () => {
     });
   });
 
-  describe('An indented blank line', () => {
-    it('should be unexpected', () => {
-      session.indentation = 0;
-      throws(() => handle('   some text'), { message: `${state.name} has no event handler for '   some text' at undefined:1` });
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
-    });
-  });
-
   describe('A docstring token', () => {
     it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
-    });
-  });
-
-  describe('DocString Token Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { token: '---' };
       throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
   });
@@ -86,14 +64,14 @@ describe('InitialState', () => {
       eq(machine.state, 'CreateFeatureState');
     });
 
-    it('should capture feature title', () => {
+    it('should be caputed', () => {
       handle('Feature: Some feature');
 
       const exported = featureBuilder.build();
       eq(exported.title, 'Some feature');
     });
 
-    it('should capture feature annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one = 1');
       handle('@two = 2');
       handle('Feature: First scenario');
@@ -127,9 +105,15 @@ describe('InitialState', () => {
     });
   });
 
-  describe('Text Events', () => {
+  describe('A line of text', () => {
     it('should be unexpected', () => {
       throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
+    });
+  });
+
+  describe('An indented line of text', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('   some text'), { message: `${state.name} has no event handler for '   some text' at undefined:1` });
     });
   });
 

@@ -28,7 +28,7 @@ describe('CreateScenarioState', () => {
 
     state = new CreateScenarioState({ featureBuilder, machine });
 
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -51,31 +51,9 @@ describe('CreateScenarioState', () => {
     });
   });
 
-  describe('An indented blank line', () => {
-    it('should be unexpected', () => {
-      session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
   describe('A docstring token', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Token Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -117,7 +95,7 @@ describe('CreateScenarioState', () => {
       eq(machine.state, 'AfterScenarioStepState');
     });
 
-    it('should be captureds', () => {
+    it('should be captured in the scenario description', () => {
       handle('First step');
 
       const exported = featureBuilder.build();
@@ -136,6 +114,12 @@ describe('CreateScenarioState', () => {
       eq(exported.scenarios[0].steps[0].annotations[0].value, '1');
       eq(exported.scenarios[0].steps[0].annotations[1].name, 'two');
       eq(exported.scenarios[0].steps[0].annotations[1].value, '2');
+    });
+  });
+
+  describe('An indented line of text', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
