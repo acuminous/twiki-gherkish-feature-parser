@@ -36,7 +36,7 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'AfterBackgroundStepState');
     });
@@ -49,14 +49,14 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'AfterBackgroundStepState');
     });
   });
 
   describe('DocString Indent Start Events', () => {
-    it('should transition to new CreateBackgroundStepDocStringIndentState on docstringIndentStart event', () => {
+    it('should cause a state transition to CreateBackgroundStepDocStringIndentState', () => {
       session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
@@ -80,7 +80,7 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('DocString Token Start Events', () => {
-    it('should transition to new CreateBackgroundStepDocStringTokenState on docstringTokenStart event', () => {
+    it('should cause a state transition to CreateBackgroundStepDocStringTokenState', () => {
       handle('---');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
@@ -94,7 +94,7 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('End Events', () => {
-    it('should transition to final on end event', () => {
+    it('should cause a state transition to final on end event', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
@@ -106,14 +106,14 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('Block Comment Events', () => {
-    it('should transition to ConsumeBlockCommentState', () => {
+    it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Scenario Events', () => {
-    it('should transition to CreateScenarioState on scenario event', () => {
+    it('should cause a state transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -142,14 +142,14 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('# foo');
       eq(machine.state, 'AfterBackgroundStepState');
     });
   });
 
   describe('Step Events', () => {
-    it('should transition to new AfterBackgroundStepState on step event', () => {
+    it('should cause a state transition to AfterBackgroundStepState', () => {
       handle('Given some text');
       eq(machine.state, 'AfterBackgroundStepState');
     });

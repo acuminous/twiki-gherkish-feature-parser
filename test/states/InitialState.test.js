@@ -27,7 +27,7 @@ describe('InitialState', () => {
   });
 
   describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'InitialState');
     });
@@ -40,7 +40,7 @@ describe('InitialState', () => {
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'InitialState');
     });
@@ -81,7 +81,7 @@ describe('InitialState', () => {
   });
 
   describe('Feature Events', () => {
-    it('should transition to CreateFeatureState', () => {
+    it('should cause a state transition to CreateFeatureState', () => {
       handle('Feature: foo');
       eq(machine.state, 'CreateFeatureState');
     });
@@ -108,7 +108,7 @@ describe('InitialState', () => {
   });
 
   describe('Block Comment Events', () => {
-    it('should transition to ConsumeBlockCommentState', () => {
+    it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
@@ -121,7 +121,7 @@ describe('InitialState', () => {
   });
 
   describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('# foo');
       eq(machine.state, 'InitialState');
     });

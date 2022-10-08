@@ -31,7 +31,7 @@ describe('CreateBackgroundState', () => {
   });
 
   describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'CreateBackgroundState');
     });
@@ -44,7 +44,7 @@ describe('CreateBackgroundState', () => {
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'CreateBackgroundState');
     });
@@ -91,7 +91,7 @@ describe('CreateBackgroundState', () => {
   });
 
   describe('Block Comment Events', () => {
-    it('should transition to ConsumeBlockCommentState', () => {
+    it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
@@ -104,14 +104,14 @@ describe('CreateBackgroundState', () => {
   });
 
   describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('# Some comment');
       eq(machine.state, 'CreateBackgroundState');
     });
   });
 
   describe('Step Events', () => {
-    it('should transition to AfterBackgroundStepState on step event', () => {
+    it('should cause a state transition to AfterBackgroundStepState', () => {
       featureBuilder.createBackground({ annotations: [] });
 
       handle('First step');

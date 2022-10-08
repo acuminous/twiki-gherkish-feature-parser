@@ -32,7 +32,7 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       session.docstring = { token: '---' };
       handle('');
       eq(machine.state, 'CreateScenarioStepDocStringState');
@@ -47,7 +47,7 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should transition to new AfterScenarioStepDocStringState on docstringIndentEnd event', () => {
+    it('should cause a state transition to AfterScenarioStepDocStringState', () => {
       session.docstring = { indentation: 3 };
       session.indentation = 0;
       handle('some text');
@@ -62,7 +62,7 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should transition to new AfterScenarioStepDocStringState on docstringTokenStop event', () => {
+    it('should cause a state transition to AfterScenarioStepDocStringState', () => {
       session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'AfterScenarioStepDocStringState');
@@ -70,13 +70,13 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('End Events', () => {
-    it('should transition to final on end event', () => {
+    it('should cause a state transition to final on end event', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Text Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       session.docstring = { token: '---' };
       handle('some text');
       eq(machine.state, 'CreateScenarioStepDocStringState');

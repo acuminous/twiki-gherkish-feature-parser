@@ -37,7 +37,7 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'AfterScenarioStepState');
     });
@@ -50,14 +50,14 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'AfterScenarioStepState');
     });
   });
 
   describe('DocString Indent Start Events', () => {
-    it('should transition to new CreateScenarioStepDocStringState on docstringIndentStart event', () => {
+    it('should cause a state transition to CreateScenarioStepDocStringState', () => {
       session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'CreateScenarioStepDocStringState');
@@ -81,7 +81,7 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('DocString Token Start Events', () => {
-    it('should transition to new CreateScenarioStepDocStringState on docstringTokenStart event', () => {
+    it('should cause a state transition to CreateScenarioStepDocStringState', () => {
       handle('---');
       eq(machine.state, 'CreateScenarioStepDocStringState');
     });
@@ -95,7 +95,7 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('End Events', () => {
-    it('should transition to final on end event', () => {
+    it('should cause a state transition to final on end event', () => {
       handle('\u0000');
       eq(machine.state, 'FinalState');
     });
@@ -108,14 +108,14 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('Block Comment Events', () => {
-    it('should transition to ConsumeBlockCommentState', () => {
+    it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Scenario Events', () => {
-    it('should transition to CreateScenarioState on scenario event', () => {
+    it('should cause a state transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -145,14 +145,14 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('#');
       eq(machine.state, 'AfterScenarioStepState');
     });
   });
 
   describe('Step Events', () => {
-    it('should transition to AfterScenarioStepState on step event', () => {
+    it('should cause a state transition to AfterScenarioStepState', () => {
       handle('Second step');
       eq(machine.state, 'AfterScenarioStepState');
     });

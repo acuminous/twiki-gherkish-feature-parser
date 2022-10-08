@@ -33,7 +33,7 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'AfterScenarioStepDocStringState');
     });
@@ -46,7 +46,7 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'AfterScenarioStepDocStringState');
     });
@@ -87,7 +87,7 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('End Events', () => {
-    it('should transition to final on end event', () => {
+    it('should cause a state transition to final on end event', () => {
       handle('\u0000');
       eq(machine.state, 'FinalState');
     });
@@ -100,14 +100,14 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('Block Comment Events', () => {
-    it('should transition to ConsumeBlockCommentState', () => {
+    it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Scenario Events', () => {
-    it('should transition to CreateScenarioState on scenario event', () => {
+    it('should cause a state transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -137,14 +137,14 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('#');
       eq(machine.state, 'AfterScenarioStepDocStringState');
     });
   });
 
   describe('Step Events', () => {
-    it('should transition to AfterScenarioStepState on step event', () => {
+    it('should cause a state transition to AfterScenarioStepState', () => {
       handle('Second step');
       eq(machine.state, 'AfterScenarioStepState');
     });

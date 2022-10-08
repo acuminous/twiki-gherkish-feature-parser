@@ -112,7 +112,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   });
 
   describe('A line of text indented to the same depth as the docstring', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('   some text');
       eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
     });

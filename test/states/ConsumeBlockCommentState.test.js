@@ -27,28 +27,28 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('@foo = bar');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Background Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('Background: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('DocString Indent Start Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'ConsumeBlockCommentState');
@@ -56,7 +56,7 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       session.docstring = { indentation: 3 };
       session.indentation = 0;
       handle('some text');
@@ -65,14 +65,14 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   describe('DocString Token Start Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('---');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'ConsumeBlockCommentState');
@@ -86,42 +86,42 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   describe('Feature Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('Feature: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Block Comment Events', () => {
-    it('should transition to previous state', () => {
+    it('should cause a state transition to previous state', () => {
       handle('###');
       eq(machine.state, 'CreateFeatureState');
     });
   });
 
   describe('Scenario Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('Scenario: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('# Single comment');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Step Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('Given some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('Text Events', () => {
-    it('should not cause transition', () => {
+    it('should not cause a state transition', () => {
       handle('some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });

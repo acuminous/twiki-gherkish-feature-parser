@@ -30,83 +30,67 @@ describe('AfterBackgroundStepDocStringState', () => {
 
     state = new AfterBackgroundStepDocStringState({ featureBuilder, machine });
 
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
-  describe('Annotation Events', () => {
-    it('should not cause transition', () => {
+  describe('An annotation', () => {
+    it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });
   });
 
-  describe('Background Events', () => {
-    it('should error', () => {
+  describe('a background', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+  describe('A blank line', () => {
+    it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });
   });
 
-  describe('DocString Indent Start Events', () => {
-    it('should error on docstringIndentStart event', () => {
-      session.indentation = 0;
+  describe('An indented line of text', () => {
+    it('should be unexpected', () => {
       throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('DocString Indent Stop Events', () => {
-    it('should error on docstringIndentStop event', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Token Start Events', () => {
-    it('should error on docstringTokenStart event', () => {
+  describe('A docstring token', () => {
+    it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('DocString Token Stop Events', () => {
-    it('should error on docstringTokenStop event', () => {
-      session.docstring = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('End Events', () => {
-    it('should transition to final on end event', () => {
+  describe('The end of the feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Feature Events', () => {
-    it('should error on feature event', () => {
+  describe('A feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Block Comment Events', () => {
-    it('should transition to ConsumeBlockCommentState', () => {
+  describe('A block comment', () => {
+    it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Scenario Events', () => {
-    it('should transition to CreateScenarioState on scenario event', () => {
+  describe('A scenario', () => {
+    it('should cause a state transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
 
-    it('should capture scenarios', () => {
+    it('should be captured', () => {
       handle('Scenario: First scenario');
 
       const exported = featureBuilder.build();
@@ -114,7 +98,7 @@ describe('AfterBackgroundStepDocStringState', () => {
       eq(exported.scenarios[0].title, 'First scenario');
     });
 
-    it('should capture scenarios with annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one = 1');
       handle('@two = 2');
       handle('Scenario: First scenario');
@@ -129,20 +113,20 @@ describe('AfterBackgroundStepDocStringState', () => {
     });
   });
 
-  describe('Single Line Comment Events', () => {
-    it('should not cause transition', () => {
+  describe('A single line comment', () => {
+    it('should not cause a state transition', () => {
       handle('# foo');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });
   });
 
-  describe('Step Events', () => {
-    it('should transition to new AfterBackgroundStepState on step event', () => {
+  describe('A line of text', () => {
+    it('should cause a state transition to AfterBackgroundStepState', () => {
       handle('Given some text');
       eq(machine.state, 'AfterBackgroundStepState');
     });
 
-    it('should capture step', () => {
+    it('should be captured', () => {
       handle('Given some text');
 
       const exported = featureBuilder.build();
@@ -150,7 +134,7 @@ describe('AfterBackgroundStepDocStringState', () => {
       eq(exported.background.steps[1].text, 'Given some text');
     });
 
-    it('should capture steps with annotations', () => {
+    it('should captured with annotations', () => {
       handle('@one = 1');
       handle('@two = 2');
       handle('Given some text');
