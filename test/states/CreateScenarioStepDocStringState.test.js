@@ -12,7 +12,7 @@ describe('CreateScenarioStepDocStringState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - a DocString line',
+    ' - a docstring line',
     ' - the end of an explicit docstring',
     ' - the end of an indented docstring',
   ].join('\n');

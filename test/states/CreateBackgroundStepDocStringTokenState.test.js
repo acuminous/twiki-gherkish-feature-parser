@@ -11,7 +11,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - a DocString line',
+    ' - a docstring line',
     ' - the end of an explicit docstring',
   ].join('\n');
 
