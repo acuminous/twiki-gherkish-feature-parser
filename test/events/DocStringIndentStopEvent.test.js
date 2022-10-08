@@ -44,7 +44,7 @@ describe('DocStringIndentStopEvent', () => {
     eq(event.handle({ line: '   some text   ', indentation: 3 }, session, state), false);
   });
 
-  it('should do nothing when already handling a token docstring', () => {
+  it('should do nothing when already handling an explicit docstring', () => {
     const state = new StubState();
     const event = new DocStringIndentStopEvent();
 

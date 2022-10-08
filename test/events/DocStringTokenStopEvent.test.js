@@ -51,7 +51,7 @@ describe('DocStringTokenStopEvent', () => {
     eq(event.handle({ line: '   """   ' }, session, state), false);
   });
 
-  it('should do nothing when not handling a token docstring', () => {
+  it('should do nothing when not handling an explicit docstring', () => {
     const state = new StubState();
     const event = new DocStringTokenStopEvent();
 

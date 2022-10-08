@@ -13,7 +13,7 @@ describe('DocStringTokenStartEvent', () => {
     session = { language: Languages.English };
   });
 
-  it('should recognise token docstrings', () => {
+  it('should recognise explicit docstrings', () => {
     const state = new StubState();
     const event = new DocStringTokenStartEvent();
     eq(event.handle({ line: '---' }, session, state), true);
