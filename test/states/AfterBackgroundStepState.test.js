@@ -56,9 +56,9 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should cause a transition to CreateBackgroundStepDocStringTokenState', () => {
+    it('should cause a transition to CreateBackgroundStepExplicitDocStringState', () => {
       handle('---');
-      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
+      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
     });
   });
 
@@ -146,9 +146,9 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('An indented line of text', () => {
-    it('should cause a transition to CreateBackgroundStepDocStringIndentState', () => {
+    it('should cause a transition to CreateBackgroundStepImplicitDocStringState', () => {
       handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {

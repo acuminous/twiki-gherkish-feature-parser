@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepDocStringIndentState } = States;
+const { CreateBackgroundStepImplicitDocStringState } = States;
 
-describe('CreateBackgroundStepDocStringIndentState', () => {
+describe('CreateBackgroundStepImplicitDocStringState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -26,9 +26,9 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundStepDocStringIndentState();
+    machine.toCreateBackgroundStepImplicitDocStringState();
 
-    state = new CreateBackgroundStepDocStringIndentState({ featureBuilder, machine });
+    state = new CreateBackgroundStepImplicitDocStringState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0, docstring: { indentation: 3 } };
   });
@@ -36,7 +36,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A blank line indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       handle('   ');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -49,7 +49,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A blank line indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
       handle('      ');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -75,7 +75,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A docstring token indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       handle('   ---');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -88,7 +88,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A docstring token indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
       handle('      ---');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -114,7 +114,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A line of text indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {

@@ -4,9 +4,9 @@ import { Events, Languages } from '../../lib/index.js';
 import StubState from '../stubs/StubState.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { DocStringTokenStartEvent } = Events;
+const { ExplicitDocStringStartEvent } = Events;
 
-describe('DocStringTokenStartEvent', () => {
+describe('ExplicitDocStringStartEvent', () => {
   let session;
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('DocStringTokenStartEvent', () => {
 
   it('should recognise explicit docstrings', () => {
     const state = new StubState();
-    const event = new DocStringTokenStartEvent();
+    const event = new ExplicitDocStringStartEvent();
     eq(event.handle({ line: '---' }, session, state), true);
     delete session.docstring;
     eq(event.handle({ line: ' --- ' }, session, state), true);
@@ -45,7 +45,7 @@ describe('DocStringTokenStartEvent', () => {
 
   it('should not recognise token docstrings when already handling a docstring', () => {
     const state = new StubState();
-    const event = new DocStringTokenStartEvent();
+    const event = new ExplicitDocStringStartEvent();
 
     session.docstring = {};
     eq(event.handle({ line: '---' }, session, state), false);
@@ -54,12 +54,12 @@ describe('DocStringTokenStartEvent', () => {
 
   it('should handle --- docstrings', () => {
     const state = new StubState((event) => {
-      eq(event.name, 'DocStringTokenStartEvent');
+      eq(event.name, 'ExplicitDocStringStartEvent');
       eq(event.source.line, '   ---   ');
       eq(event.source.number, 1);
       eq(event.source.indentation, 3);
     });
-    const event = new DocStringTokenStartEvent();
+    const event = new ExplicitDocStringStartEvent();
 
     event.handle({ line: '   ---   ', indentation: 3, number: 1 }, session, state);
 
@@ -69,12 +69,12 @@ describe('DocStringTokenStartEvent', () => {
 
   it('should handle """ docstrings', () => {
     const state = new StubState((event) => {
-      eq(event.name, 'DocStringTokenStartEvent');
+      eq(event.name, 'ExplicitDocStringStartEvent');
       eq(event.source.line, '   """   ');
       eq(event.source.number, 1);
       eq(event.source.indentation, 3);
     });
-    const event = new DocStringTokenStartEvent();
+    const event = new ExplicitDocStringStartEvent();
 
     event.handle({ line: '   """   ', indentation: 3, number: 1 }, session, state);
 

@@ -4,9 +4,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateScenarioStepDocStringTokenState } = States;
+const { CreateScenarioStepExplicitDocStringState } = States;
 
-describe('CreateScenarioStepDocStringTokenState', () => {
+describe('CreateScenarioStepExplicitDocStringState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -23,9 +23,9 @@ describe('CreateScenarioStepDocStringTokenState', () => {
     featureBuilder.createScenarioStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateScenarioStepDocStringTokenState();
+    machine.toCreateScenarioStepExplicitDocStringState();
 
-    state = new CreateScenarioStepDocStringTokenState({ featureBuilder, machine });
+    state = new CreateScenarioStepExplicitDocStringState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0, docstring: { token: '---' } };
   });
@@ -33,7 +33,7 @@ describe('CreateScenarioStepDocStringTokenState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
-      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
+      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
     });
   });
 
@@ -53,7 +53,7 @@ describe('CreateScenarioStepDocStringTokenState', () => {
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
       handle('some text');
-      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
+      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
     });
 
     it('should be captured', () => {
@@ -68,7 +68,7 @@ describe('CreateScenarioStepDocStringTokenState', () => {
   describe('An indented line of text', () => {
     it('should not cause a state transition', () => {
       handle('   some text');
-      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
+      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
     });
 
     it('should be captured', () => {

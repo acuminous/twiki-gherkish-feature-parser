@@ -1,11 +1,11 @@
 import { States, Events } from '../../lib/index.js';
 
 const { BaseState } = States;
-const { AnnotationEvent, BackgroundEvent, BlankLineEvent, DocStringTokenStartEvent, EndEvent, FeatureEvent, BlockCommentEvent, ScenarioEvent, SingleLineCommentEvent, StepEvent, TextEvent } = Events;
+const { AnnotationEvent, BackgroundEvent, BlankLineEvent, ExplicitDocStringStartEvent, EndEvent, FeatureEvent, BlockCommentEvent, ScenarioEvent, SingleLineCommentEvent, StepEvent, TextEvent } = Events;
 
 export default class StubState extends BaseState {
   constructor(assertions = []) {
-    super({ events: [EndEvent, DocStringTokenStartEvent, BlockCommentEvent, SingleLineCommentEvent, AnnotationEvent, FeatureEvent, BackgroundEvent, ScenarioEvent, BlankLineEvent, StepEvent, TextEvent] });
+    super({ events: [EndEvent, ExplicitDocStringStartEvent, BlockCommentEvent, SingleLineCommentEvent, AnnotationEvent, FeatureEvent, BackgroundEvent, ScenarioEvent, BlankLineEvent, StepEvent, TextEvent] });
     this.count = 0;
     this.assertions = [].concat(assertions);
   }
@@ -22,11 +22,11 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onDocStringTokenStart(session, event) {
+  onExplicitDocStringStart(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocStringIndentStart(session, event) {
+  onImplicitDocStringStart(session, event) {
     return this.handleEvent(event);
   }
 
@@ -34,11 +34,11 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onDocStringTokenStop(session, event) {
+  onExplicitDocStringStop(session, event) {
     return this.handleEvent(event);
   }
 
-  onDocStringIndentStop(session, event) {
+  onImplicitDocStringStop(session, event) {
     return this.handleEvent(event);
   }
 

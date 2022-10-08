@@ -57,9 +57,9 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should cause a transition to CreateScenarioStepDocStringTokenState', () => {
+    it('should cause a transition to CreateScenarioStepExplicitDocStringState', () => {
       handle('---');
-      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
+      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
     });
   });
 
@@ -151,10 +151,10 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('An indented line of text', () => {
-    it('should cause a transition to CreateScenarioStepDocStringIndentState', () => {
+    it('should cause a transition to CreateScenarioStepImplicitDocStringState', () => {
       session.indentation = 0;
       handle('   some text');
-      eq(machine.state, 'CreateScenarioStepDocStringIndentState');
+      eq(machine.state, 'CreateScenarioStepImplicitDocStringState');
     });
 
     it('should capture docstrings', () => {

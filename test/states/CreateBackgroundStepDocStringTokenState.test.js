@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepDocStringTokenState } = States;
+const { CreateBackgroundStepExplicitDocStringState } = States;
 
-describe('CreateBackgroundStepDocStringTokenState', () => {
+describe('CreateBackgroundStepExplicitDocStringState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -22,9 +22,9 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundStepDocStringTokenState();
+    machine.toCreateBackgroundStepExplicitDocStringState();
 
-    state = new CreateBackgroundStepDocStringTokenState({ featureBuilder, machine });
+    state = new CreateBackgroundStepExplicitDocStringState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0, docstring: { token: '---' } };
   });
@@ -32,7 +32,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
   describe('A blank line', () => {
     it('should not cause a transition', () => {
       handle('');
-      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
+      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -45,7 +45,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
   describe('A blank line indented more deeply than the docstring', () => {
     it('should not cause a transition', () => {
       handle('   ');
-      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
+      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -71,7 +71,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
   describe('A line of text', () => {
     it('should not cause a transition', () => {
       handle('some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
+      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
