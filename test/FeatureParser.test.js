@@ -6,7 +6,7 @@ import { FeatureParser, Languages } from '../index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-odescribe('FeatureParser', () => {
+describe('FeatureParser', () => {
 
   describe('Supported languages', () => {
 
@@ -17,23 +17,23 @@ odescribe('FeatureParser', () => {
     it('should parse features in Pirate', () => {
       assertFeature('languages', 'buck-rogers-season-one-bv', { language: Languages.Pirate });
     });
-  })
+  });
 
   describe('Variants', () => {
     listFeatures('variants').forEach(({ title, basename }) => {
       it(`should parse ${title}`, () => {
         assertFeature('variants', basename);
-      })
-    })
-  })
+      });
+    });
+  });
 
-  odescribe('Error handling', () => {
+  describe('Error handling', () => {
     listFeatures('invalid').forEach(({ title, basename }) => {
       // const _it = title === 'scenario with empty explicit docstring' ? oit : it;
       it(`should report ${title}`, () => {
         assertParserError('invalid', basename);
-      })
-    })
+      });
+    });
   });
 
   describe('ASCII Art', () => {
@@ -44,14 +44,12 @@ odescribe('FeatureParser', () => {
 });
 
 function listFeatures(folder) {
-  return fs.readdirSync(path.join('test', 'features', folder)).filter((filename) => {
-    return path.extname(filename) === '.feature';
-  }).map((filename) => {
+  return fs.readdirSync(path.join('test', 'features', folder)).filter((filename) => path.extname(filename) === '.feature').map((filename) => {
     const basename = path.basename(filename, '.feature');
     const title = basename.replaceAll('-', ' ');
-    return { title, basename }
-  })
-};
+    return { title, basename };
+  });
+}
 
 function assertFeature(folder, filename, options) {
   const expected = readJsonFile(folder, `${filename}.json`);

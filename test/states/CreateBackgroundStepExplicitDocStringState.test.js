@@ -12,7 +12,6 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
   let session;
   const expectedEvents = [
     ' - a docstring line',
-    ' - the end of an explicit docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -32,7 +31,7 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
   describe('A blank line', () => {
     it('should not cause a transition', () => {
       handle('');
-      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
+      eq(machine.state, 'ConsumeBackgroundStepExplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -45,7 +44,7 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
   describe('A blank line indented more deeply than the docstring', () => {
     it('should not cause a transition', () => {
       handle('   ');
-      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
+      eq(machine.state, 'ConsumeBackgroundStepExplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
@@ -57,8 +56,7 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
 
   describe('A docstring token', () => {
     it('should cause a transition to AfterBackgroundStepDocStringState', () => {
-      handle('---');
-      eq(machine.state, 'AfterBackgroundStepDocStringState');
+      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -71,7 +69,7 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
   describe('A line of text', () => {
     it('should not cause a transition', () => {
       handle('some text');
-      eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
+      eq(machine.state, 'ConsumeBackgroundStepExplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {

@@ -1,8 +1,3 @@
-I did not expect the end of the feature at invalid.feature:8
+I did not expect the end of an explicit docstring at invalid.feature:6
 Instead, I expected one of:
- - a blank line
- - a block comment
- - a scenario
- - a single line comment
- - a step
- - an annotation
+ - a docstring line

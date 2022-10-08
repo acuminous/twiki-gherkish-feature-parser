@@ -13,7 +13,6 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
   let session;
   const expectedEvents = [
     ' - a docstring line',
-    ' - the end of an explicit docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -33,19 +32,18 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
-      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
+      eq(machine.state, 'ConsumeScenarioStepExplicitDocStringState');
     });
   });
 
   describe('A docstring token', () => {
-    it('should cause a transition to AfterScenarioStepDocStringState', () => {
-      handle('---');
-      eq(machine.state, 'AfterScenarioStepDocStringState');
+    it('be unexpected', () => {
+      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
-    it('should cause a transition to FinalState', () => {
+    it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
@@ -53,7 +51,7 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
       handle('some text');
-      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
+      eq(machine.state, 'ConsumeScenarioStepExplicitDocStringState');
     });
 
     it('should be captured', () => {
@@ -68,7 +66,7 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
   describe('An indented line of text', () => {
     it('should not cause a state transition', () => {
       handle('   some text');
-      eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
+      eq(machine.state, 'ConsumeScenarioStepExplicitDocStringState');
     });
 
     it('should be captured', () => {
