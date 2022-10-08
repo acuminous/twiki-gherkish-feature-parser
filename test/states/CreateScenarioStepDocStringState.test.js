@@ -13,8 +13,8 @@ describe('CreateScenarioStepDocStringState', () => {
   let session;
   const expectedEvents = [
     ' - a DocString line',
-    ' - the end of an explicit DocString',
-    ' - the end of an indented DocString',
+    ' - the end of an explicit docstring',
+    ' - the end of an indented docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -40,14 +40,14 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('DocString Indent Start Events', () => {
-    it('should error on DocStringIndentStart event', () => {
+    it('should error on docstringIndentStart event', () => {
       session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should transition to new AfterScenarioStepDocStringState on DocStringIndentEnd event', () => {
+    it('should transition to new AfterScenarioStepDocStringState on docstringIndentEnd event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
       handle('some text');
@@ -56,13 +56,13 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('DocString Token Start Events', () => {
-    it('should error on DocStringTokenStart event', () => {
-      throws(() => handle('---'), { message: `I did not expect the start of an explicit DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    it('should error on docstringTokenStart event', () => {
+      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should transition to new AfterScenarioStepDocStringState on DocStringTokenStop event', () => {
+    it('should transition to new AfterScenarioStepDocStringState on docstringTokenStop event', () => {
       session.docString = { token: '---' };
       handle('---');
       eq(machine.state, 'AfterScenarioStepDocStringState');

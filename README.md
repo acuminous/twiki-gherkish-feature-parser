@@ -15,10 +15,10 @@ const featureFilePath = "./buck-rogers-season-one.feature";
 const featureFile = fs.readFileSync(featureFilePath);
 const parser = new FeatureParser();
 const metadata = {
-  source: { 
-  	uri: featureFilePath,
-  }
-}
+  source: {
+    uri: featureFilePath,
+  },
+};
 const feature = parser.parse(featureFile, metadata);
 ```
 
@@ -36,10 +36,10 @@ const featureFilePath = "./buck-rogers-season-one.feature";
 const featureFile = fs.readFileSync(featureFilePath);
 const parser = new FeatureParser({ language: Languages.English });
 const metadata = {
-  source: { 
-  	uri: featureFilePath,
-  }
-}
+  source: {
+    uri: featureFilePath,
+  },
+};
 const feature = parser.parse(file, metadata);
 ```
 
@@ -61,4 +61,4 @@ const feature = parser.parse(file, metadata);
 | Steps                        | Yes                                            |
 | Step tags/annotations        | Yes                                            |
 | Given / When / Then keywords | No - twiki does not special case step keywords |
-| DocStrings                   | Yes                                            |
+| Docstring                    | Yes                                            |

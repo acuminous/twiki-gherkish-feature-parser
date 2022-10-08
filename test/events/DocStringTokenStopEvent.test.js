@@ -13,7 +13,7 @@ describe('DocStringTokenStopEvent', () => {
     session = { language: Languages.English };
   });
 
-  it('should handle --- DocStrings', () => {
+  it('should handle --- docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringTokenStopEvent');
       eq(event.source.line, '   ---   ');
@@ -28,7 +28,7 @@ describe('DocStringTokenStopEvent', () => {
     eq(session.docString, undefined);
   });
 
-  it('should handle """ DocStrings', () => {
+  it('should handle """ docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringTokenStopEvent');
       eq(event.source.line, '   """   ');
@@ -43,18 +43,18 @@ describe('DocStringTokenStopEvent', () => {
     eq(session.docString, undefined);
   });
 
-  it('should do nothing when not handling a DocString', () => {
-    const state = new StubState();
-    const event = new DocStringTokenStopEvent();
-
-    eq(event.handle({ line: '   """   ' }, session, state), false);
-  });
-
-  it('should do nothing when already handling an indented DocString', () => {
+  it('should do nothing when already handling an indented docstring', () => {
     const state = new StubState();
     const event = new DocStringTokenStopEvent();
 
     session.docString = {};
+    eq(event.handle({ line: '   """   ' }, session, state), false);
+  });
+
+  it('should do nothing when not handling a token docstring', () => {
+    const state = new StubState();
+    const event = new DocStringTokenStopEvent();
+
     eq(event.handle({ line: '   """   ' }, session, state), false);
   });
 });

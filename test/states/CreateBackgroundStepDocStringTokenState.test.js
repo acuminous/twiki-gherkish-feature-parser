@@ -12,7 +12,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
   let session;
   const expectedEvents = [
     ' - a DocString line',
-    ' - the end of an explicit DocString',
+    ' - the end of an explicit docstring',
   ].join('\n');
 
   beforeEach(() => {

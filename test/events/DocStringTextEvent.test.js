@@ -18,7 +18,7 @@ describe('DocStringTextEvent', () => {
     };
   });
 
-  it('should recognise DocStrings', () => {
+  it('should recognise docstrings', () => {
     const state = new StubState();
     const event = new DocStringTextEvent();
 
@@ -26,7 +26,7 @@ describe('DocStringTextEvent', () => {
     eq(event.handle({ line: ' some text ' }, session, state), true);
   });
 
-  it('should handle DocStrings', () => {
+  it('should handle docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringTextEvent');
       eq(event.source.line, '   some text   ');

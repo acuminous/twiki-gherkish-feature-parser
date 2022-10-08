@@ -17,8 +17,8 @@ describe('AfterBackgroundStepState', () => {
     ' - a single line comment',
     ' - a step',
     ' - an annotation',
-    ' - the start of an explicit DocString',
-    ' - the start of an indented DocString',
+    ' - the start of an explicit docstring',
+    ' - the start of an indented docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -56,13 +56,13 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('DocString Indent Start Events', () => {
-    it('should transition to new CreateBackgroundStepDocStringIndentState on DocStringIndentStart event', () => {
+    it('should transition to new CreateBackgroundStepDocStringIndentState on docstringIndentStart event', () => {
       session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
     });
 
-    it('should capture DocStrings', () => {
+    it('should capture docstrings', () => {
       session.indentation = 0;
       handle('   some text');
 
@@ -72,24 +72,24 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should error on DocStringIndentStop event', () => {
+    it('should error on docstringIndentStop event', () => {
       session.docString = { indentation: 3 };
       session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Start Events', () => {
-    it('should transition to new CreateBackgroundStepDocStringTokenState on DocStringTokenStart event', () => {
+    it('should transition to new CreateBackgroundStepDocStringTokenState on docstringTokenStart event', () => {
       handle('---');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should error on DocStringTokenStop event', () => {
+    it('should error on docstringTokenStop event', () => {
       session.docString = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

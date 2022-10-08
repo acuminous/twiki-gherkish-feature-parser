@@ -16,7 +16,7 @@ describe('DocStringIndentStartEvent', () => {
     };
   });
 
-  it('should recognise indented DocStrings', () => {
+  it('should recognise indented docstrings', () => {
     const state = new StubState();
     const event = new DocStringIndentStartEvent();
 
@@ -30,7 +30,7 @@ describe('DocStringIndentStartEvent', () => {
     eq(event.handle({ line: 'some text', indentation: 0 }, session, state), false);
   });
 
-  it('should not recognise indented DocStrings when already handling a DocString', () => {
+  it('should not recognise indented docstrings when already handling a docstring', () => {
     const state = new StubState();
     const event = new DocStringIndentStartEvent();
 
@@ -38,7 +38,7 @@ describe('DocStringIndentStartEvent', () => {
     eq(event.handle({ line: ' some text', indentation: 1 }, session, state), false);
   });
 
-  it('should handle indented DocStrings', () => {
+  it('should handle indented docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringIndentStartEvent');
       eq(event.source.line, '   some text   ');

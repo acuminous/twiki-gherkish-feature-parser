@@ -13,7 +13,7 @@ describe('DocStringTokenStartEvent', () => {
     session = { language: Languages.English };
   });
 
-  it('should recognise token DocStrings', () => {
+  it('should recognise token docstrings', () => {
     const state = new StubState();
     const event = new DocStringTokenStartEvent();
     eq(event.handle({ line: '---' }, session, state), true);
@@ -43,7 +43,7 @@ describe('DocStringTokenStartEvent', () => {
     delete session.docString;
   });
 
-  it('should not recognise token DocStrings when already handling a DocString', () => {
+  it('should not recognise token docstrings when already handling a docstring', () => {
     const state = new StubState();
     const event = new DocStringTokenStartEvent();
 
@@ -52,7 +52,7 @@ describe('DocStringTokenStartEvent', () => {
     eq(event.handle({ line: '"""' }, session, state), false);
   });
 
-  it('should handle --- DocStrings', () => {
+  it('should handle --- docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringTokenStartEvent');
       eq(event.source.line, '   ---   ');
@@ -67,7 +67,7 @@ describe('DocStringTokenStartEvent', () => {
     eq(state.count, 1);
   });
 
-  it('should handle """ DocStrings', () => {
+  it('should handle """ docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringTokenStartEvent');
       eq(event.source.line, '   """   ');

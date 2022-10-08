@@ -13,7 +13,7 @@ describe('DocStringIndentStopEvent', () => {
     session = { language: Languages.English };
   });
 
-  it('should handle indented DocStrings', () => {
+  it('should handle indented docstrings', () => {
     const state = new StubState((event) => {
       eq(event.name, 'DocStringIndentStopEvent');
       eq(event.source.line, '   some text   ');
@@ -37,14 +37,14 @@ describe('DocStringIndentStopEvent', () => {
     eq(event.handle({ line: '   some text   ', indentation: 6 }, session, state), false);
   });
 
-  it('should do nothing when not handling a DocString', () => {
+  it('should do nothing when not handling an indented docstring', () => {
     const state = new StubState();
     const event = new DocStringIndentStopEvent();
 
     eq(event.handle({ line: '   some text   ', indentation: 3 }, session, state), false);
   });
 
-  it('should do nothing when already handling a token DocString', () => {
+  it('should do nothing when already handling a token docstring', () => {
     const state = new StubState();
     const event = new DocStringIndentStopEvent();
 
