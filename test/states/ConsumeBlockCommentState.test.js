@@ -57,7 +57,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('DocString Indent Stop Events', () => {
     it('should not cause transition', () => {
-      session.docString = { indentation: 3 };
+      session.docstring = { indentation: 3 };
       session.indentation = 0;
       handle('some text');
       eq(machine.state, 'ConsumeBlockCommentState');
@@ -73,7 +73,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('DocString Token Stop Events', () => {
     it('should not cause transition', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'ConsumeBlockCommentState');
     });

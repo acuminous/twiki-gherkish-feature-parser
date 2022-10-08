@@ -22,10 +22,10 @@ describe('DocStringIndentStopEvent', () => {
     });
     const event = new DocStringIndentStopEvent();
 
-    session.docString = { indentation: 6 };
+    session.docstring = { indentation: 6 };
     event.handle({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
 
-    eq(session.docString, undefined);
+    eq(session.docstring, undefined);
     eq(state.count, 1);
   });
 
@@ -33,7 +33,7 @@ describe('DocStringIndentStopEvent', () => {
     const state = new StubState();
     const event = new DocStringIndentStopEvent();
 
-    session.docString = { indentation: 6 };
+    session.docstring = { indentation: 6 };
     eq(event.handle({ line: '   some text   ', indentation: 6 }, session, state), false);
   });
 
@@ -48,7 +48,7 @@ describe('DocStringIndentStopEvent', () => {
     const state = new StubState();
     const event = new DocStringIndentStopEvent();
 
-    session.docString = { token: {} };
+    session.docstring = { token: {} };
     eq(event.handle({ line: '   some text   ', indentation: 3 }, session, state), false);
   });
 });

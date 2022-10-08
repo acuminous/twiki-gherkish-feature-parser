@@ -55,7 +55,7 @@ describe('InitialState', () => {
 
   describe('DocString Indent Stop Events', () => {
     it('should error on docstringIndentStop event', () => {
-      session.docString = { indentation: 3 };
+      session.docstring = { indentation: 3 };
       session.indentation = 0;
       throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
     });
@@ -69,7 +69,7 @@ describe('InitialState', () => {
 
   describe('DocString Token Stop Events', () => {
     it('should error on docstringTokenStop event', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
   });

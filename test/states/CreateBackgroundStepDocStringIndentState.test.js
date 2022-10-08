@@ -30,7 +30,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
 
     state = new CreateBackgroundStepDocStringIndentState({ featureBuilder, machine });
 
-    session = { language: Languages.English, indentation: 0, docString: { indentation: 3 } };
+    session = { language: Languages.English, indentation: 0, docstring: { indentation: 3 } };
   });
 
   describe('A blank line indented to the same depth as the docstring', () => {
@@ -42,7 +42,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     it('should be captured on the docstring', () => {
       handle('   ');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, '');
+      eq(exported.background.steps[0].docstring, '');
     });
   });
 
@@ -55,7 +55,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     it('should be captured on the docstring', () => {
       handle('      ');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, '   ');
+      eq(exported.background.steps[0].docstring, '   ');
     });
   });
 
@@ -68,7 +68,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     it('should not be captured on the docstring', () => {
       handle('');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, null);
+      eq(exported.background.steps[0].docstring, null);
     });
   });
 
@@ -81,7 +81,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     it('should be captured on the docstring', () => {
       handle('   ---');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, '---');
+      eq(exported.background.steps[0].docstring, '---');
     });
   });
 
@@ -94,7 +94,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     it('should be captured on the docstring', () => {
       handle('      ---');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, '   ---');
+      eq(exported.background.steps[0].docstring, '   ---');
     });
   });
 
@@ -120,7 +120,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
     it('should be captured on the docstring', () => {
       handle('   some text');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, 'some text');
+      eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 

@@ -21,11 +21,11 @@ describe('DocStringTokenStopEvent', () => {
     });
     const event = new DocStringTokenStopEvent();
 
-    session.docString = { token: '---', indentation: 6 };
+    session.docstring = { token: '---', indentation: 6 };
     event.handle({ line: '   ---   ', number: 1 }, session, state);
 
     eq(state.count, 1);
-    eq(session.docString, undefined);
+    eq(session.docstring, undefined);
   });
 
   it('should handle """ docstrings', () => {
@@ -36,18 +36,18 @@ describe('DocStringTokenStopEvent', () => {
     });
     const event = new DocStringTokenStopEvent();
 
-    session.docString = { token: '"""', indentation: 6 };
+    session.docstring = { token: '"""', indentation: 6 };
     event.handle({ line: '   """   ', number: 1 }, session, state);
 
     eq(state.count, 1);
-    eq(session.docString, undefined);
+    eq(session.docstring, undefined);
   });
 
   it('should do nothing when already handling an indented docstring', () => {
     const state = new StubState();
     const event = new DocStringTokenStopEvent();
 
-    session.docString = {};
+    session.docstring = {};
     eq(event.handle({ line: '   """   ' }, session, state), false);
   });
 

@@ -26,7 +26,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
 
     state = new CreateBackgroundStepDocStringTokenState({ featureBuilder, machine });
 
-    session = { language: Languages.English, indentation: 0, docString: { token: '---' } };
+    session = { language: Languages.English, indentation: 0, docstring: { token: '---' } };
   });
 
   describe('A blank line', () => {
@@ -38,7 +38,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
     it('should be captured on the docstring', () => {
       handle('');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, '');
+      eq(exported.background.steps[0].docstring, '');
     });
   });
 
@@ -51,7 +51,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
     it('should be captured on the docstring', () => {
       handle('   ');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, '   ');
+      eq(exported.background.steps[0].docstring, '   ');
     });
   });
 
@@ -77,7 +77,7 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
     it('should be captured on the docstring', () => {
       handle('some text');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, 'some text');
+      eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 

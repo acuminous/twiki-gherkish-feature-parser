@@ -34,7 +34,7 @@ describe('DocStringIndentStartEvent', () => {
     const state = new StubState();
     const event = new DocStringIndentStartEvent();
 
-    session.docString = {};
+    session.docstring = {};
     eq(event.handle({ line: ' some text', indentation: 1 }, session, state), false);
   });
 
@@ -49,7 +49,7 @@ describe('DocStringIndentStartEvent', () => {
 
     event.handle({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
 
-    eq(session.docString.indentation, 3);
+    eq(session.docstring.indentation, 3);
     eq(state.count, 1);
   });
 });

@@ -33,7 +33,7 @@ describe('CreateScenarioStepDocStringState', () => {
 
   describe('Blank Line Events', () => {
     it('should not cause transition', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       handle('');
       eq(machine.state, 'CreateScenarioStepDocStringState');
     });
@@ -48,7 +48,7 @@ describe('CreateScenarioStepDocStringState', () => {
 
   describe('DocString Indent Stop Events', () => {
     it('should transition to new AfterScenarioStepDocStringState on docstringIndentEnd event', () => {
-      session.docString = { indentation: 3 };
+      session.docstring = { indentation: 3 };
       session.indentation = 0;
       handle('some text');
       eq(machine.state, 'AfterScenarioStepState');
@@ -63,7 +63,7 @@ describe('CreateScenarioStepDocStringState', () => {
 
   describe('DocString Token Stop Events', () => {
     it('should transition to new AfterScenarioStepDocStringState on docstringTokenStop event', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'AfterScenarioStepDocStringState');
     });
@@ -77,18 +77,18 @@ describe('CreateScenarioStepDocStringState', () => {
 
   describe('DocString Text Events', () => {
     it('should not cause transition', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       handle('some text');
       eq(machine.state, 'CreateScenarioStepDocStringState');
     });
 
     it('should capture docstrings', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       handle('some text');
       handle('Some more text');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docString, ['some text', 'Some more text'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Some more text'].join(os.EOL));
     });
   });
 

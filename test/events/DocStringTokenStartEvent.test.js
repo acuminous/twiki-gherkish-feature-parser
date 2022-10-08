@@ -17,37 +17,37 @@ describe('DocStringTokenStartEvent', () => {
     const state = new StubState();
     const event = new DocStringTokenStartEvent();
     eq(event.handle({ line: '---' }, session, state), true);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: ' --- ' }, session, state), true);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: ' ------ ' }, session, state), true);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: '"""' }, session, state), true);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: ' """ ' }, session, state), true);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: ' """""" ' }, session, state), true);
-    delete session.docString;
+    delete session.docstring;
 
     eq(event.handle({ line: '-' }, session, state), false);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: '--' }, session, state), false);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: '--- not a doc string' }, session, state), false);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: '"' }, session, state), false);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: '""' }, session, state), false);
-    delete session.docString;
+    delete session.docstring;
     eq(event.handle({ line: '""" not a doc string' }, session, state), false);
-    delete session.docString;
+    delete session.docstring;
   });
 
   it('should not recognise token docstrings when already handling a docstring', () => {
     const state = new StubState();
     const event = new DocStringTokenStartEvent();
 
-    session.docString = {};
+    session.docstring = {};
     eq(event.handle({ line: '---' }, session, state), false);
     eq(event.handle({ line: '"""' }, session, state), false);
   });
@@ -63,7 +63,7 @@ describe('DocStringTokenStartEvent', () => {
 
     event.handle({ line: '   ---   ', indentation: 3, number: 1 }, session, state);
 
-    eq(session.docString.token, '---');
+    eq(session.docstring.token, '---');
     eq(state.count, 1);
   });
 
@@ -78,7 +78,7 @@ describe('DocStringTokenStartEvent', () => {
 
     event.handle({ line: '   """   ', indentation: 3, number: 1 }, session, state);
 
-    eq(session.docString.token, '"""');
+    eq(session.docstring.token, '"""');
     eq(state.count, 1);
   });
 });

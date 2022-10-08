@@ -28,12 +28,12 @@
       {
         "annotations": [],
         "text": "Given the year is 1987",
-        "docString": null
+        "docstring": null
       },
       {
         "annotations": [],
         "text": "And NASA launches the last of America's deep space probes",
-        "docString": null
+        "docstring": null
       },
       {
         "annotations": [
@@ -43,17 +43,17 @@
           }
         ],
         "text": "When a freak mishap occurs",
-        "docString": null
+        "docstring": null
       },
       {
         "annotations": [],
         "text": "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems",
-        "docString": null
+        "docstring": null
       },
       {
         "annotations": [],
         "text": "And returns Buck Rogers to Earth 500 years later",
-        "docString": null
+        "docstring": null
       }
     ]
   },
@@ -71,22 +71,22 @@
         {
           "annotations": [],
           "text": "Given the Draconians have planted a homing beacon aboard Buck's shuttle",
-          "docString": null
+          "docstring": null
         },
         {
           "annotations": [],
           "text": "When Buck arrives on Earth",
-          "docString": null
+          "docstring": null
         },
         {
           "annotations": [],
           "text": "Then he must adjust to the 25th century",
-          "docString": null
+          "docstring": null
         },
         {
           "annotations": [],
           "text": "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them",
-          "docString": null
+          "docstring": null
         }
       ]
     }

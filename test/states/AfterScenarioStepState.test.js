@@ -68,13 +68,13 @@ describe('AfterScenarioStepState', () => {
       handle('   some text');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docString, 'some text');
+      eq(exported.scenarios[0].steps[0].docstring, 'some text');
     });
   });
 
   describe('DocString Indent Stop Events', () => {
     it('should error on docstringIndentStop event', () => {
-      session.docString = { indentation: 3 };
+      session.docstring = { indentation: 3 };
       session.indentation = 0;
       throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
@@ -89,7 +89,7 @@ describe('AfterScenarioStepState', () => {
 
   describe('DocString Token Stop Events', () => {
     it('should error on docstringTokenStop event', () => {
-      session.docString = { token: '---' };
+      session.docstring = { token: '---' };
       throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
