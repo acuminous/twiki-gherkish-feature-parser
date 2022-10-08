@@ -23,7 +23,7 @@ describe('ConsumeBlockCommentState', () => {
 
     state = new ConsumeBlockCommentState({ featureBuilder, machine });
 
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -55,25 +55,8 @@ describe('ConsumeBlockCommentState', () => {
     });
   });
 
-  describe('DocString Indent Stop Events', () => {
-    it('should not cause a state transition', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      handle('some text');
-      eq(machine.state, 'ConsumeBlockCommentState');
-    });
-  });
-
   describe('A docstring token', () => {
     it('should not cause a state transition', () => {
-      handle('---');
-      eq(machine.state, 'ConsumeBlockCommentState');
-    });
-  });
-
-  describe('DocString Token Stop Events', () => {
-    it('should not cause a state transition', () => {
-      session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
@@ -93,7 +76,7 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a transition to previous state', () => {
+    it('should cause a transition to the previous state', () => {
       handle('###');
       eq(machine.state, 'CreateFeatureState');
     });
@@ -116,13 +99,6 @@ describe('ConsumeBlockCommentState', () => {
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
       handle('Given some text');
-      eq(machine.state, 'ConsumeBlockCommentState');
-    });
-  });
-
-  describe('Text Events', () => {
-    it('should not cause a state transition', () => {
-      handle('some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
