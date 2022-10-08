@@ -1,5 +1,4 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
-import os from 'node:os';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
@@ -14,7 +13,6 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
   const expectedEvents = [
     ' - a DocString line',
     ' - the end of an explicit DocString',
-    ' - the end of an indented DocString',
   ].join('\n');
 
   beforeEach(() => {
@@ -31,53 +29,55 @@ describe('CreateBackgroundStepDocStringTokenState', () => {
     session = { language: Languages.English, indentation: 0, docString: { token: '---' } };
   });
 
-  describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
+  describe('A blank line', () => {
+    it('should not cause a transition', () => {
       handle('');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
-  });
 
-  describe('DocString Indent Start Events', () => {
-    it('should not cause transition', () => {
-      handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
+    it('should be captured on the docstring', () => {
+      handle('');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, '');
     });
   });
 
-  describe('DocString Indent Stop Events', () => {
-    it('should not cause transition', () => {
-      session.indentation = 3;
-      handle('some text');
+  describe('A blank line indented more deeply than the docstring', () => {
+    it('should not cause a transition', () => {
+      handle('   ');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('   ');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, '   ');
     });
   });
 
-  describe('DocString Token Stop Events', () => {
-    it('should transition to new AfterBackgroundStepDocStringState on DocStringTokenStop event', () => {
+  describe('A docstring token', () => {
+    it('should cause a transition to AfterBackgroundStepDocStringState', () => {
       handle('---');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });
   });
 
-  describe('End Events', () => {
-    it('should error on End event', () => {
+  describe('The end of the feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('DocString Text Events', () => {
-    it('should not cause transition', () => {
+  describe('A line of text', () => {
+    it('should not cause a transition', () => {
       handle('some text');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
 
-    it('should capture docstrings', () => {
+    it('should be captured on the docstring', () => {
       handle('some text');
-      handle('Some more text');
-
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, ['some text', 'Some more text'].join(os.EOL));
+      eq(exported.background.steps[0].docString, 'some text');
     });
   });
 
