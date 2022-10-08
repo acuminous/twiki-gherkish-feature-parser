@@ -11,11 +11,11 @@ describe('CreateBackgroundState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - an annotation',
     ' - a blank line',
     ' - a block comment',
     ' - a single line comment',
     ' - a step',
+    ' - an annotation',
   ].join('\n');
 
   beforeEach(() => {

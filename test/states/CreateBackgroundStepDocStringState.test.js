@@ -13,8 +13,8 @@ describe('CreateBackgroundStepDocStringState', () => {
   let session;
   const expectedEvents = [
     ' - a DocString line',
-    ' - the end of an indented DocString',
     ' - the end of an explicit DocString',
+    ' - the end of an indented DocString',
   ].join('\n');
 
   beforeEach(() => {

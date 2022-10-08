@@ -11,15 +11,15 @@ describe('AfterScenarioStepState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - an annotation',
     ' - a blank line',
     ' - a block comment',
-    ' - the start of an explicit DocString',
-    ' - the start of an indented DocString',
-    ' - the end of the feature',
     ' - a scenario',
     ' - a single line comment',
     ' - a step',
+    ' - an annotation',
+    ' - the end of the feature',
+    ' - the start of an explicit DocString',
+    ' - the start of an indented DocString',
   ].join('\n');
 
   beforeEach(() => {

@@ -52,11 +52,11 @@ describe('FeatureParser', () => {
     const source = readFeatureFile('en', 'invalid.feature');
     const parser = new FeatureParser();
     const expectedEvents = [
-      ' - an annotation',
       ' - a blank line',
       ' - a block comment',
       ' - a single line comment',
       ' - a step',
+      ' - an annotation',
     ].join('\n');
 
     throws(() => {

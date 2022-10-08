@@ -11,14 +11,14 @@ describe('AfterBackgroundStepState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - an annotation',
     ' - a blank line',
     ' - a block comment',
-    ' - the start of an indented DocString',
-    ' - the start of an explicit DocString',
-    ' - a single line comment',
     ' - a scenario',
+    ' - a single line comment',
     ' - a step',
+    ' - an annotation',
+    ' - the start of an explicit DocString',
+    ' - the start of an indented DocString',
   ].join('\n');
 
   beforeEach(() => {

@@ -14,6 +14,6 @@ describe('Missing event handler', () => {
 
 class InvalidState extends BaseState {
   constructor() {
-    super({ events: [FeatureEvent], validEvents: [FeatureEvent] });
+    super({ events: [new FeatureEvent({ expected: true })] });
   }
 }

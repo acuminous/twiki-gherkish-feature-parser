@@ -11,12 +11,12 @@ describe('AfterBackgroundStepDocStringState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - an annotation',
     ' - a blank line',
     ' - a block comment',
     ' - a scenario',
     ' - a single line comment',
     ' - a step',
+    ' - an annotation',
   ].join('\n');
 
   beforeEach(() => {

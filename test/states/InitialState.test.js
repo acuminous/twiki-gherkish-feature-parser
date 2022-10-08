@@ -11,11 +11,11 @@ describe('InitialState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - an annotation',
     ' - a blank line',
     ' - a block comment',
     ' - a feature',
     ' - a single line comment',
+    ' - an annotation',
   ].join('\n');
 
   beforeEach(() => {

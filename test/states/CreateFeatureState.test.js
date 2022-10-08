@@ -11,12 +11,12 @@ describe('CreateFeatureState', () => {
   let state;
   let session;
   const expectedEvents = [
-    ' - an annotation',
     ' - a background',
     ' - a blank line',
     ' - a block comment',
     ' - a scenario',
     ' - a single line comment',
+    ' - an annotation',
     ' - some text',
   ].join('\n');
 
