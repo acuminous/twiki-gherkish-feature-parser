@@ -1,0 +1,7 @@
+I did not expect a scenario at invalid.feature:5
+Instead, I expected one of:
+ - a blank line
+ - a block comment
+ - a single line comment
+ - a step
+ - an annotation

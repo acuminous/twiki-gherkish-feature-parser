@@ -1,4 +1,4 @@
-Feature: Buck Rogers - Hall Of Fame
+Feature: Buck Rogers - ASCII Art
 
 Background: Buck Rogers
   It's called gettin' down.
