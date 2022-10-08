@@ -40,7 +40,7 @@ describe('CreateBackgroundStepDocStringState', () => {
 
   describe('DocString Indent Start Events', () => {
     it('should not cause transition', () => {
-      handle('   some text')
+      handle('   some text');
       eq(machine.state, 'CreateBackgroundStepDocStringState');
     });
   });
