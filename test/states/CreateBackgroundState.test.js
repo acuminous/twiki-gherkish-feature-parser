@@ -21,13 +21,14 @@ describe('CreateBackgroundState', () => {
   beforeEach(() => {
     featureBuilder = new FeatureBuilder();
     featureBuilder.createFeature({ annotations: [], title: 'Meh' });
+    featureBuilder.createBackground({ annotations: [], title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
     machine.toCreateBackgroundState({ featureBuilder });
 
     state = new CreateBackgroundState({ machine, featureBuilder });
 
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -52,29 +53,13 @@ describe('CreateBackgroundState', () => {
 
   describe('An indented blank line', () => {
     it('should be unexpected', () => {
-      session.indentation = 0;
       throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A docstring token', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Token Stop Events', () => {
-    it('should be unexpected', () => {
-      session.docstring = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -120,8 +105,6 @@ describe('CreateBackgroundState', () => {
     });
 
     it('should be captureds', () => {
-      featureBuilder.createBackground({ annotations: [] });
-
       handle('First step');
 
       const exported = featureBuilder.build();
@@ -130,8 +113,6 @@ describe('CreateBackgroundState', () => {
     });
 
     it('should be captureds with annotations', () => {
-      featureBuilder.createBackground({ annotations: [] });
-
       handle('@one=1');
       handle('@two=2');
       handle('First step');
