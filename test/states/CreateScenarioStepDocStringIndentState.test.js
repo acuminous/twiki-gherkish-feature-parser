@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepDocStringIndentState } = States;
+const { CreateScenarioStepDocStringIndentState } = States;
 
-describe('CreateBackgroundStepDocStringIndentState', () => {
+describe('CreateScenarioStepDocStringIndentState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -22,13 +22,13 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   beforeEach(() => {
     featureBuilder = new FeatureBuilder();
     featureBuilder.createFeature({ annotations: [], title: 'Meh' });
-    featureBuilder.createBackground({ annotations: [], title: 'Meh' });
-    featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
+    featureBuilder.createScenario({ annotations: [], title: 'Meh' });
+    featureBuilder.createScenarioStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundStepDocStringIndentState();
+    machine.toCreateScenarioStepDocStringIndentState();
 
-    state = new CreateBackgroundStepDocStringIndentState({ featureBuilder, machine });
+    state = new CreateScenarioStepDocStringIndentState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0, docstring: { indentation: 3 } };
   });
@@ -36,65 +36,65 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A blank line indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       handle('   ');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateScenarioStepDocStringIndentState');
     });
 
     it('should be captured on the docstring', () => {
       handle('   ');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, '');
+      eq(exported.scenarios[0].steps[0].docstring, '');
     });
   });
 
   describe('A blank line indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
       handle('      ');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateScenarioStepDocStringIndentState');
     });
 
     it('should be captured on the docstring', () => {
       handle('      ');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, '   ');
+      eq(exported.scenarios[0].steps[0].docstring, '   ');
     });
   });
 
   describe('A blank line outdated to the original depth', () => {
-    it('should cause a transition to AfterBackgroundStepDocStringState', () => {
+    it('should cause a transition to AfterScenarioStepDocStringState', () => {
       handle('');
-      eq(machine.state, 'AfterBackgroundStepDocStringState');
+      eq(machine.state, 'AfterScenarioStepDocStringState');
     });
 
     it('should not be captured on the docstring', () => {
       handle('');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, null);
+      eq(exported.scenarios[0].steps[0].docstring, null);
     });
   });
 
   describe('A docstring token indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       handle('   ---');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateScenarioStepDocStringIndentState');
     });
 
     it('should be captured on the docstring', () => {
       handle('   ---');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, '---');
+      eq(exported.scenarios[0].steps[0].docstring, '---');
     });
   });
 
   describe('A docstring token indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
       handle('      ---');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateScenarioStepDocStringIndentState');
     });
 
     it('should be captured on the docstring', () => {
       handle('      ---');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, '   ---');
+      eq(exported.scenarios[0].steps[0].docstring, '   ---');
     });
   });
 
@@ -114,13 +114,13 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   describe('A line of text indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+      eq(machine.state, 'CreateScenarioStepDocStringIndentState');
     });
 
     it('should be captured on the docstring', () => {
       handle('   some text');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, 'some text');
+      eq(exported.scenarios[0].steps[0].docstring, 'some text');
     });
   });
 
