@@ -4,9 +4,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateScenarioStepDocStringState } = States;
+const { CreateScenarioStepDocStringTokenState } = States;
 
-describe('CreateScenarioStepDocStringState', () => {
+describe('CreateScenarioStepDocStringTokenState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -14,7 +14,6 @@ describe('CreateScenarioStepDocStringState', () => {
   const expectedEvents = [
     ' - a docstring line',
     ' - the end of an explicit docstring',
-    ' - the end of an indented docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -24,46 +23,22 @@ describe('CreateScenarioStepDocStringState', () => {
     featureBuilder.createScenarioStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateScenarioStepDocStringState();
+    machine.toCreateScenarioStepDocStringTokenState();
 
-    state = new CreateScenarioStepDocStringState({ featureBuilder, machine });
+    state = new CreateScenarioStepDocStringTokenState({ featureBuilder, machine });
 
-    session = { language: Languages.English, indentation: 0 };
+    session = { language: Languages.English, indentation: 0, docstring: { token: '---' } };
   });
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      session.docstring = { token: '---' };
       handle('');
-      eq(machine.state, 'CreateScenarioStepDocStringState');
-    });
-  });
-
-  describe('An indented blank line', () => {
-    it('should be unexpected', () => {
-      session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should cause a transition to AfterScenarioStepDocStringState', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      handle('some text');
-      eq(machine.state, 'AfterScenarioStepState');
+      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
     });
   });
 
   describe('A docstring token', () => {
-    it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Token Stop Events', () => {
     it('should cause a transition to AfterScenarioStepDocStringState', () => {
-      session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'AfterScenarioStepDocStringState');
     });
@@ -75,20 +50,32 @@ describe('CreateScenarioStepDocStringState', () => {
     });
   });
 
-  describe('DocString Text Events', () => {
+  describe('A line of text', () => {
     it('should not cause a state transition', () => {
-      session.docstring = { token: '---' };
       handle('some text');
-      eq(machine.state, 'CreateScenarioStepDocStringState');
+      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
     });
 
-    it('should capture docstrings', () => {
-      session.docstring = { token: '---' };
+    it('should be captured', () => {
       handle('some text');
-      handle('Some more text');
+      handle('some more text');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Some more text'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
+    });
+  });
+
+  describe('An indented line of text', () => {
+    it('should not cause a state transition', () => {
+      handle('   some text');
+      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
+    });
+
+    it('should be captured', () => {
+      handle('   some text');
+
+      const exported = featureBuilder.build();
+      eq(exported.scenarios[0].steps[0].docstring, '   some text');
     });
   });
 

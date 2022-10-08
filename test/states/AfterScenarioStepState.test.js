@@ -57,9 +57,9 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should cause a transition to CreateScenarioStepDocStringState', () => {
+    it('should cause a transition to CreateScenarioStepDocStringTokenState', () => {
       handle('---');
-      eq(machine.state, 'CreateScenarioStepDocStringState');
+      eq(machine.state, 'CreateScenarioStepDocStringTokenState');
     });
   });
 
