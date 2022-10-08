@@ -26,61 +26,61 @@ describe('InitialState', () => {
     session = { language: Languages.English };
   });
 
-  describe('Annotation Events', () => {
+  describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'InitialState');
     });
   });
 
-  describe('Background Events', () => {
-    it('should error', () => {
+  describe('A background', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Background: foo'), { message: `${state.name} has no event handler for 'Background: foo' at undefined:1` });
     });
   });
 
-  describe('Blank Line Events', () => {
+  describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'InitialState');
     });
   });
 
-  describe('DocString Indent Start Events', () => {
-    it('should error on docstringIndentStart event', () => {
+  describe('An indented blank line', () => {
+    it('should be unexpected on docstringIndentStart event', () => {
       session.indentation = 0;
       throws(() => handle('   some text'), { message: `${state.name} has no event handler for '   some text' at undefined:1` });
     });
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should error on docstringIndentStop event', () => {
+    it('should be unexpected on docstringIndentStop event', () => {
       session.docstring = { indentation: 3 };
       session.indentation = 0;
       throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
     });
   });
 
-  describe('DocString Token Start Events', () => {
-    it('should error on docstringTokenStart event', () => {
+  describe('A docstring token', () => {
+    it('should be unexpected on docstringTokenStart event', () => {
       throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should error on docstringTokenStop event', () => {
+    it('should be unexpected on docstringTokenStop event', () => {
       session.docstring = { token: '---' };
       throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
   });
 
-  describe('End Events', () => {
-    it('should error', () => {
+  describe('The end of the feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Feature Events', () => {
+  describe('A feature', () => {
     it('should cause a state transition to CreateFeatureState', () => {
       handle('Feature: foo');
       eq(machine.state, 'CreateFeatureState');
@@ -107,20 +107,20 @@ describe('InitialState', () => {
     });
   });
 
-  describe('Block Comment Events', () => {
+  describe('A block comment', () => {
     it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Scenario Events', () => {
-    it('should error', () => {
+  describe('A scenario', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Scenario: foo'), { message: `${state.name} has no event handler for 'Scenario: foo' at undefined:1` });
     });
   });
 
-  describe('Single Line Comment Events', () => {
+  describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       handle('# foo');
       eq(machine.state, 'InitialState');
@@ -128,7 +128,7 @@ describe('InitialState', () => {
   });
 
   describe('Text Events', () => {
-    it('should error', () => {
+    it('should be unexpected', () => {
       throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
     });
   });

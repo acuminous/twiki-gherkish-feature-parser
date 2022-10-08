@@ -32,93 +32,62 @@ describe('AfterBackgroundStepState', () => {
 
     state = new AfterBackgroundStepState({ featureBuilder, machine });
 
-    session = { language: Languages.English };
+    session = { language: Languages.English, indentation: 0 };
   });
 
-  describe('Annotation Events', () => {
+  describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo=bar');
       eq(machine.state, 'AfterBackgroundStepState');
     });
   });
 
-  describe('Background Events', () => {
-    it('should error', () => {
+  describe('A background', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Blank Line Events', () => {
+  describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'AfterBackgroundStepState');
     });
   });
 
-  describe('DocString Indent Start Events', () => {
-    it('should cause a state transition to CreateBackgroundStepDocStringIndentState', () => {
-      session.indentation = 0;
-      handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
-    });
-
-    it('should capture docstrings', () => {
-      session.indentation = 0;
-      handle('   some text');
-
-      const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, 'some text');
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should error on docstringIndentStop event', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Token Start Events', () => {
+  describe('A docstring token', () => {
     it('should cause a state transition to CreateBackgroundStepDocStringTokenState', () => {
       handle('---');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
   });
 
-  describe('DocString Token Stop Events', () => {
-    it('should error on docstringTokenStop event', () => {
-      session.docstring = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('End Events', () => {
-    it('should cause a state transition to final on end event', () => {
+  describe('The end of the feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Feature Events', () => {
-    it('should error on feature event', () => {
+  describe('A feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Block Comment Events', () => {
+  describe('A block comment', () => {
     it('should cause a state transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Scenario Events', () => {
+  describe('A scenario', () => {
     it('should cause a state transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
 
-    it('should capture scenarios', () => {
+    it('should be captured', () => {
       handle('Scenario: First scenario');
 
       const exported = featureBuilder.build();
@@ -126,7 +95,7 @@ describe('AfterBackgroundStepState', () => {
       eq(exported.scenarios[0].title, 'First scenario');
     });
 
-    it('should capture scenarios with annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one = 1');
       handle('@two = 2');
       handle('Scenario: First scenario');
@@ -141,20 +110,20 @@ describe('AfterBackgroundStepState', () => {
     });
   });
 
-  describe('Single Line Comment Events', () => {
+  describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       handle('# foo');
       eq(machine.state, 'AfterBackgroundStepState');
     });
   });
 
-  describe('Step Events', () => {
+  describe('A line of text', () => {
     it('should cause a state transition to AfterBackgroundStepState', () => {
       handle('Given some text');
       eq(machine.state, 'AfterBackgroundStepState');
     });
 
-    it('should capture step', () => {
+    it('should be captured', () => {
       handle('Given some text');
 
       const exported = featureBuilder.build();
@@ -162,7 +131,7 @@ describe('AfterBackgroundStepState', () => {
       eq(exported.background.steps[1].text, 'Given some text');
     });
 
-    it('should capture steps with annotations', () => {
+    it('should be captureds with annotations', () => {
       handle('@one = 1');
       handle('@two = 2');
       handle('Given some text');
@@ -173,6 +142,19 @@ describe('AfterBackgroundStepState', () => {
       eq(exported.background.steps[1].annotations[0].value, '1');
       eq(exported.background.steps[1].annotations[1].name, 'two');
       eq(exported.background.steps[1].annotations[1].value, '2');
+    });
+  });
+
+  describe('An indented line of text', () => {
+    it('should cause a state transition to CreateBackgroundStepDocStringIndentState', () => {
+      handle('   some text');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('   some text');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 

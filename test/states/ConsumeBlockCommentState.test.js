@@ -26,28 +26,28 @@ describe('ConsumeBlockCommentState', () => {
     session = { language: Languages.English };
   });
 
-  describe('Annotation Events', () => {
+  describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo = bar');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Background Events', () => {
+  describe('A background', () => {
     it('should not cause a state transition', () => {
       handle('Background: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Blank Line Events', () => {
+  describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('DocString Indent Start Events', () => {
+  describe('An indented blank line', () => {
     it('should not cause a state transition', () => {
       session.indentation = 0;
       handle('   some text');
@@ -64,7 +64,7 @@ describe('ConsumeBlockCommentState', () => {
     });
   });
 
-  describe('DocString Token Start Events', () => {
+  describe('A docstring token', () => {
     it('should not cause a state transition', () => {
       handle('---');
       eq(machine.state, 'ConsumeBlockCommentState');
@@ -79,41 +79,41 @@ describe('ConsumeBlockCommentState', () => {
     });
   });
 
-  describe('End Events', () => {
-    it('should error', () => {
+  describe('The end of the feature', () => {
+    it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('Feature Events', () => {
+  describe('A feature', () => {
     it('should not cause a state transition', () => {
       handle('Feature: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Block Comment Events', () => {
+  describe('A block comment', () => {
     it('should cause a state transition to previous state', () => {
       handle('###');
       eq(machine.state, 'CreateFeatureState');
     });
   });
 
-  describe('Scenario Events', () => {
+  describe('A scenario', () => {
     it('should not cause a state transition', () => {
       handle('Scenario: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Single Line Comment Events', () => {
+  describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       handle('# Single comment');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('Step Events', () => {
+  describe('A line of text', () => {
     it('should not cause a state transition', () => {
       handle('Given some text');
       eq(machine.state, 'ConsumeBlockCommentState');
