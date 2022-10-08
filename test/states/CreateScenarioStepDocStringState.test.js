@@ -40,14 +40,14 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('An indented blank line', () => {
-    it('should be unexpected on docstringIndentStart event', () => {
+    it('should be unexpected', () => {
       session.indentation = 0;
       throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should cause a state transition to AfterScenarioStepDocStringState', () => {
+    it('should cause a transition to AfterScenarioStepDocStringState', () => {
       session.docstring = { indentation: 3 };
       session.indentation = 0;
       handle('some text');
@@ -56,13 +56,13 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should be unexpected on docstringTokenStart event', () => {
+    it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should cause a state transition to AfterScenarioStepDocStringState', () => {
+    it('should cause a transition to AfterScenarioStepDocStringState', () => {
       session.docstring = { token: '---' };
       handle('---');
       eq(machine.state, 'AfterScenarioStepDocStringState');
@@ -70,7 +70,7 @@ describe('CreateScenarioStepDocStringState', () => {
   });
 
   describe('The end of the feature', () => {
-    it('should cause a state transition to final on end event', () => {
+    it('should cause a transition to FinalState', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });

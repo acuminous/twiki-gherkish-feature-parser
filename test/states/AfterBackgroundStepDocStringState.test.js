@@ -78,14 +78,14 @@ describe('AfterBackgroundStepDocStringState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a state transition to ConsumeBlockCommentState', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A scenario', () => {
-    it('should cause a state transition to CreateScenarioState', () => {
+    it('should cause a transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -121,7 +121,7 @@ describe('AfterBackgroundStepDocStringState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a state transition to AfterBackgroundStepState', () => {
+    it('should cause a transition to AfterBackgroundStepState', () => {
       handle('Given some text');
       eq(machine.state, 'AfterBackgroundStepState');
     });

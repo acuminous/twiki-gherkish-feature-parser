@@ -57,7 +57,7 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('An indented blank line', () => {
-    it('should cause a state transition to CreateScenarioStepDocStringState', () => {
+    it('should cause a transition to CreateScenarioStepDocStringState', () => {
       session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'CreateScenarioStepDocStringState');
@@ -73,7 +73,7 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should be unexpected on docstringIndentStop event', () => {
+    it('should be unexpected', () => {
       session.docstring = { indentation: 3 };
       session.indentation = 0;
       throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
@@ -81,21 +81,21 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should cause a state transition to CreateScenarioStepDocStringState', () => {
+    it('should cause a transition to CreateScenarioStepDocStringState', () => {
       handle('---');
       eq(machine.state, 'CreateScenarioStepDocStringState');
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should be unexpected on docstringTokenStop event', () => {
+    it('should be unexpected', () => {
       session.docstring = { token: '---' };
       throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
-    it('should cause a state transition to final on end event', () => {
+    it('should cause a transition to FinalState', () => {
       handle('\u0000');
       eq(machine.state, 'FinalState');
     });
@@ -108,14 +108,14 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a state transition to ConsumeBlockCommentState', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A scenario', () => {
-    it('should cause a state transition to CreateScenarioState', () => {
+    it('should cause a transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -152,7 +152,7 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a state transition to AfterScenarioStepState', () => {
+    it('should cause a transition to AfterScenarioStepState', () => {
       handle('Second step');
       eq(machine.state, 'AfterScenarioStepState');
     });

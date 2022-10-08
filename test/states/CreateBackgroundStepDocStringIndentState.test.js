@@ -60,7 +60,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   });
 
   describe('A blank line outdated to the original depth', () => {
-    it('should cause a state transition to AfterBackgroundStepDocStringState', () => {
+    it('should cause a transition to AfterBackgroundStepDocStringState', () => {
       handle('');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });
@@ -105,7 +105,7 @@ describe('CreateBackgroundStepDocStringIndentState', () => {
   });
 
   describe('The end of the feature', () => {
-    it('should cause a state transition to FinalState', () => {
+    it('should cause a transition to FinalState', () => {
       handle('\u0000');
       eq(machine.state, 'FinalState');
     });

@@ -56,7 +56,7 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should cause a state transition to CreateBackgroundStepDocStringTokenState', () => {
+    it('should cause a transition to CreateBackgroundStepDocStringTokenState', () => {
       handle('---');
       eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
@@ -75,14 +75,14 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a state transition to ConsumeBlockCommentState', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A scenario', () => {
-    it('should cause a state transition to CreateScenarioState', () => {
+    it('should cause a transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -118,7 +118,7 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a state transition to AfterBackgroundStepState', () => {
+    it('should cause a transition to AfterBackgroundStepState', () => {
       handle('Given some text');
       eq(machine.state, 'AfterBackgroundStepState');
     });
@@ -146,7 +146,7 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('An indented line of text', () => {
-    it('should cause a state transition to CreateBackgroundStepDocStringIndentState', () => {
+    it('should cause a transition to CreateBackgroundStepDocStringIndentState', () => {
       handle('   some text');
       eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
     });

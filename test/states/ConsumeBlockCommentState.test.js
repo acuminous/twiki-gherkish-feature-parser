@@ -93,7 +93,7 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a state transition to previous state', () => {
+    it('should cause a transition to previous state', () => {
       handle('###');
       eq(machine.state, 'CreateFeatureState');
     });

@@ -52,14 +52,14 @@ describe('CreateScenarioState', () => {
   });
 
   describe('An indented blank line', () => {
-    it('should be unexpected on docstringIndentStart event', () => {
+    it('should be unexpected', () => {
       session.indentation = 0;
       throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Indent Stop Events', () => {
-    it('should be unexpected on docstringIndentStop event', () => {
+    it('should be unexpected', () => {
       session.docstring = { indentation: 3 };
       session.indentation = 0;
       throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
@@ -67,13 +67,13 @@ describe('CreateScenarioState', () => {
   });
 
   describe('A docstring token', () => {
-    it('should be unexpected on docstringTokenStart event', () => {
+    it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('DocString Token Stop Events', () => {
-    it('should be unexpected on docstringTokenStop event', () => {
+    it('should be unexpected', () => {
       session.docstring = { token: '---' };
       throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
@@ -92,14 +92,14 @@ describe('CreateScenarioState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a state transition to ConsumeBlockCommentState', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A scenario', () => {
-    it('should be unexpected on scenario event', () => {
+    it('should be unexpected', () => {
       throws(() => handle('Scenario: First scenario'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
@@ -112,7 +112,7 @@ describe('CreateScenarioState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a state transition to AfterScenarioStepState', () => {
+    it('should cause a transition to AfterScenarioStepState', () => {
       handle('First step');
       eq(machine.state, 'AfterScenarioStepState');
     });

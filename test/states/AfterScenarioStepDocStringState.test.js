@@ -52,42 +52,14 @@ describe('AfterScenarioStepDocStringState', () => {
     });
   });
 
-  describe('An indented blank line', () => {
-    it('should be unexpected on docstringIndentStart event', () => {
-      session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Indent Stop Events', () => {
-    it('should be unexpected on docstringIndentStop event', () => {
-      session.docstring = { indentation: 3 };
-      session.indentation = 0;
-      throws(() => handle('some text'), { message: `I did not expect the end of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
   describe('A docstring token', () => {
-    it('should be unexpected on docstringTokenStart event', () => {
+    it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('DocString Token Stop Events', () => {
-    it('should be unexpected on docstringTokenStop event', () => {
-      session.docstring = { token: '---' };
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('A feature', () => {
-    it('should be unexpected on feature event', () => {
-      throws(() => handle('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
   describe('The end of the feature', () => {
-    it('should cause a state transition to final on end event', () => {
+    it('should cause a transition to FinalState', () => {
       handle('\u0000');
       eq(machine.state, 'FinalState');
     });
@@ -100,14 +72,14 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a state transition to ConsumeBlockCommentState', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A scenario', () => {
-    it('should cause a state transition to CreateScenarioState', () => {
+    it('should cause a transition to CreateScenarioState', () => {
       handle('Scenario: foo');
       eq(machine.state, 'CreateScenarioState');
     });
@@ -144,7 +116,7 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a state transition to AfterScenarioStepState', () => {
+    it('should cause a transition to AfterScenarioStepState', () => {
       handle('Second step');
       eq(machine.state, 'AfterScenarioStepState');
     });
@@ -169,6 +141,13 @@ describe('AfterScenarioStepDocStringState', () => {
       eq(exported.scenarios[0].steps[1].annotations[0].value, '1');
       eq(exported.scenarios[0].steps[1].annotations[1].name, 'two');
       eq(exported.scenarios[0].steps[1].annotations[1].value, '2');
+    });
+  });
+
+  describe('An indented line of text', () => {
+    it('should be unexpected', () => {
+      session.indentation = 0;
+      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
