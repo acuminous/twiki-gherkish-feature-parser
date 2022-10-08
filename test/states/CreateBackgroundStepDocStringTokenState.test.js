@@ -4,9 +4,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepDocStringState } = States;
+const { CreateBackgroundStepDocStringTokenState } = States;
 
-describe('CreateBackgroundStepDocStringState', () => {
+describe('CreateBackgroundStepDocStringTokenState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -24,9 +24,9 @@ describe('CreateBackgroundStepDocStringState', () => {
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundStepDocStringState();
+    machine.toCreateBackgroundStepDocStringTokenState();
 
-    state = new CreateBackgroundStepDocStringState({ featureBuilder, machine });
+    state = new CreateBackgroundStepDocStringTokenState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0, docString: { token: '---' } };
   });
@@ -34,14 +34,14 @@ describe('CreateBackgroundStepDocStringState', () => {
   describe('Blank Line Events', () => {
     it('should not cause transition', () => {
       handle('');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
   });
 
   describe('DocString Indent Start Events', () => {
     it('should not cause transition', () => {
       handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
   });
 
@@ -49,7 +49,7 @@ describe('CreateBackgroundStepDocStringState', () => {
     it('should not cause transition', () => {
       session.indentation = 3;
       handle('some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
   });
 
@@ -69,7 +69,7 @@ describe('CreateBackgroundStepDocStringState', () => {
   describe('DocString Text Events', () => {
     it('should not cause transition', () => {
       handle('some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
 
     it('should capture docstrings', () => {

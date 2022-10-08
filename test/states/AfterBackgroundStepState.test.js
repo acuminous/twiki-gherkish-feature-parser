@@ -56,10 +56,10 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('DocString Indent Start Events', () => {
-    it('should transition to new CreateBackgroundStepDocStringState on DocStringIndentStart event', () => {
+    it('should transition to new CreateBackgroundStepDocStringIndentState on DocStringIndentStart event', () => {
       session.indentation = 0;
       handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
     });
 
     it('should capture DocStrings', () => {
@@ -80,9 +80,9 @@ describe('AfterBackgroundStepState', () => {
   });
 
   describe('DocString Token Start Events', () => {
-    it('should transition to new CreateBackgroundStepDocStringState on DocStringTokenStart event', () => {
+    it('should transition to new CreateBackgroundStepDocStringTokenState on DocStringTokenStart event', () => {
       handle('---');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'CreateBackgroundStepDocStringTokenState');
     });
   });
 

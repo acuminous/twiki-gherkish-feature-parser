@@ -1,20 +1,22 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
-import os from 'node:os';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepDocStringState } = States;
+const { CreateBackgroundStepDocStringIndentState } = States;
 
-describe('CreateBackgroundStepDocStringState', () => {
+describe('CreateBackgroundStepDocStringIndentState', () => {
   let featureBuilder;
   let machine;
   let state;
   let session;
   const expectedEvents = [
-    ' - a DocString line',
-    ' - the end of an explicit DocString',
-    ' - the end of an indented DocString',
+    ' - a blank line',
+    ' - a block comment',
+    ' - a scenario',
+    ' - a single line comment',
+    ' - a step',
+    ' - an annotation',
   ].join('\n');
 
   beforeEach(() => {
@@ -24,71 +26,101 @@ describe('CreateBackgroundStepDocStringState', () => {
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundStepDocStringState();
+    machine.toCreateBackgroundStepDocStringIndentState();
 
-    state = new CreateBackgroundStepDocStringState({ featureBuilder, machine });
+    state = new CreateBackgroundStepDocStringIndentState({ featureBuilder, machine });
 
-    session = { language: Languages.English, indentation: 0 };
+    session = { language: Languages.English, indentation: 0, docString: { indentation: 3 } };
   });
 
-  describe('Blank Line Events', () => {
-    it('should not cause transition', () => {
-      session.docString = { token: '---' };
+  describe('A blank line indented to the same depth as the docstring', () => {
+    it('should not cause a state transition', () => {
+      handle('   ');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('   ');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, '');
+    });
+  });
+
+  describe('A blank line indented more deeply than the docstring', () => {
+    it('should not cause a state transition', () => {
+      handle('      ');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('      ');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, '   ');
+    });
+  });
+
+  describe('A blank line outdated to the original depth', () => {
+    it('should cause a state transition to AfterBackgroundStepDocStringState', () => {
       handle('');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      eq(machine.state, 'AfterBackgroundStepDocStringState');
+    });
+
+    it('should not be captured on the docstring', () => {
+      handle('');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, null);
     });
   });
 
-  describe('DocString Indent Start Events', () => {
-    it('should error on DocStringIndentStart event', () => {
-      session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  describe('A docstring token indented to the same depth as the docstring', () => {
+    it('should not cause a state transition', () => {
+      handle('   ---');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('   ---');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, '---');
     });
   });
 
-  describe('DocString Indent Stop Events', () => {
-    it('should transition to new AfterBackgroundStepDocStringState on DocStringIndentEnd event', () => {
-      session.docString = { indentation: 3 };
-      session.indentation = 0;
-      handle('some text');
-      eq(machine.state, 'AfterBackgroundStepState');
+  describe('A docstring token indented more deeply than the docstring', () => {
+    it('should not cause a state transition', () => {
+      handle('      ---');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('      ---');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docString, '   ---');
     });
   });
 
-  describe('DocString Token Start Events', () => {
-    it('should error on DocStringTokenStart event', () => {
+  describe('A docstring token oudented to the original depth', () => {
+    it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit DocString at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('DocString Token Stop Events', () => {
-    it('should transition to new AfterBackgroundStepDocStringState on DocStringTokenStop event', () => {
-      session.docString = { token: '---' };
-      handle('---');
-      eq(machine.state, 'AfterBackgroundStepDocStringState');
+  describe('The end of the feature', () => {
+    it('should cause a state transition to FinalState', () => {
+      handle('\u0000');
+      eq(machine.state, 'FinalState');
     });
   });
 
-  describe('End Events', () => {
-    it('should transition to final on end event', () => {
-      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('DocString Text Events', () => {
+  describe('A line of text indented to the same depth as the docstring', () => {
     it('should not cause transition', () => {
-      session.docString = { token: '---' };
-      handle('some text');
-      eq(machine.state, 'CreateBackgroundStepDocStringState');
+      handle('   some text');
+      eq(machine.state, 'CreateBackgroundStepDocStringIndentState');
     });
 
-    it('should capture docstrings', () => {
-      session.docString = { token: '---' };
-      handle('some text');
-      handle('Some more text');
-
+    it('should be captured on the docstring', () => {
+      handle('   some text');
       const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docString, ['some text', 'Some more text'].join(os.EOL));
+      eq(exported.background.steps[0].docString, 'some text');
     });
   });
 
