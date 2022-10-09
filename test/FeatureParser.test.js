@@ -8,7 +8,7 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 
 describe('FeatureParser', () => {
 
-  describe('Supported languages', () => {
+  describe('Supported Languages', () => {
 
     it('should parse features in English by default', () => {
       assertFeature('languages', 'buck-rogers-season-one-en');
@@ -19,7 +19,7 @@ describe('FeatureParser', () => {
     });
   });
 
-  describe('Variants', () => {
+  describe('Valid Variants', () => {
     listFeatures('variants').forEach(({ title, basename }) => {
       it(`should parse ${title}`, () => {
         assertFeature('variants', basename);
