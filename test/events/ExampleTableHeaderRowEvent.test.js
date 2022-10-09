@@ -18,12 +18,12 @@ describe('ExampleTableHeaderRowEvent', () => {
     eq(event.handle({ line: '|   a   |' }, session, state), true);
     eq(event.handle({ line: '| a | b | c |' }, session, state), true);
     eq(event.handle({ line: '| abc |' }, session, state), true);
+    eq(event.handle({ line: '| a b c |' }, session, state), true);
 
     eq(event.handle({ line: '|' }, session, state), false);
     eq(event.handle({ line: '| a' }, session, state), false);
     eq(event.handle({ line: '| a | b' }, session, state), false);
     eq(event.handle({ line: 'a | b' }, session, state), false);
-    eq(event.handle({ line: '| a b c |' }, session, state), false);
   });
 
   it('should handle single column example table header row', () => {
