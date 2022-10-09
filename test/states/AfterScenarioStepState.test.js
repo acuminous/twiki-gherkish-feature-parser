@@ -17,6 +17,7 @@ describe('AfterScenarioStepState', () => {
     ' - a single line comment',
     ' - a step',
     ' - an annotation',
+    ' - some examples',
     ' - the end of the feature',
     ' - the start of an explicit docstring',
     ' - the start of an indented docstring',
@@ -110,6 +111,13 @@ describe('AfterScenarioStepState', () => {
       eq(exported.scenarios[1].annotations[0].value, '1');
       eq(exported.scenarios[1].annotations[1].name, 'two');
       eq(exported.scenarios[1].annotations[1].value, '2');
+    });
+  });
+
+  describe('Some examples', () => {
+    it('should cause a transition to CreateScenarioExampleTableState', () => {
+      handle('Where:');
+      eq(machine.state, 'CreateScenarioExampleTableState');
     });
   });
 

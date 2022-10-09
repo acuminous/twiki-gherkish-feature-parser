@@ -1,10 +1,9 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import FeatureEvent from '../../lib/events/FeatureEvent.js';
-import { States } from '../../lib/index.js';
+import BaseState from '../../lib/states/BaseState.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { BaseState } = States;
 
 describe('Missing event handler', () => {
   it('should report states with missing event handlers', () => {
