@@ -17,7 +17,7 @@ describe('AfterScenarioStepState', () => {
     ' - a single line comment',
     ' - a step',
     ' - an annotation',
-    ' - some examples',
+    ' - an example table',
     ' - the end of the feature',
     ' - the start of an explicit docstring',
     ' - the start of an indented docstring',
