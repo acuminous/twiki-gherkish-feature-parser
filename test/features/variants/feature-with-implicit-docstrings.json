@@ -1,0 +1,66 @@
+{
+  "annotations": [],
+  "title": "Buck Rogers - Season One",
+  "description": "Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
+  "background": {
+    "title": "Introduction",
+    "description": null,
+    "annotations": [],
+    "steps": [
+      {
+        "annotations": [],
+        "text": "Given the year is 1987",
+        "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+      },
+      {
+        "annotations": [],
+        "text": "And NASA launches the last of America's deep space probes",
+        "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+      },
+      {
+        "annotations": [],
+        "text": "When a freak mishap occurs",
+        "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\n  biddie-biddie-biddie!"
+      },
+      {
+        "annotations": [],
+        "text": "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems",
+        "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+      },
+      {
+        "annotations": [],
+        "text": "And returns Buck Rogers to Earth 500 years later",
+        "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "title": "Awakening",
+      "description": null,
+      "annotations": [],
+      "steps": [
+        {
+          "annotations": [],
+          "text": "Given the Draconians have planted a homing beacon aboard Buck's shuttle",
+          "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+        },
+        {
+          "annotations": [],
+          "text": "When Buck arrives on Earth",
+          "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+        },
+        {
+          "annotations": [],
+          "text": "Then he must adjust to the 25th century",
+          "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\n  biddie-biddie-biddie!"
+        },
+        {
+          "annotations": [],
+          "text": "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them",
+          "docstring": "biddie-biddie-biddie!\nbiddie-biddie-biddie!\nbiddie-biddie-biddie!"
+        }
+      ]
+    }
+  ]
+}
