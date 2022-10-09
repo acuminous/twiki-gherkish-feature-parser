@@ -2,7 +2,38 @@
   "annotations": [],
   "title": "Buck Rogers - Season One",
   "description": "Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
-  "background": null,
+  "background": {
+    "title": "Introduction",
+    "description": null,
+    "annotations": [],
+    "steps": [
+      {
+        "annotations": [],
+        "text": "Given the year is 1987",
+        "docstring": null
+      },
+      {
+        "annotations": [],
+        "text": "And NASA launches the last of America's deep space probes",
+        "docstring": null
+      },
+      {
+        "annotations": [],
+        "text": "When a freak mishap occurs",
+        "docstring": null
+      },
+      {
+        "annotations": [],
+        "text": "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems",
+        "docstring": null
+      },
+      {
+        "annotations": [],
+        "text": "And returns Buck Rogers to Earth 500 years later",
+        "docstring": null
+      }
+    ]
+  },
   "scenarios": [
     {
       "title": "Awakening",
