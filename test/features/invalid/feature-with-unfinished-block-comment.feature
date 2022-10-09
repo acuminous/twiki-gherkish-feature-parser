@@ -1,7 +1,7 @@
 Feature: Buck Rogers - Season One
 
-Buck Rogers season one comprising of 24 episodes.
-It was first aired on September 20th, 1979.
+###
+Background: Introduction
 
 Scenario: Awakening
 

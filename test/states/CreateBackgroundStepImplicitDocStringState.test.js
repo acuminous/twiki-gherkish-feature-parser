@@ -12,7 +12,7 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
   let session;
   const expectedEvents = [
     ' - a blank line',
-    ' - a block comment',
+    ' - a block comment delimiter',
     ' - a scenario',
     ' - a single line comment',
     ' - a step',

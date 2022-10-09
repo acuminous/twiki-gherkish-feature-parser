@@ -2,7 +2,7 @@ I did not expect the end of the feature at invalid.feature:3
 Instead, I expected one of:
  - a background
  - a blank line
- - a block comment
+ - a block comment delimiter
  - a scenario
  - a single line comment
  - an annotation

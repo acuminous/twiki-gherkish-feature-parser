@@ -12,7 +12,7 @@ describe('InitialState', () => {
   let session;
   const expectedEvents = [
     ' - a blank line',
-    ' - a block comment',
+    ' - a block comment delimiter',
     ' - a feature',
     ' - a single line comment',
     ' - an annotation',

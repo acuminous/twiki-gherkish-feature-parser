@@ -13,7 +13,7 @@ describe('CreateFeatureState', () => {
   const expectedEvents = [
     ' - a background',
     ' - a blank line',
-    ' - a block comment',
+    ' - a block comment delimiter',
     ' - a scenario',
     ' - a single line comment',
     ' - an annotation',

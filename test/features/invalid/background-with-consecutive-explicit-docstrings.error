@@ -1,7 +1,7 @@
 I did not expect the start of an explicit docstring at invalid.feature:8
 Instead, I expected one of:
  - a blank line
- - a block comment
+ - a block comment delimiter
  - a scenario
  - a single line comment
  - a step
