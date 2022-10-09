@@ -41,5 +41,17 @@
   },
   "dependencies": {
     "debug": "^4.3.4"
-  }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acuminous/twiki-gherkish-feature-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/acuminous/twiki-gherkish-feature-parser/issues"
+  },
+  "homepage": "https://github.com/acuminous/twiki-gherkish-feature-parser#readme"
 }

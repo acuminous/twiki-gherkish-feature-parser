@@ -22,11 +22,7 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onExplicitDocStringStart(session, event) {
-    return this.handleEvent(event);
-  }
-
-  onImplicitDocStringStart(session, event) {
+  onBlockComment(session, event) {
     return this.handleEvent(event);
   }
 
@@ -34,15 +30,19 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onExplicitDocStringStop(session, event) {
-    return this.handleEvent(event);
-  }
-
-  onImplicitDocStringStop(session, event) {
-    return this.handleEvent(event);
-  }
-
   onEnd(session, event) {
+    return this.handleEvent(event);
+  }
+
+  onExamples(session, event) {
+    return this.handleEvent(event);
+  }
+
+  onExplicitDocStringStart(session, event) {
+    return this.handleEvent(event);
+  }
+
+  onExplicitDocStringStop(session, event) {
     return this.handleEvent(event);
   }
 
@@ -50,11 +50,11 @@ export default class StubState extends BaseState {
     return this.handleEvent(event);
   }
 
-  onLanguage(event) {
+  onImplicitDocStringStart(session, event) {
     return this.handleEvent(event);
   }
 
-  onBlockComment(session, event) {
+  onImplicitDocStringStop(session, event) {
     return this.handleEvent(event);
   }
 
