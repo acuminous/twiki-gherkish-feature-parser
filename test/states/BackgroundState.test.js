@@ -58,6 +58,12 @@ describe('BackgroundState', () => {
     });
   });
 
+  describe('An example table', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
   describe('An explicit docstring', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });

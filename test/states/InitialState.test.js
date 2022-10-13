@@ -35,7 +35,7 @@ describe('InitialState', () => {
 
   describe('A background', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Background: foo'), { message: `${state.name} has no event handler for 'Background: foo' at undefined:1` });
+      throws(() => handle('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -46,15 +46,27 @@ describe('InitialState', () => {
     });
   });
 
-  describe('A docstring delimiter', () => {
+  describe('An explicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
+      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
+  describe('An implicit docstring', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('   some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
       throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
+  describe('An example table', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -99,19 +111,13 @@ describe('InitialState', () => {
 
   describe('A scenario', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Scenario: foo'), { message: `${state.name} has no event handler for 'Scenario: foo' at undefined:1` });
+      throws(() => handle('Scenario: foo'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A line of text', () => {
     it('should be unexpected', () => {
-      throws(() => handle('some text'), { message: `${state.name} has no event handler for 'some text' at undefined:1` });
-    });
-  });
-
-  describe('An indented line of text', () => {
-    it('should be unexpected', () => {
-      throws(() => handle('   some text'), { message: `${state.name} has no event handler for '   some text' at undefined:1` });
+      throws(() => handle('some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

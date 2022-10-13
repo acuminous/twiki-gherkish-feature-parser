@@ -62,6 +62,12 @@ describe('BackgroundStepsState', () => {
     });
   });
 
+  describe('An example table', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
   describe('An explicit docstring', () => {
     it('should cause a transition to CreateBackgroundStepExplicitDocStringState', () => {
       handle('---');

@@ -76,6 +76,12 @@ describe('ScenarioState', () => {
     });
   });
 
+  describe('An example table', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
   describe('A feature', () => {
     it('should be unexpected', () => {
       throws(() => handle('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
