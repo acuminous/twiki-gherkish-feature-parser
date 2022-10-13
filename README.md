@@ -152,12 +152,12 @@ ExplicitDocStringStartState [DocStringLineEvent] ⇨ [ExplicitDocStringState](#E
 #### ExplicitDocStringState
 
 ExplicitDocStringState [DocStringLineEvent] ⇨ ExplicitDocStringState</br>
-ExplicitDocStringState [DocStringDelimiterEvent] ⇨ [BackgroundStepsState | ScenarioStepsState](#BackgroundStepsState | ScenarioStepsState)</br>
+ExplicitDocStringState [DocStringDelimiterEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
 
 #### ImplicitDocStringState
 
 ImplicitDocStringState [DocStringLineEvent] ⇨ ImplicitDocStringState</br>
-ImplicitDocStringState [DocStringOutdentEvent] ⇨ [BackgroundStepsState | ScenarioStepsState](#BackgroundStepsState | ScenarioStepsState)</br>
+ImplicitDocStringState [DocStringOutdentEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
 
 #### ExampleTableState
 
