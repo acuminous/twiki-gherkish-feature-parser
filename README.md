@@ -134,7 +134,7 @@ ScenarioStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 ScenarioStepsState [StepEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [ExampleTableEvent] ⇨ [ExampleTableState](#ExampleTableState)</br>
 ScenarioStepsState [SingleLineComment] ⇨ ScenarioStepsState</br>
-ScenarioStepsState [EndEvent] ⇨ [FinalState](#FinalState)</br>
+ScenarioStepsState [EndEvent] ⇨ FinalState</br>
 
 #### ScenarioStepsAnnotationState
 
@@ -178,7 +178,7 @@ ExampleTableSeparatorState [ExampleTableDataRowEvent] ⇨ [ExampleTableDataRow](
 #### ExampleTableDataRow
 
 ExampleTableDataRow [ExampleTableDataRowEvent] ⇨ ExampleTableDataRow</br>
-ExampleTableDataRow [EndEvent] ⇨ [FinalState](#FinalState)</br>
+ExampleTableDataRow [EndEvent] ⇨ FinalState</br>
 ExampleTableDataRow [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 
 #### BlockCommentState
