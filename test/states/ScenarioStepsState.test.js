@@ -58,9 +58,9 @@ describe('ScenarioStepsState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a transition to ConsumeBlockCommentState', () => {
+    it('should cause a transition to BlockCommentState', () => {
       handle('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+      eq(machine.state, 'BlockCommentState');
     });
   });
 
