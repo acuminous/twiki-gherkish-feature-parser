@@ -66,7 +66,14 @@ describe('FeatureState', () => {
     });
   });
 
-  describe('A docstring token', () => {
+  describe('A block comment delimiter', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
+      handle('###');
+      eq(machine.state, 'ConsumeBlockCommentState');
+    });
+  });
+
+  describe('A docstring delimeter', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
@@ -84,10 +91,10 @@ describe('FeatureState', () => {
     });
   });
 
-  describe('A block comment', () => {
-    it('should cause a transition to ConsumeBlockCommentState', () => {
-      handle('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+  describe('A single line comment', () => {
+    it('should not cause a state transition', () => {
+      handle('# Some comment');
+      eq(machine.state, 'FeatureState');
     });
   });
 
@@ -97,7 +104,7 @@ describe('FeatureState', () => {
       eq(machine.state, 'CreateScenarioState');
     });
 
-    it('should be captured', () => {
+    it('should be captured without annotations', () => {
       handle('Scenario: First scenario');
 
       const exported = featureBuilder.build();
@@ -113,17 +120,8 @@ describe('FeatureState', () => {
       const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
-      eq(exported.scenarios[0].annotations[0].name, 'one');
-      eq(exported.scenarios[0].annotations[0].value, '1');
-      eq(exported.scenarios[0].annotations[1].name, 'two');
-      eq(exported.scenarios[0].annotations[1].value, '2');
-    });
-  });
-
-  describe('A single line comment', () => {
-    it('should not cause a state transition', () => {
-      handle('# Some comment');
-      eq(machine.state, 'FeatureState');
+      deq(exported.scenarios[0].annotations[0], { name: 'one', value: '1' });
+      deq(exported.scenarios[0].annotations[1], { name: 'two', value: '2' });
     });
   });
 
@@ -136,15 +134,10 @@ describe('FeatureState', () => {
     it('should be captured in the feature description', () => {
       handle('some text');
       handle('some more text');
+      handle('   some indented text');
 
       const exported = featureBuilder.build();
-      eq(exported.description, 'some text\nsome more text');
-    });
-  });
-
-  describe('An indented line of text', () => {
-    it('should be unexpected', () => {
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      eq(exported.description, 'some text\nsome more text\n   some indented text');
     });
   });
 
