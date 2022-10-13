@@ -73,7 +73,7 @@ The parser uses a state machine which transitions between states when specific e
 
 InitialState [AnnotationEvent] ⇨ InitialState</br>
 InitialState [BlankLineEvent] ⇨ InitialState</br>
-InitialState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+InitialState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 InitialState [FeatureEvent] ⇨ [FeatureState](#FeatureState)</br>
 InitialState [SingleLineComment] ⇨ InitialState</br>
 
@@ -82,7 +82,7 @@ InitialState [SingleLineComment] ⇨ InitialState</br>
 FeatureState [AnnotationEvent] ⇨ FeatureState</br>
 FeatureState [BackgroundEvent] ⇨ [BackgroundState](#BackgroundState)</br>
 FeatureState [BlankLineEvent] ⇨ FeatureState</br>
-FeatureState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+FeatureState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 FeatureState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 FeatureState [SingleLineComment] ⇨ FeatureState</br>
 FeatureState [TextEvent] ⇨ FeatureState</br>
@@ -91,7 +91,7 @@ FeatureState [TextEvent] ⇨ FeatureState</br>
 
 BackgroundState [AnnotationEvent] ⇨ BackgroundState</br>
 BackgroundState [BlankLineEvent] ⇨ BackgroundState</br>
-BackgroundState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+BackgroundState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 BackgroundState [SingleLineComment] ⇨ BackgroundState</br>
 BackgroundState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState)</br>
 
@@ -99,7 +99,7 @@ BackgroundState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState)</b
 
 BackgroundStepsState [AnnotationEvent] ⇨ BackgroundStepsState</br>
 BackgroundStepsState [BlankLineEvent] ⇨ BackgroundStepsState</br>
-BackgroundStepsState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+BackgroundStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 BackgroundStepsState [DocStringDelimiterEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
 BackgroundStepsState [DocStringIndentEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
 BackgroundStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
@@ -110,7 +110,7 @@ BackgroundStepsState [SingleLineComment] ⇨ BackgroundStepsState</br>
 
 BackgroundStepsAnnotationState [AnnotationEvent] ⇨ BackgroundStepsAnnotationState</br>
 BackgroundStepsAnnotationState [BlankLineEvent] ⇨ BackgroundStepsAnnotationState</br>
-BackgroundStepsAnnotationState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+BackgroundStepsAnnotationState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 BackgroundStepsAnnotationState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 BackgroundStepsAnnotationState [SingleLineComment] ⇨ BackgroundStepsAnnotationState</br>
 BackgroundStepsAnnotationState [StepEvent] ⇨ BackgroundStepsAnnotationState</br>
@@ -119,7 +119,7 @@ BackgroundStepsAnnotationState [StepEvent] ⇨ BackgroundStepsAnnotationState</b
 
 ScenarioState [AnnotationEvent] ⇨ ScenarioState</br>
 ScenarioState [BlankLineEvent] ⇨ ScenarioState</br>
-ScenarioState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+ScenarioState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 ScenarioState [SingleLineComment] ⇨ ScenarioState</br>
 ScenarioState [StepEvent] ⇨ [ScenarioStepsState](#ScenarioStepsState)</br>
 
@@ -127,7 +127,7 @@ ScenarioState [StepEvent] ⇨ [ScenarioStepsState](#ScenarioStepsState)</br>
 
 ScenarioStepsState [AnnotationEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [BlankLineEvent] ⇨ ScenarioStepsState</br>
-ScenarioStepsState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+ScenarioStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 ScenarioStepsState [DocStringDelimiterEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
 ScenarioStepsState [DocStringIndentEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
 ScenarioStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
@@ -140,7 +140,7 @@ ScenarioStepsState [EndEvent] ⇨ FinalState</br>
 
 ScenarioStepsAnnotationState [AnnotationEvent] ⇨ ScenarioStepsAnnotationState</br>
 ScenarioStepsAnnotationState [BlankLineEvent] ⇨ ScenarioStepsAnnotationState</br>
-ScenarioStepsAnnotationState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+ScenarioStepsAnnotationState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 ScenarioStepsAnnotationState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 ScenarioStepsAnnotationState [StepEvent] ⇨ ScenarioStepsAnnotationState</br>
 ScenarioStepsAnnotationState [SingleLineComment] ⇨ ScenarioStepsAnnotationState</br>
@@ -162,7 +162,7 @@ ImplicitDocStringState [DocStringOutdentEvent] ⇨ [BackgroundStepsState](#Backg
 #### ExampleTableState
 
 ExampleTableState [BlankLineEvent] ⇨ ExampleTableState</br>
-ExampleTableState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+ExampleTableState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 ExampleTableState [ExampleTableHeaderRowEvent] ⇨ [ExampleTableHeaderState](#ExampleTableHeaderState)</br>
 ExampleTableState [SingleLineComment] ⇨ ExampleTableState</br>
 
@@ -183,5 +183,5 @@ ExampleTableDataRow [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 
 #### BlockCommentState
 
-BlockCommentState [BlockCommentEvent] ⇨ $PreviousState</br>
+BlockCommentState [BlockCommentDelimiterEvent] ⇨ $PreviousState</br>
 BlockCommentState [TextEvent] ⇨ BlockCommentState</br>
