@@ -59,9 +59,9 @@ describe('InitialState', () => {
   });
 
   describe('A feature', () => {
-    it('should cause a transition to CreateFeatureState', () => {
+    it('should cause a transition to FeatureState', () => {
       handle('Feature: foo');
-      eq(machine.state, 'CreateFeatureState');
+      eq(machine.state, 'FeatureState');
     });
 
     it('should be caputed', () => {

@@ -18,7 +18,7 @@ describe('ConsumeBlockCommentState', () => {
     const featureBuilder = new FeatureBuilder();
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateFeatureState();
+    machine.toFeatureState();
     machine.toConsumeBlockCommentState();
 
     state = new ConsumeBlockCommentState({ featureBuilder, machine });
@@ -78,7 +78,7 @@ describe('ConsumeBlockCommentState', () => {
   describe('A block comment', () => {
     it('should cause a transition to the previous state', () => {
       handle('###');
-      eq(machine.state, 'CreateFeatureState');
+      eq(machine.state, 'FeatureState');
     });
   });
 
