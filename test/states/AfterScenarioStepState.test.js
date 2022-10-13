@@ -85,9 +85,9 @@ describe('AfterScenarioStepState', () => {
   });
 
   describe('A scenario', () => {
-    it('should cause a transition to CreateScenarioState', () => {
+    it('should cause a transition to ScenarioState', () => {
       handle('Scenario: foo');
-      eq(machine.state, 'CreateScenarioState');
+      eq(machine.state, 'ScenarioState');
     });
 
     it('should be captured', () => {

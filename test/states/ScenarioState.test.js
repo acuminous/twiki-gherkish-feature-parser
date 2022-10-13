@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateScenarioState } = States;
+const { ScenarioState } = States;
 
-describe('CreateScenarioState', () => {
+describe('ScenarioState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -24,9 +24,9 @@ describe('CreateScenarioState', () => {
     featureBuilder.createScenario({ annotations: [], title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateScenarioState();
+    machine.toScenarioState();
 
-    state = new CreateScenarioState({ featureBuilder, machine });
+    state = new ScenarioState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0 };
   });
@@ -34,7 +34,7 @@ describe('CreateScenarioState', () => {
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo=bar');
-      eq(machine.state, 'CreateScenarioState');
+      eq(machine.state, 'ScenarioState');
     });
   });
 
@@ -47,7 +47,7 @@ describe('CreateScenarioState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
-      eq(machine.state, 'CreateScenarioState');
+      eq(machine.state, 'ScenarioState');
     });
   });
 
@@ -85,7 +85,7 @@ describe('CreateScenarioState', () => {
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       handle('# Some comment');
-      eq(machine.state, 'CreateScenarioState');
+      eq(machine.state, 'ScenarioState');
     });
   });
 

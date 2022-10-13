@@ -99,9 +99,9 @@ describe('FeatureState', () => {
   });
 
   describe('A scenario', () => {
-    it('should cause a transition to CreateScenarioState', () => {
+    it('should cause a transition to ScenarioState', () => {
       handle('Scenario: First scenario');
-      eq(machine.state, 'CreateScenarioState');
+      eq(machine.state, 'ScenarioState');
     });
 
     it('should be captured without annotations', () => {
