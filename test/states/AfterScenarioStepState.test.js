@@ -20,7 +20,7 @@ describe('AfterScenarioStepState', () => {
     ' - an example table',
     ' - the end of the feature',
     ' - the start of an explicit docstring',
-    ' - the start of an indented docstring',
+    ' - the start of an implicit docstring',
   ].join('\n');
 
   beforeEach(() => {

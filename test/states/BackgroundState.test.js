@@ -51,15 +51,22 @@ describe('BackgroundState', () => {
     });
   });
 
-  describe('An indented blank line', () => {
-    it('should be unexpected', () => {
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  describe('A block comment delimiter', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
+      handle('###');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A docstring token', () => {
+  describe('An explicit docstring', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
+  describe('An implicit docstring', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -75,23 +82,16 @@ describe('BackgroundState', () => {
     });
   });
 
-  describe('A block comment', () => {
-    it('should cause a transition to ConsumeBlockCommentState', () => {
-      handle('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+  describe('A single line comment', () => {
+    it('should not cause a state transition', () => {
+      handle('# Some comment');
+      eq(machine.state, 'BackgroundState');
     });
   });
 
   describe('A scenario', () => {
     it('should be unexpected', () => {
       throws(() => handle('Scenario: First scenario'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('A single line comment', () => {
-    it('should not cause a state transition', () => {
-      handle('# Some comment');
-      eq(machine.state, 'BackgroundState');
     });
   });
 
@@ -104,7 +104,7 @@ describe('BackgroundState', () => {
       eq(machine.state, 'AfterBackgroundStepState');
     });
 
-    it('should be captureds', () => {
+    it('should be captured without annotations', () => {
       handle('First step');
 
       const exported = featureBuilder.build();
@@ -112,17 +112,15 @@ describe('BackgroundState', () => {
       eq(exported.background.steps[0].text, 'First step');
     });
 
-    it('should be captureds with annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one=1');
       handle('@two=2');
       handle('First step');
 
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].annotations.length, 2);
-      eq(exported.background.steps[0].annotations[0].name, 'one');
-      eq(exported.background.steps[0].annotations[0].value, '1');
-      eq(exported.background.steps[0].annotations[1].name, 'two');
-      eq(exported.background.steps[0].annotations[1].value, '2');
+      deq(exported.background.steps[0].annotations[0], { name: 'one', value: '1' });
+      deq(exported.background.steps[0].annotations[1], { name: 'two', value: '2' });
     });
   });
 

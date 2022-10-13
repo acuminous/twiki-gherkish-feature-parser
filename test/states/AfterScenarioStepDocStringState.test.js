@@ -147,7 +147,7 @@ describe('AfterScenarioStepDocStringState', () => {
   describe('An indented line of text', () => {
     it('should be unexpected', () => {
       session.indentation = 0;
-      throws(() => handle('   some text'), { message: `I did not expect the start of an indented docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => handle('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
