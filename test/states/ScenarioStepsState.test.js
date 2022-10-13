@@ -64,7 +64,7 @@ describe('ScenarioStepsState', () => {
     });
   });
 
-  describe('An examples table', () => {
+  describe('An example table', () => {
     it('should cause a transition to CreateScenarioExampleTableState', () => {
       handle('Where:');
       eq(machine.state, 'CreateScenarioExampleTableState');
