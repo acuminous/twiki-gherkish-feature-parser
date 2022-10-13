@@ -75,7 +75,7 @@ The parser uses a state machine which transitions between states when specific e
 | BackgroundEvent            | Background:<br/>Background: Introduction                            |
 | BlankLineEvent             |                                                                     |
 | BlockCommentDelimiterEvent | ###                                                                 |
-| DocStringDelimiterEvent    | '''</br>"""</br>                                                    |
+| DocStringDelimiterEvent    | ---</br>"""</br>                                                    |
 | DocStringIndentEvent       | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;indented&nbsp;docstring |
 | DocStringTextEvent         | This is a docstring                                                 |
 | EndEvent                   | \u0000 _(automatically appended by the feature parser)_             |
