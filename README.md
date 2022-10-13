@@ -103,8 +103,8 @@ BackgroundStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#Block
 BackgroundStepsState [DocStringDelimiterEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
 BackgroundStepsState [DocStringIndentEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
 BackgroundStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
-BackgroundStepsState [StepEvent] ⇨ BackgroundStepsState</br>
 BackgroundStepsState [SingleLineComment] ⇨ BackgroundStepsState</br>
+BackgroundStepsState [StepEvent] ⇨ BackgroundStepsState</br>
 
 #### ScenarioState
 
@@ -121,10 +121,10 @@ ScenarioStepsState [BlankLineEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 ScenarioStepsState [DocStringDelimiterEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
 ScenarioStepsState [DocStringIndentEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
-ScenarioStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
-ScenarioStepsState [StepEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [ExampleTableEvent] ⇨ [ExampleTableState](#ExampleTableState)</br>
+ScenarioStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 ScenarioStepsState [SingleLineComment] ⇨ ScenarioStepsState</br>
+ScenarioStepsState [StepEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [EndEvent] ⇨ FinalState</br>
 
 #### StepsAnnotationState
