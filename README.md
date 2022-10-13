@@ -69,25 +69,25 @@ The parser uses a state machine which transitions between states when specific e
 
 ### States
 
-##### InitialState
+#### InitialState
 
-InitialState [AnnotationEvent] ⇨ InitialState
-InitialState [BlankLineEvent] ⇨ InitialState
-InitialState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)
-InitialState [FeatureEvent] ⇨ [FeatureState](#[FeatureState])
-InitialState [SingleLineComment] ⇨ InitialState
+InitialState [AnnotationEvent] ⇨ InitialState</br>
+InitialState [BlankLineEvent] ⇨ InitialState</br>
+InitialState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+InitialState [FeatureEvent] ⇨ [FeatureState](#[FeatureState])</br>
+InitialState [SingleLineComment] ⇨ InitialState</br>
 
-##### FeatureState
+#### FeatureState
 
-FeatureState [AnnotationEvent] ⇨ FeatureState
-FeatureState [BackgroundEvent] ⇨ [BackgroundState](#BackgroundState)
-FeatureState [BlankLineEvent] ⇨ FeatureState
-FeatureState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)
-FeatureState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)
-FeatureState [SingleLineComment] ⇨ FeatureState
-FeatureState [TextEvent] ⇨ FeatureState
+FeatureState [AnnotationEvent] ⇨ FeatureState</br>
+FeatureState [BackgroundEvent] ⇨ [BackgroundState](#BackgroundState)</br>
+FeatureState [BlankLineEvent] ⇨ FeatureState</br>
+FeatureState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+FeatureState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
+FeatureState [SingleLineComment] ⇨ FeatureState</br>
+FeatureState [TextEvent] ⇨ FeatureState</br>
 
-##### BackgroundState
+#### BackgroundState
 
 BackgroundState [AnnotationEvent] ⇨ BackgroundState</br>
 BackgroundState [BlankLineEvent] ⇨ BackgroundState</br>
@@ -95,7 +95,7 @@ BackgroundState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)<
 BackgroundState [SingleLineComment] ⇨ BackgroundState</br>
 BackgroundState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState)</br>
 
-##### BackgroundStepsState
+#### BackgroundStepsState
 
 BackgroundStepsState [AnnotationEvent] ⇨ BackgroundStepsState</br>
 BackgroundStepsState [BlankLineEvent] ⇨ BackgroundStepsState</br>
@@ -106,7 +106,7 @@ BackgroundStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 BackgroundStepsState [StepEvent] ⇨ BackgroundStepsState</br>
 BackgroundStepsState [SingleLineComment] ⇨ BackgroundStepsState</br>
 
-##### BackgroundStepsAnnotationState
+#### BackgroundStepsAnnotationState
 
 BackgroundStepsAnnotationState [AnnotationEvent] ⇨ BackgroundStepsAnnotationState</br>
 BackgroundStepsAnnotationState [BlankLineEvent] ⇨ BackgroundStepsAnnotationState</br>
@@ -115,7 +115,7 @@ BackgroundStepsAnnotationState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioStat
 BackgroundStepsAnnotationState [SingleLineComment] ⇨ BackgroundStepsAnnotationState</br>
 BackgroundStepsAnnotationState [StepEvent] ⇨ BackgroundStepsAnnotationState</br>
 
-##### ScenarioState
+#### ScenarioState
 
 ScenarioState [AnnotationEvent] ⇨ ScenarioState</br>
 ScenarioState [BlankLineEvent] ⇨ ScenarioState</br>
@@ -123,7 +123,7 @@ ScenarioState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</b
 ScenarioState [SingleLineComment] ⇨ ScenarioState</br>
 ScenarioState [StepEvent] ⇨ [ScenarioStepsState](#ScenarioStepsState)</br>
 
-##### ScenarioStepsState
+#### ScenarioStepsState
 
 ScenarioStepsState [AnnotationEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [BlankLineEvent] ⇨ ScenarioStepsState</br>
@@ -136,7 +136,7 @@ ScenarioStepsState [ExampleTableEvent] ⇨ [ExampleTableState](#ExampleTableStat
 ScenarioStepsState [SingleLineComment] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [EndEvent] ⇨ [FinalState](#FinalState)</br>
 
-##### ScenarioStepsAnnotationState
+#### ScenarioStepsAnnotationState
 
 ScenarioStepsAnnotationState [AnnotationEvent] ⇨ ScenarioStepsAnnotationState</br>
 ScenarioStepsAnnotationState [BlankLineEvent] ⇨ ScenarioStepsAnnotationState</br>
@@ -145,43 +145,43 @@ ScenarioStepsAnnotationState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)
 ScenarioStepsAnnotationState [StepEvent] ⇨ ScenarioStepsAnnotationState</br>
 ScenarioStepsAnnotationState [SingleLineComment] ⇨ ScenarioStepsAnnotationState</br>
 
-##### ExplicitDocStringStartState
+#### ExplicitDocStringStartState
 
 ExplicitDocStringStartState [DocStringLineEvent] ⇨ [ExplicitDocStringState](#ExplicitDocStringState)</br>
 
-##### ExplicitDocStringState
+#### ExplicitDocStringState
 
 ExplicitDocStringState [DocStringLineEvent] ⇨ ExplicitDocStringState</br>
 ExplicitDocStringState [DocStringDelimiterEvent] ⇨ [BackgroundStepsState | ScenarioStepsState](#BackgroundStepsState | ScenarioStepsState)</br>
 
-##### ImplicitDocStringState
+#### ImplicitDocStringState
 
 ImplicitDocStringState [DocStringLineEvent] ⇨ ImplicitDocStringState</br>
 ImplicitDocStringState [DocStringOutdentEvent] ⇨ [BackgroundStepsState | ScenarioStepsState](#BackgroundStepsState | ScenarioStepsState)</br>
 
-##### ExampleTableState
+#### ExampleTableState
 
 ExampleTableState [BlankLineEvent] ⇨ ExampleTableState</br>
 ExampleTableState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 ExampleTableState [ExampleTableHeaderRowEvent] ⇨ [ExampleTableHeaderState](#ExampleTableHeaderState)</br>
 ExampleTableState [SingleLineComment] ⇨ ExampleTableState</br>
 
-##### ExampleTableHeaderState
+#### ExampleTableHeaderState
 
 ExampleTableHeaderState [ExampleTableSeparaterRowEvent] ⇨ [ExampleTableSeparatorState](#ExampleTableSeparatorState)</br>
 
-##### ExampleTableSeparatorState
+#### ExampleTableSeparatorState
 
 ExampleTableSeparatorState [AnnotationEvent] ⇨ ExampleTableSeparatorState</br>
 ExampleTableSeparatorState [ExampleTableDataRowEvent] ⇨ [ExampleTableDataRow](#ExampleTableDataRow)</br>
 
-##### ExampleTableDataRow
+#### ExampleTableDataRow
 
 ExampleTableDataRow [ExampleTableDataRowEvent] ⇨ ExampleTableDataRow</br>
 ExampleTableDataRow [EndEvent] ⇨ [FinalState](#FinalState)</br>
 ExampleTableDataRow [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 
-##### BlockCommentState
+#### BlockCommentState
 
 BlockCommentState [BlockCommentEvent] ⇨ $PreviousState</br>
 BlockCommentState [TextEvent] ⇨ BlockCommentState</br>
