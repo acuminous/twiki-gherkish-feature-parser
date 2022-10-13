@@ -138,16 +138,16 @@ StepsAnnotationState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsStat
 
 #### ExplicitDocStringStartState
 
-ExplicitDocStringStartState [DocStringLineEvent] ⇨ [ExplicitDocStringState](#ExplicitDocStringState)</br>
+ExplicitDocStringStartState [DocStringTextEvent] ⇨ [ExplicitDocStringState](#ExplicitDocStringState)</br>
 
 #### ExplicitDocStringState
 
-ExplicitDocStringState [DocStringLineEvent] ⇨ ExplicitDocStringState</br>
+ExplicitDocStringState [DocStringTextEvent] ⇨ ExplicitDocStringState</br>
 ExplicitDocStringState [DocStringDelimiterEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
 
 #### ImplicitDocStringState
 
-ImplicitDocStringState [DocStringLineEvent] ⇨ ImplicitDocStringState</br>
+ImplicitDocStringState [DocStringTextEvent] ⇨ ImplicitDocStringState</br>
 ImplicitDocStringState [DocStringOutdentEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
 
 #### ExampleTableState
