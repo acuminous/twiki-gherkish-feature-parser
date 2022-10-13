@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { AfterScenarioStepState } = States;
+const { ScenarioStepsState } = States;
 
-describe('AfterScenarioStepState', () => {
+describe('ScenarioStepsState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -30,9 +30,9 @@ describe('AfterScenarioStepState', () => {
     featureBuilder.createScenarioStep({ annotations: [], text: 'First step' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toAfterScenarioStepState();
+    machine.toScenarioStepsState();
 
-    state = new AfterScenarioStepState({ featureBuilder, machine });
+    state = new ScenarioStepsState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0 };
   });
@@ -40,7 +40,7 @@ describe('AfterScenarioStepState', () => {
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo=bar');
-      eq(machine.state, 'AfterScenarioStepState');
+      eq(machine.state, 'ScenarioStepsState');
     });
   });
 
@@ -53,14 +53,42 @@ describe('AfterScenarioStepState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
-      eq(machine.state, 'AfterScenarioStepState');
+      eq(machine.state, 'ScenarioStepsState');
     });
   });
 
-  describe('A docstring token', () => {
+  describe('A block comment', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
+      handle('###');
+      eq(machine.state, 'ConsumeBlockCommentState');
+    });
+  });
+
+  describe('An examples table', () => {
+    it('should cause a transition to CreateScenarioExampleTableState', () => {
+      handle('Where:');
+      eq(machine.state, 'CreateScenarioExampleTableState');
+    });
+  });
+
+  describe('An explicit docstring', () => {
     it('should cause a transition to CreateScenarioStepExplicitDocStringState', () => {
       handle('---');
       eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
+    });
+  });
+
+  describe('An implicit docstring', () => {
+    it('should cause a transition to CreateScenarioStepImplicitDocStringState', () => {
+      session.indentation = 0;
+      handle('   some text');
+      eq(machine.state, 'CreateScenarioStepImplicitDocStringState');
+    });
+
+    it('should capture docstrings', () => {
+      handle('   some text');
+      const exported = featureBuilder.build();
+      eq(exported.scenarios[0].steps[0].docstring, 'some text');
     });
   });
 
@@ -77,10 +105,10 @@ describe('AfterScenarioStepState', () => {
     });
   });
 
-  describe('A block comment', () => {
-    it('should cause a transition to ConsumeBlockCommentState', () => {
-      handle('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+  describe('A single line comment', () => {
+    it('should not cause a state transition', () => {
+      handle('#');
+      eq(machine.state, 'ScenarioStepsState');
     });
   });
 
@@ -90,7 +118,7 @@ describe('AfterScenarioStepState', () => {
       eq(machine.state, 'ScenarioState');
     });
 
-    it('should be captured', () => {
+    it('should be captured without annotations', () => {
       handle('Scenario: Second scenario');
 
       const exported = featureBuilder.build();
@@ -114,27 +142,13 @@ describe('AfterScenarioStepState', () => {
     });
   });
 
-  describe('Some examples', () => {
-    it('should cause a transition to CreateScenarioExampleTableState', () => {
-      handle('Where:');
-      eq(machine.state, 'CreateScenarioExampleTableState');
-    });
-  });
-
-  describe('A single line comment', () => {
-    it('should not cause a state transition', () => {
-      handle('#');
-      eq(machine.state, 'AfterScenarioStepState');
-    });
-  });
-
   describe('A line of text', () => {
-    it('should cause a transition to AfterScenarioStepState', () => {
+    it('should cause a transition to ScenarioStepsState', () => {
       handle('Second step');
-      eq(machine.state, 'AfterScenarioStepState');
+      eq(machine.state, 'ScenarioStepsState');
     });
 
-    it('should be captured', () => {
+    it('should be captured without annotations', () => {
       handle('Second step');
 
       const exported = featureBuilder.build();
@@ -144,31 +158,15 @@ describe('AfterScenarioStepState', () => {
       eq(exported.scenarios[0].steps[1].text, 'Second step');
     });
 
-    it('should be captureds with annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one=1');
       handle('@two=2');
       handle('Bah');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[1].annotations.length, 2);
-      eq(exported.scenarios[0].steps[1].annotations[0].name, 'one');
-      eq(exported.scenarios[0].steps[1].annotations[0].value, '1');
-      eq(exported.scenarios[0].steps[1].annotations[1].name, 'two');
-      eq(exported.scenarios[0].steps[1].annotations[1].value, '2');
-    });
-  });
-
-  describe('An indented line of text', () => {
-    it('should cause a transition to CreateScenarioStepImplicitDocStringState', () => {
-      session.indentation = 0;
-      handle('   some text');
-      eq(machine.state, 'CreateScenarioStepImplicitDocStringState');
-    });
-
-    it('should capture docstrings', () => {
-      handle('   some text');
-      const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, 'some text');
+      deq(exported.scenarios[0].steps[1].annotations[0], { name: 'one', value: '1' });
+      deq(exported.scenarios[0].steps[1].annotations[1], { name: 'two', value: '2' });
     });
   });
 

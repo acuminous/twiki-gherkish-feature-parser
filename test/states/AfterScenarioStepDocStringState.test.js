@@ -116,9 +116,9 @@ describe('AfterScenarioStepDocStringState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a transition to AfterScenarioStepState', () => {
+    it('should cause a transition to ScenarioStepsState', () => {
       handle('Second step');
-      eq(machine.state, 'AfterScenarioStepState');
+      eq(machine.state, 'ScenarioStepsState');
     });
 
     it('should be captured', () => {
