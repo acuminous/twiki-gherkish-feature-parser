@@ -69,25 +69,25 @@ The parser uses a state machine which transitions between states when specific e
 
 ### Events
 
-| Name                       | Examples                                                            |                                              |
-| -------------------------- | ------------------------------------------------------------------- | -------------------------------------------- |
-| AnnotationEvent            | @skip<br/>@timeout=1000                                             |                                              |
-| BackgroundEvent            | Background:<br/>Background: Title                                   |                                              |
-| BlankLineEvent             |                                                                     |                                              |
-| BlockCommentDelimiterEvent | ###                                                                 |                                              |
-| DocStringDelimiterEvent    | '''</br>"""</br>                                                    |                                              |
-| DocStringIndentEvent       | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;indented&nbsp;docstring |                                              |
-| DocStringTextEvent         | This is a docstring                                                 |                                              |
-| EndEvent                   | \u0000                                                              | Automatically appended by the feature parser |
-| ExampleTableEvent          | Where:                                                              |                                              |
-| ExampleTableHeaderRow      | \| height \| width \|                                               |                                              |
-| ExampleTableSeparatorRow   | \|--------\|---------\|                                             |                                              |
-| ExampleTableDataRow        | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|      |                                              |
-| FeatureEvent               | Feature:<br/>Feature: Title                                         |                                              |
-| ScenarioEvent              | Scenario:<br/>Scenario: Title                                       |                                              |
-| SingleLineCommentEvent     | # This is a comment                                                 |                                              |
-| StepEvent                  | This is a step                                                      |                                              |
-| TextEvent                  | This is some text                                                   |                                              |
+| Name                       | Examples                                                            | Event Data                                                               | Notes |
+| -------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----- |
+| AnnotationEvent            | @skip<br/>@timeout=1000                                             | `{ name: "skip", value: true }`<br/>`{ name: "timeout", value: "1000" }` |       |
+| BackgroundEvent            | Background:<br/>Background: Introduction                            | `{ title: "" }`<br/>`{ title: "Introduction" }`                          |       |
+| BlankLineEvent             |                                                                     | `{}`                                                                     |       |
+| BlockCommentDelimiterEvent | ###                                                                 | `{}`                                                                     |       |
+| DocStringDelimiterEvent    | '''</br>"""</br>                                                    | `{}`                                                                     |       |
+| DocStringIndentEvent       | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;indented&nbsp;docstring | `{ text: "This is an indented docstring" }`                              |       |
+| DocStringTextEvent         | This is a docstring                                                 | `{ text: "This is a docstring" }`                                        |       |
+| EndEvent                   | \u0000                                                              | Automatically appended by the feature parser                             |       |
+| ExampleTableEvent          | Where:                                                              | `{}`                                                                     |       |
+| ExampleTableHeaderRow      | \| height \| width \|                                               | `{ headings: ["height", "width"] }`                                      |       |
+| ExampleTableSeparatorRow   | \|--------\|---------\|                                             | `{}`                                                                     |       |
+| ExampleTableDataRow        | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|      | `{ values: ["10cm", "20cm"] }`                                           |       |
+| FeatureEvent               | Feature:<br/>Feature: Buck Rogers - Season One                      | `{ title: "" }`<br/>`{ title: "Buck Rogers - Season One" }`              |       |
+| ScenarioEvent              | Scenario:<br/>Scenario: Awakening                                   | `{ title: "" }`<br/>`{ title: "Awakening" }`                             |       |
+| SingleLineCommentEvent     | # This is a comment                                                 | `{}`                                                                     |       |
+| StepEvent                  | This is a step                                                      | `{ text: "This is a step" }`                                             |       |
+| TextEvent                  | This is some text                                                   | `{ text: "this is some text" }`                                          |       |
 
 ### States
 
