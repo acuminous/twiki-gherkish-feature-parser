@@ -40,9 +40,9 @@ describe('FeatureState', () => {
   });
 
   describe('A background', () => {
-    it('should cause a transition to CreateBackgroundState', () => {
+    it('should cause a transition to BackgroundState', () => {
       handle('Background: foo');
-      eq(machine.state, 'CreateBackgroundState');
+      eq(machine.state, 'BackgroundState');
     });
 
     it('should capture backgrounds with annotations', () => {

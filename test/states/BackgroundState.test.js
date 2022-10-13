@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundState } = States;
+const { BackgroundState } = States;
 
-describe('CreateBackgroundState', () => {
+describe('BackgroundState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -24,9 +24,9 @@ describe('CreateBackgroundState', () => {
     featureBuilder.createBackground({ annotations: [], title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundState({ featureBuilder });
+    machine.toBackgroundState({ featureBuilder });
 
-    state = new CreateBackgroundState({ machine, featureBuilder });
+    state = new BackgroundState({ machine, featureBuilder });
 
     session = { language: Languages.English, indentation: 0 };
   });
@@ -34,7 +34,7 @@ describe('CreateBackgroundState', () => {
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo=bar');
-      eq(machine.state, 'CreateBackgroundState');
+      eq(machine.state, 'BackgroundState');
     });
   });
 
@@ -47,7 +47,7 @@ describe('CreateBackgroundState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
-      eq(machine.state, 'CreateBackgroundState');
+      eq(machine.state, 'BackgroundState');
     });
   });
 
@@ -91,7 +91,7 @@ describe('CreateBackgroundState', () => {
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       handle('# Some comment');
-      eq(machine.state, 'CreateBackgroundState');
+      eq(machine.state, 'BackgroundState');
     });
   });
 
