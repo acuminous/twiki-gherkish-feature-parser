@@ -69,7 +69,7 @@ The parser uses a state machine which transitions between states when specific e
 
 ### Events
 
-| Name                       | Examples                                                       |
+| Name                       | Examples                                                       |                                              |
 | -------------------------- | -------------------------------------------------------------- | -------------------------------------------- |
 | AnnotationEvent            | @skip<br/>@timeout=1000                                        |                                              |
 | BackgroundEvent            | Background:<br/>Background: Title                              |                                              |
