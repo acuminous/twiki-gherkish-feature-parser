@@ -51,9 +51,22 @@ describe('ScenarioState', () => {
     });
   });
 
-  describe('A docstring token', () => {
+  describe('A block comment', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
+      handle('###');
+      eq(machine.state, 'ConsumeBlockCommentState');
+    });
+  });
+
+  describe('An explicit docstring', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    });
+  });
+
+  describe('An implicit docstring', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -69,10 +82,10 @@ describe('ScenarioState', () => {
     });
   });
 
-  describe('A block comment', () => {
-    it('should cause a transition to ConsumeBlockCommentState', () => {
-      handle('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+  describe('A single line comment', () => {
+    it('should not cause a state transition', () => {
+      handle('# Some comment');
+      eq(machine.state, 'ScenarioState');
     });
   });
 
@@ -82,20 +95,13 @@ describe('ScenarioState', () => {
     });
   });
 
-  describe('A single line comment', () => {
-    it('should not cause a state transition', () => {
-      handle('# Some comment');
-      eq(machine.state, 'ScenarioState');
-    });
-  });
-
   describe('A line of text', () => {
     it('should cause a transition to AfterScenarioStepState', () => {
       handle('First step');
       eq(machine.state, 'AfterScenarioStepState');
     });
 
-    it('should be captured in the scenario description', () => {
+    it('should be captured without annotations', () => {
       handle('First step');
 
       const exported = featureBuilder.build();
@@ -103,23 +109,15 @@ describe('ScenarioState', () => {
       eq(exported.scenarios[0].steps[0].text, 'First step');
     });
 
-    it('should be captureds with annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one=1');
       handle('@two=2');
       handle('First step');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].annotations.length, 2);
-      eq(exported.scenarios[0].steps[0].annotations[0].name, 'one');
-      eq(exported.scenarios[0].steps[0].annotations[0].value, '1');
-      eq(exported.scenarios[0].steps[0].annotations[1].name, 'two');
-      eq(exported.scenarios[0].steps[0].annotations[1].value, '2');
-    });
-  });
-
-  describe('An indented line of text', () => {
-    it('should be unexpected', () => {
-      throws(() => handle('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      deq(exported.scenarios[0].steps[0].annotations[0], { name: 'one', value: '1' });
+      deq(exported.scenarios[0].steps[0].annotations[1], { name: 'two', value: '2' });
     });
   });
 
