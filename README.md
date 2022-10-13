@@ -67,6 +67,28 @@ const feature = parser.parse(file, metadata);
 
 The parser uses a state machine which transitions between states when specific events are dispatched.
 
+### Events
+
+| Name                       | Examples                                                       |
+| -------------------------- | -------------------------------------------------------------- | -------------------------------------------- |
+| AnnotationEvent            | @skip<br/>@timeout=1000                                        |                                              |
+| BackgroundEvent            | Background:<br/>Background: Title                              |                                              |
+| BlankLineEvent             |                                                                |                                              |
+| BlockCommentDelimiterEvent | ###                                                            |                                              |
+| DocStringDelimiterEvent    | '''</br>"""</br>                                               |                                              |
+| DocStringIndentEvent       | &nbsp;&nbsp;&nbsp;This is an indented docstring                |                                              |
+| DocStringTextEvent         | This is a docstring                                            |                                              |
+| EndEvent                   | \u0000                                                         | Automatically appended by the feature parser |
+| ExampleTableEvent          | Where:                                                         |                                              |
+| ExampleTableHeaderRow      | \| height \| width \|                                          |                                              |
+| ExampleTableSeparatorRow   | \|--------\|---------\|                                        |                                              |
+| ExampleTableDataRow        | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\| |                                              |
+| FeatureEvent               | Feature:<br/>Feature: Title                                    |                                              |
+| ScenarioEvent              | Scenario:<br/>Scenario: Title                                  |                                              |
+| SingleLineCommentEvent     | # This is a comment                                            |                                              |
+| StepEvent                  | This is a step                                                 |                                              |
+| TextEvent                  | This is some text                                              |                                              |
+
 ### States
 
 #### InitialState
