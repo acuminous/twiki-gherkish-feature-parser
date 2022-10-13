@@ -3,9 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { AfterBackgroundStepState } = States;
+const { BackgroundStepsState } = States;
 
-describe('AfterBackgroundStepState', () => {
+describe('BackgroundStepsState', () => {
   let featureBuilder;
   let machine;
   let state;
@@ -28,9 +28,9 @@ describe('AfterBackgroundStepState', () => {
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
     machine = new StateMachine({ featureBuilder });
-    machine.toAfterBackgroundStepState();
+    machine.toBackgroundStepsState();
 
-    state = new AfterBackgroundStepState({ featureBuilder, machine });
+    state = new BackgroundStepsState({ featureBuilder, machine });
 
     session = { language: Languages.English, indentation: 0 };
   });
@@ -38,7 +38,7 @@ describe('AfterBackgroundStepState', () => {
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       handle('@foo=bar');
-      eq(machine.state, 'AfterBackgroundStepState');
+      eq(machine.state, 'BackgroundStepsState');
     });
   });
 
@@ -51,14 +51,34 @@ describe('AfterBackgroundStepState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       handle('');
-      eq(machine.state, 'AfterBackgroundStepState');
+      eq(machine.state, 'BackgroundStepsState');
     });
   });
 
-  describe('A docstring token', () => {
+  describe('A block comment delimter', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
+      handle('###');
+      eq(machine.state, 'ConsumeBlockCommentState');
+    });
+  });
+
+  describe('An explicit docstring', () => {
     it('should cause a transition to CreateBackgroundStepExplicitDocStringState', () => {
       handle('---');
       eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
+    });
+  });
+
+  describe('An implicit docstring', () => {
+    it('should cause a transition to CreateBackgroundStepImplicitDocStringState', () => {
+      handle('   some text');
+      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
+    });
+
+    it('should be captured on the docstring', () => {
+      handle('   some text');
+      const exported = featureBuilder.build();
+      eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 
@@ -74,10 +94,10 @@ describe('AfterBackgroundStepState', () => {
     });
   });
 
-  describe('A block comment', () => {
-    it('should cause a transition to ConsumeBlockCommentState', () => {
-      handle('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+  describe('A single line comment', () => {
+    it('should not cause a state transition', () => {
+      handle('# foo');
+      eq(machine.state, 'BackgroundStepsState');
     });
   });
 
@@ -87,7 +107,7 @@ describe('AfterBackgroundStepState', () => {
       eq(machine.state, 'CreateScenarioState');
     });
 
-    it('should be captured', () => {
+    it('should be captured without annotations', () => {
       handle('Scenario: First scenario');
 
       const exported = featureBuilder.build();
@@ -110,20 +130,13 @@ describe('AfterBackgroundStepState', () => {
     });
   });
 
-  describe('A single line comment', () => {
-    it('should not cause a state transition', () => {
-      handle('# foo');
-      eq(machine.state, 'AfterBackgroundStepState');
-    });
-  });
-
   describe('A line of text', () => {
-    it('should cause a transition to AfterBackgroundStepState', () => {
+    it('should cause a transition to BackgroundStepsState', () => {
       handle('Given some text');
-      eq(machine.state, 'AfterBackgroundStepState');
+      eq(machine.state, 'BackgroundStepsState');
     });
 
-    it('should be captured', () => {
+    it('should be captured without', () => {
       handle('Given some text');
 
       const exported = featureBuilder.build();
@@ -131,7 +144,7 @@ describe('AfterBackgroundStepState', () => {
       eq(exported.background.steps[1].text, 'Given some text');
     });
 
-    it('should be captureds with annotations', () => {
+    it('should be captured with annotations', () => {
       handle('@one = 1');
       handle('@two = 2');
       handle('Given some text');
@@ -142,19 +155,6 @@ describe('AfterBackgroundStepState', () => {
       eq(exported.background.steps[1].annotations[0].value, '1');
       eq(exported.background.steps[1].annotations[1].name, 'two');
       eq(exported.background.steps[1].annotations[1].value, '2');
-    });
-  });
-
-  describe('An indented line of text', () => {
-    it('should cause a transition to CreateBackgroundStepImplicitDocStringState', () => {
-      handle('   some text');
-      eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
-    });
-
-    it('should be captured on the docstring', () => {
-      handle('   some text');
-      const exported = featureBuilder.build();
-      eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 

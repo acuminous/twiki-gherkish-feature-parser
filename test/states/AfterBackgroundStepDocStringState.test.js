@@ -121,9 +121,9 @@ describe('AfterBackgroundStepDocStringState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a transition to AfterBackgroundStepState', () => {
+    it('should cause a transition to BackgroundStepsState', () => {
       handle('Given some text');
-      eq(machine.state, 'AfterBackgroundStepState');
+      eq(machine.state, 'BackgroundStepsState');
     });
 
     it('should be captured', () => {

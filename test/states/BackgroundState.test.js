@@ -96,12 +96,12 @@ describe('BackgroundState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a transition to AfterBackgroundStepState', () => {
+    it('should cause a transition to BackgroundStepsState', () => {
       featureBuilder.createBackground({ annotations: [] });
 
       handle('First step');
 
-      eq(machine.state, 'AfterBackgroundStepState');
+      eq(machine.state, 'BackgroundStepsState');
     });
 
     it('should be captured without annotations', () => {
