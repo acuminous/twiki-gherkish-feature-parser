@@ -74,7 +74,7 @@ The parser uses a state machine which transitions between states when specific e
 InitialState [AnnotationEvent] ⇨ InitialState</br>
 InitialState [BlankLineEvent] ⇨ InitialState</br>
 InitialState [BlockCommentEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-InitialState [FeatureEvent] ⇨ [FeatureState](#[FeatureState])</br>
+InitialState [FeatureEvent] ⇨ [FeatureState](#FeatureState)</br>
 InitialState [SingleLineComment] ⇨ InitialState</br>
 
 #### FeatureState
