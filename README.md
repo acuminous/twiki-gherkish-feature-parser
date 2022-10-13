@@ -69,25 +69,27 @@ The parser uses a state machine which transitions between states when specific e
 
 ### Events
 
-| Name                       | Examples                                                                                        |
-| -------------------------- | ----------------------------------------------------------------------------------------------- |
-| AnnotationEvent            | @skip<br/>@timeout=1000                                                                         |
-| BackgroundEvent            | Background:<br/>Background: Introduction                                                        |
-| BlankLineEvent             |                                                                                                 |
-| BlockCommentDelimiterEvent | ###                                                                                             |
-| DocStringDelimiterEvent    | ---</br>"""</br>                                                                                |
-| DocStringIndentEvent       | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
-| DocStringTextEvent         | This is a line in a docstring                                                                   |
-| EndEvent                   | \u0000 _(automatically appended by the feature parser)_                                         |
-| ExampleTableEvent          | Where:                                                                                          |
-| ExampleTableHeaderRow      | \| height \| width \|                                                                           |
-| ExampleTableSeparatorRow   | \|--------\|---------\|                                                                         |
-| ExampleTableDataRow        | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
-| FeatureEvent               | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
-| ScenarioEvent              | Scenario:<br/>Scenario: Awakening                                                               |
-| SingleLineCommentEvent     | # This is a comment                                                                             |
-| StepEvent                  | This is a step                                                                                  |
-| TextEvent                  | This is some text                                                                               |
+| Name                        | Examples                                                                                        |
+| --------------------------- | ----------------------------------------------------------------------------------------------- |
+| AnnotationEvent             | @skip<br/>@timeout=1000                                                                         |
+| BackgroundEvent             | Background:<br/>Background: Introduction                                                        |
+| BlankLineEvent              |                                                                                                 |
+| BlockCommentDelimiterEvent  | ###                                                                                             |
+| DocStringTextEvent          | This is a line in a docstring                                                                   |
+| EndEvent                    | \u0000 _(automatically appended by the feature parser)_                                         |
+| ExampleTableEvent           | Where:                                                                                          |
+| ExampleTableHeaderRow       | \| height \| width \|                                                                           |
+| ExampleTableSeparatorRow    | \|--------\|---------\|                                                                         |
+| ExampleTableDataRow         | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
+| ExplicitDocStringStartEvent | ---</br>"""</br>                                                                                |
+| ExplicitDocStringStopEvent  | ---</br>"""</br>                                                                                |
+| FeatureEvent                | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
+| ImplicitDocStringStartEvent | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
+| ImplicitDocStringStopEvent  | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
+| ScenarioEvent               | Scenario:<br/>Scenario: Awakening                                                               |
+| SingleLineCommentEvent      | # This is a comment                                                                             |
+| StepEvent                   | This is a step                                                                                  |
+| TextEvent                   | This is some text                                                                               |
 
 ### States
 
@@ -122,8 +124,8 @@ BackgroundState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState)</b
 BackgroundStepsState [AnnotationEvent] ⇨ StepsAnnotationState</br>
 BackgroundStepsState [BlankLineEvent] ⇨ BackgroundStepsState</br>
 BackgroundStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-BackgroundStepsState [DocStringDelimiterEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
-BackgroundStepsState [DocStringIndentEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
+BackgroundStepsState [ExplicitDocStringStartEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
+BackgroundStepsState [ImplicitDocStringStartEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
 BackgroundStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 BackgroundStepsState [SingleLineComment] ⇨ BackgroundStepsState</br>
 BackgroundStepsState [StepEvent] ⇨ BackgroundStepsState</br>
@@ -141,8 +143,8 @@ ScenarioState [StepEvent] ⇨ [ScenarioStepsState](#ScenarioStepsState)</br>
 ScenarioStepsState [AnnotationEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [BlankLineEvent] ⇨ ScenarioStepsState</br>
 ScenarioStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-ScenarioStepsState [DocStringDelimiterEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
-ScenarioStepsState [DocStringIndentEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
+ScenarioStepsState [ExplicitDocStringStartEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
+ScenarioStepsState [ImplicitDocStringStartEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
 ScenarioStepsState [ExampleTableEvent] ⇨ [ExampleTableState](#ExampleTableState)</br>
 ScenarioStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
 ScenarioStepsState [SingleLineComment] ⇨ ScenarioStepsState</br>
@@ -165,12 +167,12 @@ ExplicitDocStringStartState [DocStringTextEvent] ⇨ [ExplicitDocStringState](#E
 #### ExplicitDocStringState
 
 ExplicitDocStringState [DocStringTextEvent] ⇨ ExplicitDocStringState</br>
-ExplicitDocStringState [DocStringDelimiterEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
+ExplicitDocStringState [ExplicitDocStringStopEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
 
 #### ImplicitDocStringState
 
 ImplicitDocStringState [DocStringTextEvent] ⇨ ImplicitDocStringState</br>
-ImplicitDocStringState [DocStringOutdentEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
+ImplicitDocStringState [ImplicitDocStringStopEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
 
 #### ExampleTableState
 
