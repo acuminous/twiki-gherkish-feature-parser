@@ -46,7 +46,7 @@ describe('InitialState', () => {
     });
   });
 
-  describe('A docstring token', () => {
+  describe('A docstring delimiter', () => {
     it('should be unexpected', () => {
       throws(() => handle('---'), { message: `${state.name} has no event handler for '---' at undefined:1` });
     });
@@ -64,7 +64,7 @@ describe('InitialState', () => {
       eq(machine.state, 'FeatureState');
     });
 
-    it('should be caputed', () => {
+    it('should be caputed without annotations', () => {
       handle('Feature: Some feature');
 
       const exported = featureBuilder.build();
@@ -78,23 +78,15 @@ describe('InitialState', () => {
 
       const exported = featureBuilder.build();
       eq(exported.annotations.length, 2);
-      eq(exported.annotations[0].name, 'one');
-      eq(exported.annotations[0].value, '1');
-      eq(exported.annotations[1].name, 'two');
-      eq(exported.annotations[1].value, '2');
+      deq(exported.annotations[0], { name: 'one', value: '1' });
+      deq(exported.annotations[1], { name: 'two', value: '2' });
     });
   });
 
-  describe('A block comment', () => {
+  describe('A block comment delimiter', () => {
     it('should cause a transition to ConsumeBlockCommentState', () => {
       handle('###');
       eq(machine.state, 'ConsumeBlockCommentState');
-    });
-  });
-
-  describe('A scenario', () => {
-    it('should be unexpected', () => {
-      throws(() => handle('Scenario: foo'), { message: `${state.name} has no event handler for 'Scenario: foo' at undefined:1` });
     });
   });
 
@@ -102,6 +94,12 @@ describe('InitialState', () => {
     it('should not cause a state transition', () => {
       handle('# foo');
       eq(machine.state, 'InitialState');
+    });
+  });
+
+  describe('A scenario', () => {
+    it('should be unexpected', () => {
+      throws(() => handle('Scenario: foo'), { message: `${state.name} has no event handler for 'Scenario: foo' at undefined:1` });
     });
   });
 
