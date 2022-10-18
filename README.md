@@ -94,11 +94,11 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ExampleTableHeaderRow       | headings    | \| height \| width \|                                                                           |
 | ExampleTableSeparatorRow    |             | \|--------\|---------\|                                                                         |
 | ExampleTableDataRow         | values      | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
-| ExplicitDocStringStartEvent |             | ---</br>"""</br>                                                                                |
-| ExplicitDocStringStopEvent  |             | ---</br>"""</br>                                                                                |
+| ExplicitDocStringBeginEvent |             | ---</br>"""</br>                                                                                |
+| ExplicitDocStringEndEvent   |             | ---</br>"""</br>                                                                                |
 | FeatureEvent                | title?      | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
-| ImplicitDocStringStartEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
-| ImplicitDocStringStopEvent  | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
+| ImplicitDocStringBeginEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
+| ImplicitDocStringEndEvent   | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
 | ScenarioEvent               | title?      | Scenario:<br/>Scenario: Awakening                                                               |
 | SingleLineCommentEvent      |             | # This is a comment                                                                             |
 | StepEvent                   | text        | This is a step                                                                                  |
@@ -205,8 +205,8 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent  | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                  |
 | EndEvent                    | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)                                                        |
 | ExampleTableEvent           | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)                                                        |
-| ExplicitDocStringStartEvent | Transition                          | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                            |
-| ImplicitDocStringStartEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                            |
+| ExplicitDocStringBeginEvent | Transition                          | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                            |
+| ImplicitDocStringBeginEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                            |
 | ScenarioEvent               | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState) |
 | SingleLineComment           | Absorb                              |                                                                                                        |
 | StepEvent                   | Build                               |                                                                                                        |
@@ -219,23 +219,23 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 ### ConsumeExplicitDocStringState
 
-| Event                      | Action     | Destination                             |
-| -------------------------- | ---------- | --------------------------------------- |
-| DocStringTextEvent         | Build      |                                         |
-| ExplicitDocStringStopEvent | Transition | [EndDocStringState](#EndDocStringState) |
+| Event                     | Action     | Destination                             |
+| ------------------------- | ---------- | --------------------------------------- |
+| DocStringTextEvent        | Build      |                                         |
+| ExplicitDocStringEndEvent | Transition | [EndDocStringState](#EndDocStringState) |
 
 ### BeginImplicitDocStringState
 
 | Event                       | Action                           | Destination                                                     |
 | --------------------------- | -------------------------------- | --------------------------------------------------------------- |
-| ImplicitDocStringStartEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeImplicitDocStringState](#ConsumeImplicitDocStringState) |
+| ImplicitDocStringBeginEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeImplicitDocStringState](#ConsumeImplicitDocStringState) |
 
 ### ConsumeImplicitDocStringState
 
-| Event                      | Action                            | Destination                             |
-| -------------------------- | --------------------------------- | --------------------------------------- |
-| DocStringTextEvent         | Build                             |                                         |
-| ImplicitDocStringStopEvent | Transition&nbsp;&amp;&nbsp;Handle | [EndDocStringState](#EndDocStringState) |
+| Event                     | Action                            | Destination                             |
+| ------------------------- | --------------------------------- | --------------------------------------- |
+| DocStringTextEvent        | Build                             |                                         |
+| ImplicitDocStringEndEvent | Transition&nbsp;&amp;&nbsp;Handle | [EndDocStringState](#EndDocStringState) |
 
 ### EndDocStringState
 
