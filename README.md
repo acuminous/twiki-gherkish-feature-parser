@@ -80,7 +80,7 @@ When handling an event, the state may do one or more of the following
 
 For example, the state machine starts off in the [Initial State](#InitialState). If the first line of text in the feature specifciation is `@skip` then this will be intercepted by the [InitialState's](#InitialState) AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data: `{ name: "skip", value: true }`. The event data will be dispatched to the [InitialState's](#InitialState) annotation event handler, which will ask the state machine to move to the [#ConsumeAnnotationsState](#ConsumeAnnotationsState) before redispatching the event data to the [#ConsumeAnnotationsState's](#ConsumeAnnotationsState) annotation event handler. The [#ConsumeAnnotationsState's](#ConsumeAnnotationsState) annotation event handler will ask the FeatureBuilder to stash the annotation data until such time as a feature is created.
 
-### Events
+## Events
 
 | Name                        | Data        | Examples                                                                                        |
 | --------------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
@@ -104,9 +104,9 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | StepEvent                   | text        | This is a step                                                                                  |
 | TextEvent                   | text        | This is some text                                                                               |
 
-### States
+## States
 
-#### InitialState
+### InitialState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -116,7 +116,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | FeatureEvent               | Build&nbsp;&amp;&nbsp;Transition    | [BeginFeatureState](#BeginFeatureState)               |
 | SingleLineComment          | Absorb                              |                                                       |
 
-#### ConsumeAnnotationsState
+### ConsumeAnnotationsState
 
 | Event                      | Action                          | Destination                                                                                                                                                                                                                               |
 | -------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -130,7 +130,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                          |                                                                                                                                                                                                                                           |
 | StepEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch | [BeginBackgroundState](#BeginBackgroundState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginScenarioState](#BeginScenarioState), [ContinueScenarioState](#ContinueScenarioState) or [ConsumeStepsState](#ConsumeStepsState) |
 
-#### BeginFeatureState
+### BeginFeatureState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -142,7 +142,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                              |                                                       |
 | TextEvent                  | Build                               |                                                       |
 
-#### ContinueFeatureState
+### ContinueFeatureState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -152,7 +152,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ScenarioEvent              | Build&nbsp;&amp;&nbsp;Transition    | [BeginScenarioState](#BeginScenarioState)             |
 | SingleLineComment          | Absorb                              |                                                       |
 
-#### BeginBackgroundState
+### BeginBackgroundState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -162,7 +162,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                              |                                                       |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueBackgroundState](#ContinueBackgroundState)   |
 
-#### ContinueBackgroundState
+### ContinueBackgroundState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -173,7 +173,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                              |                                                       |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)               |
 
-#### BeginScenarioState
+### BeginScenarioState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -183,7 +183,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                              |                                                       |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueScenarioState](#ContinueScenarioState)       |
 
-#### ContinueScenarioState
+### ContinueScenarioState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -196,7 +196,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                              |                                                       |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)               |
 
-#### ConsumeStepsState
+### ConsumeStepsState
 
 | Event                       | Action                              | Destination                                                                                            |
 | --------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -211,33 +211,33 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment           | Absorb                              |                                                                                                        |
 | StepEvent                   | Build                               |                                                                                                        |
 
-#### BeginExplicitDocStringState
+### BeginExplicitDocStringState
 
 | Event              | Action                              | Destination                                                     |
 | ------------------ | ----------------------------------- | --------------------------------------------------------------- |
 | DocStringTextEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeExplicitDocStringState](#ConsumeExplicitDocStringState) |
 
-#### ConsumeExplicitDocStringState
+### ConsumeExplicitDocStringState
 
 | Event                      | Action     | Destination                             |
 | -------------------------- | ---------- | --------------------------------------- |
 | DocStringTextEvent         | Build      |                                         |
 | ExplicitDocStringStopEvent | Transition | [EndDocStringState](#EndDocStringState) |
 
-#### BeginImplicitDocStringState
+### BeginImplicitDocStringState
 
 | Event                       | Action                           | Destination                                                     |
 | --------------------------- | -------------------------------- | --------------------------------------------------------------- |
 | ImplicitDocStringStartEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeImplicitDocStringState](#ConsumeImplicitDocStringState) |
 
-#### ConsumeImplicitDocStringState
+### ConsumeImplicitDocStringState
 
 | Event                      | Action                            | Destination                             |
 | -------------------------- | --------------------------------- | --------------------------------------- |
 | DocStringTextEvent         | Build                             |                                         |
 | ImplicitDocStringStopEvent | Transition&nbsp;&amp;&nbsp;Handle | [EndDocStringState](#EndDocStringState) |
 
-#### EndDocStringState
+### EndDocStringState
 
 | Event                      | Action                          | Destination                                                                                            |
 | -------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -250,7 +250,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineComment          | Absorb                          |                                                                                                        |
 | StepEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch | [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState) |
 
-#### BeginExampleTableState
+### BeginExampleTableState
 
 | Event                      | Action                           | Destination                                                       |
 | -------------------------- | -------------------------------- | ----------------------------------------------------------------- |
@@ -259,13 +259,13 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ExampleTableHeaderRowEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeExampleTableHeaderState](#ConsumeExampleTableHeaderState) |
 | SingleLineComment          | Absorb                           |                                                                   |
 
-#### ConsumeExampleTableHeaderState
+### ConsumeExampleTableHeaderState
 
 | Event                         | Action     | Destination                                                             |
 | ----------------------------- | ---------- | ----------------------------------------------------------------------- |
 | ExampleTableSeparaterRowEvent | Transition | [ConsumeExampleTableSeparatorState](#ConsumeExampleTableSeparatorState) |
 
-#### ConsumeExampleTableSeparatorState
+### ConsumeExampleTableSeparatorState
 
 | Event                      | Action                              | Destination                                                         |
 | -------------------------- | ----------------------------------- | ------------------------------------------------------------------- |
@@ -274,7 +274,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ExampleTableDataRowEvent   | Build&nbsp;&amp;&nbsp;Transition    | [ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState) |
 | SingleLineComment          | Absorb                              |                                                                     |
 
-#### ConsumeExampleTableDataState
+### ConsumeExampleTableDataState
 
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -286,7 +286,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)       |
 | SingleLineComment          | Absorb                              |                                                       |
 
-#### EndExampleTableState
+### EndExampleTableState
 
 | Event                      | Action                              | Destination                                                   |
 | -------------------------- | ----------------------------------- | ------------------------------------------------------------- |
@@ -297,13 +297,13 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)               |
 | SingleLineComment          | Absorb                              |                                                               |
 
-#### ConsumeBlockCommentState
+### ConsumeBlockCommentState
 
 | Event                      | Action | Destination                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | -------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | BlockCommentDelimiterEvent | Unwind | [BeginBackgroundState](#BeginBackgroundState), [BeginFeatureState](#BeginFeatureState), [ConsumeAnnotationsState](#ConsumeAnnotationsState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginExampleTableState](#BeginExampleTableState), [BeginScenarioState](#BeginScenarioState), [ContinueFeatureState](#ContinueFeatureState), [ConsumeExampleTableDataState](#ConsumeExampleTableDataState), [ConsumeExampleTableSeparatorState](#ConsumeExampleTableSeparatorState), [ContinueScenarioState](#ContinueScenarioState), [ConsumeStepsState](#ConsumeStepsState), [EndDocStringState](#EndDocStringState) or [EndExampleTableState](#EndExampleTableState) |
 | TextEvent                  | Absorb |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
-#### EndFeatureState
+### EndFeatureState
 
 No more possible events or actions
