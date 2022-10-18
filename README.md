@@ -71,7 +71,7 @@ When handling an event, the state may do one or more of the following
 
 - Use the event data to **build** an internal representation of the feature
 - Ask the state machine to **transition** to a new state
-- Ask the state machine to **unwind** to the previous state which supports the event
+- Ask the state machine to **unwind** to the previous state that supports the event
 - **Dispatch** the event to the new state after transitioning or unwinding
 - Ask the state machine to **handle** the original line of text after transitioning or unwinding
 - Absorb the event
