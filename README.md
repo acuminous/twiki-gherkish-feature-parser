@@ -61,7 +61,7 @@ const feature = parser.parse(file, metadata);
 | Steps                        | Yes                                            |
 | Step tags/annotations        | Yes                                            |
 | Given / When / Then keywords | No - twiki does not special case step keywords |
-| Docstring                    | Yes                                            |
+| Docstring                    | Yes, use """ or ---                            |
 
 ## State Machine
 
@@ -71,152 +71,190 @@ When handling an event, the state may do one or more of the following
 
 - Use the event data to construct an internal representation of the feature
 - Ask the state machine to transition to a new state
-- Forward the event data to the new state
+- Redispatch the event to the new state
 
 For example, the state machine starts off in the [Initial State](#InitialState). If the first line of text in the feature specifciation is `@skip` then this will be intercepted by the [Initial State's](#InitialState) AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data `{ name: "skip", value: true }`. The event data will be dispatched to the [Initial State's](#InitialState) `onAnnotation` event handler, which will ask the state machine to move to the [Annotation State](#AnnotationState) before invoking the Annotation State's `onAnnotation` event handler with the same event data. The [Annotation State's](#AnnotationState) `onAnnotation` event handler will ask the FeatureBuilder to stash the annotation data, until such time as a feature is created.
 
 ### Events
 
-| Name                        | Examples                                                                                        |
-| --------------------------- | ----------------------------------------------------------------------------------------------- |
-| AnnotationEvent             | @skip<br/>@timeout=1000                                                                         |
-| BackgroundEvent             | Background:<br/>Background: Introduction                                                        |
-| BlankLineEvent              |                                                                                                 |
-| BlockCommentDelimiterEvent  | ###                                                                                             |
-| DocStringTextEvent          | This is a line in a docstring                                                                   |
-| EndEvent                    | \u0000 _(automatically appended by the feature parser)_                                         |
-| ExampleTableEvent           | Where:                                                                                          |
-| ExampleTableHeaderRow       | \| height \| width \|                                                                           |
-| ExampleTableSeparatorRow    | \|--------\|---------\|                                                                         |
-| ExampleTableDataRow         | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
-| ExplicitDocStringStartEvent | ---</br>"""</br>                                                                                |
-| ExplicitDocStringStopEvent  | ---</br>"""</br>                                                                                |
-| FeatureEvent                | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
-| ImplicitDocStringStartEvent | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
-| ImplicitDocStringStopEvent  | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
-| ScenarioEvent               | Scenario:<br/>Scenario: Awakening                                                               |
-| SingleLineCommentEvent      | # This is a comment                                                                             |
-| StepEvent                   | This is a step                                                                                  |
-| TextEvent                   | This is some text                                                                               |
+| Name                        | Data        | Examples                                                                                        |
+| --------------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| AnnotationEvent             | name, value | @skip<br/>@timeout=1000                                                                         |
+| BackgroundEvent             | title?      | Background:<br/>Background: Introduction                                                        |
+| BlankLineEvent              |             |                                                                                                 |
+| BlockCommentDelimiterEvent  |             | ###                                                                                             |
+| DocStringTextEvent          | text        | This is a line in a docstring                                                                   |
+| EndEvent                    |             | \u0000 _(automatically appended by the feature parser)_                                         |
+| ExampleTableEvent           |             | Where:                                                                                          |
+| ExampleTableHeaderRow       | headings    | \| height \| width \|                                                                           |
+| ExampleTableSeparatorRow    |             | \|--------\|---------\|                                                                         |
+| ExampleTableDataRow         | values      | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
+| ExplicitDocStringStartEvent |             | ---</br>"""</br>                                                                                |
+| ExplicitDocStringStopEvent  |             | ---</br>"""</br>                                                                                |
+| FeatureEvent                | title?      | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
+| ImplicitDocStringStartEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
+| ImplicitDocStringStopEvent  | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
+| ScenarioEvent               | title?      | Scenario:<br/>Scenario: Awakening                                                               |
+| SingleLineCommentEvent      |             | # This is a comment                                                                             |
+| StepEvent                   | text        | This is a step                                                                                  |
+| TextEvent                   | text        | This is some text                                                                               |
 
 ### States
 
 #### InitialState
 
-InitialState [AnnotationEvent] ⇨ Forward to [AnnotationState](#AnnotationState)</br>
-InitialState [BlankLineEvent] ⇨ InitialState</br>
-InitialState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-InitialState [FeatureEvent] ⇨ [FeatureState](#FeatureState)</br>
-InitialState [SingleLineComment] ⇨ InitialState</br>
+| Event                      | Action                                                |
+| -------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Redispatch to [AnnotationState](#AnnotationState)     |
+| BlankLineEvent             |                                                       |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
+| FeatureEvent               | Transition to [FeatureState](#FeatureState)           |
+| SingleLineComment          |                                                       |
 
 #### AnnotationState
 
-AnnotationState [AnnotationEvent] ⇨ AnnotationState</br>
-AnnotationState [BlankLineEvent] ⇨ AnnotationState</br>
-AnnotationState [BackgroundEvent] ⇨ Forward to $PreviousState</br>
-AnnotationState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-AnnotationState [ExampleTableDataRowEvent] ⇨ Forward to $PreviousState</br>
-AnnotationState [FeatureEvent] ⇨ Forward to $PreviousState</br>
-AnnotationState [ScenarioEvent] ⇨ Forward to $PreviousState</br>
-AnnotationState [SingleLineComment] ⇨ AnnotationState</br>
-AnnotationState [StepEvent] ⇨ Forward to $PreviousState</br>
+| Event                      | Action                                                |
+| -------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Redispatch to AnnotationState                         |
+| BlankLineEvent             |                                                       |
+| BackgroundEvent            | Redispatch to $PreviousState                          |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
+| ExampleTableDataRowEvent   | Redispatch to $PreviousState                          |
+| FeatureEvent               | Redispatch to $PreviousState                          |
+| ScenarioEvent              | Redispatch to $PreviousState                          |
+| SingleLineComment          |                                                       |
+| StepEvent                  | Redispatch to $PreviousState                          |
 
 #### FeatureState
 
-FeatureState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-FeatureState [BackgroundEvent] ⇨ [BackgroundStateA](#BackgroundStateA)</br>
-FeatureState [BlankLineEvent] ⇨ FeatureState</br>
-FeatureState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-FeatureState [ScenarioEvent] ⇨ [ScenarioStateA](#ScenarioStateA)</br>
-FeatureState [SingleLineComment] ⇨ FeatureState</br>
-FeatureState [TextEvent] ⇨ FeatureState</br>
+| Event                      | Action                                                |
+| -------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Redispatch to [AnnotationState](#AnnotationState)     |
+| BackgroundEvent            | Transition to [BackgroundStateA](#BackgroundStateA)   |
+| BlankLineEvent             |                                                       |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
+| ScenarioEvent              | Transition to [ScenarioStateA](#ScenarioStateA)       |
+| SingleLineComment          |                                                       |
+| TextEvent                  |                                                       |
 
 #### BackgroundStateA
 
-BackgroundStateA [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-BackgroundStateA [BlankLineEvent] ⇨ BackgroundStateA</br>
-BackgroundStateA [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-BackgroundStateA [SingleLineComment] ⇨ BackgroundStateA</br>
-BackgroundStateA [StepEvent] ⇨ Forward to [BackgroundStateB](#BackgroundStateB)</br>
+| Event                      | Action                                                |
+| -------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Redispatch to [AnnotationState](#AnnotationState)     |
+| BlankLineEvent             |                                                       |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
+| SingleLineComment          |                                                       |
+| StepEvent                  | Redispatch to [BackgroundStateB](#BackgroundStateB)   |
 
 #### BackgroundStateB
 
-BackgroundStateB [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-BackgroundStateB [BlankLineEvent] ⇨ BackgroundStateB</br>
-BackgroundStateB [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-BackgroundStateB [ScenarioEvent] ⇨ ScenarioStateA</br>
-BackgroundStateB [SingleLineComment] ⇨ BackgroundStateB</br>
-BackgroundStateB [StepEvent] ⇨ [StepState](#StepState)</br>
+| Event                      | Action                                                |
+| -------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Redispatch to [AnnotationState](#AnnotationState)     |
+| BlankLineEvent             |                                                       |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
+| ScenarioEvent              | Transition to ScenarioStateA                          |
+| SingleLineComment          |                                                       |
+| StepEvent                  | Redispatch to [StepState](#StepState)                 |
 
 #### ScenarioStateA
 
-ScenarioState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-ScenarioState [BlankLineEvent] ⇨ ScenarioStateA</br>
-ScenarioState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-ScenarioState [SingleLineComment] ⇨ ScenarioStateA</br>
-ScenarioState [StepEvent] ⇨ [ScenarioStateB](#ScenarioStateB)</br>
+| Event                      | Action                                                |
+| -------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Redispatch to [AnnotationState](#AnnotationState)     |
+| BlankLineEvent             |                                                       |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
+| SingleLineComment          |                                                       |
+| StepEvent                  | Redispatch to [ScenarioStateB](#ScenarioStateB)       |
 
 #### ScenarioStateB
 
-ScenarioState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-ScenarioState [BlankLineEvent] ⇨ ScenarioStateB</br>
-ScenarioState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-ScenarioState [EndEvent] ⇨ Forward to $PreviousState</br>
-ScenarioState [ScenarioEvent] ⇨ ScenarioStateB</br>
-ScenarioState [SingleLineComment] ⇨ ScenarioStateB</br>
-ScenarioState [StepEvent] ⇨ [StepState](#StepState)</br>
+| Event                      | Action                                                 |
+| -------------------------- | ------------------------------------------------------ |
+| AnnotationEvent            | Redispatch to [AnnotationState](#AnnotationState)      |
+| BlankLineEvent             |                                                        |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState)  |
+| EndEvent                   | Transition to [FinalState](#FinalState)                |
+| ExampleTableEvent          | Transistion to [ExampleTableState](#ExampleTableState) |
+| ScenarioEvent              | Transition to [ScenarioStateA](#ScenarioStateA)        |
+| SingleLineComment          |                                                        |
+| StepEvent                  | Redispatch to [StepState](#StepState)                  |
 
 #### StepState
 
-StepState [AnnotationEvent] ⇨ Forward to $PreviousState</br>
-StepState [BlankLineEvent] ⇨ StepState</br>
-StepState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-StepState [EndEvent] ⇨ Forward to $PreviousState</br>
-StepState [ExampleTableEvent] ⇨ Forward to $PreviousState</br>
-StepState [ExplicitDocStringStartEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
-StepState [ImplicitDocStringStartEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
-StepState [ScenarioEvent] ⇨ Forward to $PreviousState</br>
-StepState [SingleLineComment] ⇨ StepState</br>
-StepState [StepEvent] ⇨ Forward to $PreviousState</br>
+| Event                       | Action                                                            |
+| --------------------------- | ----------------------------------------------------------------- |
+| AnnotationEvent             | Redispatch to [AnnotationState](#AnnotationState)                 |
+| BlankLineEvent              |                                                                   |
+| BlockCommentDelimiterEvent  | Transition to [BlockCommentState](#BlockCommentState)             |
+| EndEvent                    | Redispatch to $PreviousState                                      |
+| ExampleTableEvent           | Redispatch to $PreviousState                                      |
+| ExplicitDocStringStartEvent | Transition to [ExplicitDocStringStateA](#ExplicitDocStringStateA) |
+| ImplicitDocStringStartEvent | Transition to [ImplicitDocStringStateA](#ImplicitDocStringStateA) |
+| ScenarioEvent               | Transition to ScenarioStateA                                      |
+| SingleLineComment           |                                                                   |
+| StepEvent                   |                                                                   |
 
-#### ExplicitDocStringStartState
+#### ExplicitDocStringStateA
 
-ExplicitDocStringStartState [DocStringTextEvent] ⇨ [ExplicitDocStringState](#ExplicitDocStringState)</br>
+| Event              | Action                                                            |
+| ------------------ | ----------------------------------------------------------------- |
+| DocStringTextEvent | Transition to [ExplicitDocStringStateB](#ExplicitDocStringStateB) |
 
-#### ExplicitDocStringState
+#### ExplicitDocStringStateB
 
-ExplicitDocStringState [DocStringTextEvent] ⇨ ExplicitDocStringState</br>
-ExplicitDocStringState [ExplicitDocStringStopEvent] ⇨ $PreviousState([StepState](#StepState))</br>
+| Event                      | Action                                                                                   |
+| -------------------------- | ---------------------------------------------------------------------------------------- |
+| DocStringTextEvent         |                                                                                          |
+| ExplicitDocStringStopEvent | Transition to [ScenarioStateA](#ScenarioStateA) or [BackgroundStateA](#BackgroundStateA) |
 
-#### ImplicitDocStringState
+#### ImplicitDocStringStateA
 
-ImplicitDocStringState [DocStringTextEvent] ⇨ ImplicitDocStringState</br>
-ImplicitDocStringState [ImplicitDocStringStopEvent] ⇨ $PreviousState([StepState](#StepState))</br>
+| Event                      | Action                                                                                   |
+| -------------------------- | ---------------------------------------------------------------------------------------- |
+| DocStringTextEvent         |                                                                                          |
+| ImplicitDocStringStopEvent | Redispatch to [ScenarioStateA](#ScenarioStateA) or [BackgroundStateA](#BackgroundStateA) |
 
 #### ExampleTableState
 
-ExampleTableState [BlankLineEvent] ⇨ ExampleTableState</br>
-ExampleTableState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-ExampleTableState [ExampleTableHeaderRowEvent] ⇨ [ExampleTableHeaderState](#ExampleTableHeaderState)</br>
-ExampleTableState [SingleLineComment] ⇨ ExampleTableState</br>
+| Event                      | Action                                                             |
+| -------------------------- | ------------------------------------------------------------------ |
+| BlankLineEvent             |                                                                    |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState)              |
+| ExampleTableHeaderRowEvent | Transiation to [ExampleTableHeaderState](#ExampleTableHeaderState) |
+| SingleLineComment          |                                                                    |
 
 #### ExampleTableHeaderState
 
-ExampleTableHeaderState [ExampleTableSeparaterRowEvent] ⇨ [ExampleTableSeparatorState](#ExampleTableSeparatorState)</br>
+| Event                         | Action                                                                  |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| ExampleTableSeparaterRowEvent | Transition to [ExampleTableSeparatorState](#ExampleTableSeparatorState) |
 
 #### ExampleTableSeparatorState
 
-ExampleTableSeparatorState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-ExampleTableSeparatorState [ExampleTableDataRowEvent] ⇨ [ExampleTableDataRow](#ExampleTableDataRow)</br>
+| Event                    | Action                                                    |
+| ------------------------ | --------------------------------------------------------- |
+| AnnotationEvent          | Redispatch to [AnnotationState](#AnnotationState)         |
+| ExampleTableDataRowEvent | Transition to [ExampleTableDataRow](#ExampleTableDataRow) |
 
 #### ExampleTableDataRow
 
-ExampleTableDataRow [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
-ExampleTableDataRow [ExampleTableDataRowEvent] ⇨ ExampleTableDataRow</br>
-ExampleTableDataRow [EndEvent] ⇨ FinalState</br>
-ExampleTableDataRow [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
+| Event                    | Action                                            |
+| ------------------------ | ------------------------------------------------- |
+| AnnotationEvent          | Redispatch to [AnnotationState](#AnnotationState) |
+| EndEvent                 | Redispatch to [ScenarioStateB](#ScenarioStateB)   |
+| ExampleTableDataRowEvent |                                                   |
+| ScenarioEvent            | Transition to [ScenarioStateA](#ScenarioStateA)   |
+| SingleLineComment        |                                                   |
 
 #### BlockCommentState
 
-BlockCommentState [BlockCommentDelimiterEvent] ⇨ $PreviousState</br>
-BlockCommentState [TextEvent] ⇨ BlockCommentState</br>
+| Event                      | Action                       |
+| -------------------------- | ---------------------------- |
+| BlockCommentDelimiterEvent | Transition to $PreviousState |
+| TextEvent                  |                              |
+
+#### FinalState
+
+No more possible events or actions
