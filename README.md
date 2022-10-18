@@ -306,4 +306,4 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 ### EndFeatureState
 
-No more possible events or actions
+Congratulations! You have reached the end of the Internet. There are no more links.
