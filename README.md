@@ -279,14 +279,14 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | Event                      | Action                | Destination                                                   |
 | -------------------------- | --------------------- | ------------------------------------------------------------- |
 | AnnotationEvent            | Transition & Dispatch | [AnnotationState](#AnnotationState)                           |
-| BlankLineEvent             | Transition            | [ExampleTableDataRowStateB](#ExampleTableDataRowStateB)       |
+| BlankLineEvent             | Transition            | [ExampleTableDataRowsStateB](#ExampleTableDataRowsStateB)     |
 | BlockCommentDelimiterEvent | Transition            | [BlockCommentState](#BlockCommentState)                       |
 | EndEvent                   | Unwind & Dispatch     | Previous supporting state ([ScenarioStateB](#ScenarioStateB)) |
 | ExampleTableDataRowEvent   | Build                 |                                                               |
 | ScenarioEvent              | Unwind & Dispatch     | Previous supporting state ([ScenarioStateB](#ScenarioStateB)) |
 | SingleLineComment          | Absorb                |                                                               |
 
-#### ExampleTableDataRowStateB
+#### ExampleTableDataRowsStateB
 
 | Event             | Action                | Destination                                                                           |
 | ----------------- | --------------------- | ------------------------------------------------------------------------------------- |
