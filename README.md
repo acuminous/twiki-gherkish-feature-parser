@@ -99,6 +99,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | FeatureEvent                | title?      | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
 | ImplicitDocStringBeginEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
 | ImplicitDocStringEndEvent   | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
+| RuleEvent                   | title?      | Rule:<br/>Rule: Buck Rogers wins                                                                |
 | ScenarioEvent               | title?      | Scenario:<br/>Scenario: Awakening                                                               |
 | SingleLineCommentEvent      |             | # This is a comment                                                                             |
 | StepEvent                   | text        | This is a step                                                                                  |
@@ -138,6 +139,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BackgroundEvent            | Build&nbsp;&amp;&nbsp;Transition    | [BeginBackgroundState](#BeginBackgroundState)         |
 | BlankLineEvent             | Absorb                              |                                                       |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| RuleEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueFeatureState](#ContinueFeatureState)         |
 | ScenarioEvent              | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueFeatureState](#ContinueFeatureState)         |
 | SingleLineComment          | Absorb                              |                                                       |
 | TextEvent                  | Build                               |                                                       |
@@ -149,6 +151,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
 | BlankLineEvent             | Absorb                              |                                                       |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| RuleEvent                  | Build&nbsp;&amp;&nbsp;Transition    | [BeginRuleState](#BeginRuleState)                     |
 | ScenarioEvent              | Build&nbsp;&amp;&nbsp;Transition    | [BeginScenarioState](#BeginScenarioState)             |
 | SingleLineComment          | Absorb                              |                                                       |
 
@@ -164,14 +167,35 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 ### ContinueBackgroundState
 
+| Event                      | Action                              | Destination                                                                  |
+| -------------------------- | ----------------------------------- | ---------------------------------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                          |
+| BlankLineEvent             | Absorb                              |                                                                              |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                        |
+| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [BeginFeatureState](#BeginFeatureState) or [BeginRuleState](#BeginRuleState) |
+| SingleLineComment          | Absorb                              |                                                                              |
+| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                      |
+
+### BeginRuleState
+
+| Event                      | Action                              | Destination                                           |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
+| BackgroundEvent            | Build&nbsp;&amp;&nbsp;Transition    | [BeginBackgroundState](#BeginBackgroundState)         |
+| BlankLineEvent             | Absorb                              |                                                       |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| SingleLineComment          | Absorb                              |                                                       |
+| ScenarioEvent              | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueRuleState](#ContinueRuleState)               |
+
+### ContinueRuleState
+
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
 | BlankLineEvent             | Absorb                              |                                                       |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [BeginFeatureState](#BeginFeatureState)               |
+| ScenarioEvent              | Build&nbsp;&amp;&nbsp;Transition    | [BeginScenarioState](#BeginScenarioState)             |
 | SingleLineComment          | Absorb                              |                                                       |
-| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)               |
 
 ### BeginScenarioState
 
@@ -185,16 +209,17 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 ### ContinueScenarioState
 
-| Event                      | Action                              | Destination                                           |
-| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
-| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BlankLineEvent             | Absorb                              |                                                       |
-| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| EndEvent                   | Transition                          | [EndFeatureState](#EndFeatureState)                   |
-| ExampleTableEvent          | Transition                          | [BeginExampleTableState](#BeginExampleTableState)     |
-| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState)         |
-| SingleLineComment          | Absorb                              |                                                       |
-| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)               |
+| Event                      | Action                              | Destination                                                                            |
+| -------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                    |
+| BlankLineEvent             | Absorb                              |                                                                                        |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                  |
+| EndEvent                   | Transition                          | [EndFeatureState](#EndFeatureState)                                                    |
+| ExampleTableEvent          | Transition                          | [BeginExampleTableState](#BeginExampleTableState)                                      |
+| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState)                                          |
+| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState), [ContinueRuleState](#ContinueRuleState) |
+| SingleLineComment          | Absorb                              |                                                                                        |
+| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                                |
 
 ### ConsumeStepsState
 
