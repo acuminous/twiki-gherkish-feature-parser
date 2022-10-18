@@ -71,7 +71,9 @@ When handling an event, the state may do one or more of the following
 
 - Use the event data to construct an internal representation of the feature
 - Ask the state machine to transition to a new state
-- Redispatch the event to the new state
+- Ask the state machine to unwind to a previous state
+- Redispatch the event to the new state after tranistioning or unwinding
+- Ask the state machine to rehandle the original line of text after transitioning or unwinding
 
 For example, the state machine starts off in the [Initial State](#InitialState). If the first line of text in the feature specifciation is `@skip` then this will be intercepted by the [Initial State's](#InitialState) AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data `{ name: "skip", value: true }`. The event data will be dispatched to the [Initial State's](#InitialState) `onAnnotation` event handler, which will ask the state machine to move to the [Annotation State](#AnnotationState) before invoking the Annotation State's `onAnnotation` event handler with the same event data. The [Annotation State's](#AnnotationState) `onAnnotation` event handler will ask the FeatureBuilder to stash the annotation data, until such time as a feature is created.
 
@@ -156,7 +158,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState) |
 | ScenarioEvent              | Transition to ScenarioStateA                          |
 | SingleLineComment          |                                                       |
-| StepEvent                  | Redispatch to [StepState](#StepState)                 |
+| StepEvent                  | Redispatch to [StepsState](#StepsState)               |
 
 #### ScenarioStateA
 
@@ -179,9 +181,9 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ExampleTableEvent          | Transistion to [ExampleTableState](#ExampleTableState) |
 | ScenarioEvent              | Transition to [ScenarioStateA](#ScenarioStateA)        |
 | SingleLineComment          |                                                        |
-| StepEvent                  | Redispatch to [StepState](#StepState)                  |
+| StepEvent                  | Redispatch to [StepsState](#StepsState)                |
 
-#### StepState
+#### StepsState
 
 | Event                       | Action                                                            |
 | --------------------------- | ----------------------------------------------------------------- |
@@ -191,8 +193,8 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | EndEvent                    | Redispatch to $PreviousState                                      |
 | ExampleTableEvent           | Redispatch to $PreviousState                                      |
 | ExplicitDocStringStartEvent | Transition to [ExplicitDocStringStateA](#ExplicitDocStringStateA) |
-| ImplicitDocStringStartEvent | Transition to [ImplicitDocStringStateA](#ImplicitDocStringStateA) |
-| ScenarioEvent               | Transition to ScenarioStateA                                      |
+| ImplicitDocStringStartEvent | Transition to [ImplicitDocStringState](#ImplicitDocStringState)   |
+| ScenarioEvent               | Transition to $PreviousState                                      |
 | SingleLineComment           |                                                                   |
 | StepEvent                   |                                                                   |
 
@@ -209,12 +211,12 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | DocStringTextEvent         |                                                                                          |
 | ExplicitDocStringStopEvent | Transition to [ScenarioStateA](#ScenarioStateA) or [BackgroundStateA](#BackgroundStateA) |
 
-#### ImplicitDocStringStateA
+#### ImplicitDocStringState
 
-| Event                      | Action                                                                                   |
-| -------------------------- | ---------------------------------------------------------------------------------------- |
-| DocStringTextEvent         |                                                                                          |
-| ImplicitDocStringStopEvent | Redispatch to [ScenarioStateA](#ScenarioStateA) or [BackgroundStateA](#BackgroundStateA) |
+| Event                      | Action                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| DocStringTextEvent         |                                                                                      |
+| ImplicitDocStringStopEvent | Unwind to [ScenarioStateA](#ScenarioStateA) or [BackgroundStateA](#BackgroundStateA) |
 
 #### ExampleTableState
 
