@@ -113,7 +113,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
 | BlankLineEvent             | Absorb                              |                                                       |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| FeatureEvent               | Build;&amp;&nbsp;Transition         | [BeginFeatureState](#BeginFeatureState)               |
+| FeatureEvent               | Build&nbsp;&amp;&nbsp;Transition    | [BeginFeatureState](#BeginFeatureState)               |
 | SingleLineComment          | Absorb                              |                                                       |
 
 #### ConsumeAnnotationsState
@@ -135,7 +135,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | Event                      | Action                              | Destination                                           |
 | -------------------------- | ----------------------------------- | ----------------------------------------------------- |
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BackgroundEvent            | Build;&amp;&nbsp;Transition         | [BeginBackgroundState](#BeginBackgroundState)         |
+| BackgroundEvent            | Build&nbsp;&amp;&nbsp;Transition    | [BeginBackgroundState](#BeginBackgroundState)         |
 | BlankLineEvent             | Absorb                              |                                                       |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
 | ScenarioEvent              | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueFeatureState](#ContinueFeatureState)         |
@@ -149,7 +149,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
 | BlankLineEvent             | Absorb                              |                                                       |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| ScenarioEvent              | Build;&amp;&nbsp;Transition         | [BeginScenarioState](#BeginScenarioState)             |
+| ScenarioEvent              | Build&nbsp;&amp;&nbsp;Transition    | [BeginScenarioState](#BeginScenarioState)             |
 | SingleLineComment          | Absorb                              |                                                       |
 
 #### BeginBackgroundState
@@ -226,9 +226,9 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### BeginImplicitDocStringState
 
-| Event                       | Action                      | Destination                                                     |
-| --------------------------- | --------------------------- | --------------------------------------------------------------- |
-| ImplicitDocStringStartEvent | Build;&amp;&nbsp;Transition | [ConsumeImplicitDocStringState](#ConsumeImplicitDocStringState) |
+| Event                       | Action                           | Destination                                                     |
+| --------------------------- | -------------------------------- | --------------------------------------------------------------- |
+| ImplicitDocStringStartEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeImplicitDocStringState](#ConsumeImplicitDocStringState) |
 
 #### ConsumeImplicitDocStringState
 
@@ -252,12 +252,12 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### BeginExampleTableState
 
-| Event                      | Action                      | Destination                                                       |
-| -------------------------- | --------------------------- | ----------------------------------------------------------------- |
-| BlankLineEvent             | Absorb                      |                                                                   |
-| BlockCommentDelimiterEvent | Transition                  | [ConsumeBlockCommentState](#ConsumeBlockCommentState)             |
-| ExampleTableHeaderRowEvent | Build;&amp;&nbsp;Transition | [ConsumeExampleTableHeaderState](#ConsumeExampleTableHeaderState) |
-| SingleLineComment          | Absorb                      |                                                                   |
+| Event                      | Action                           | Destination                                                       |
+| -------------------------- | -------------------------------- | ----------------------------------------------------------------- |
+| BlankLineEvent             | Absorb                           |                                                                   |
+| BlockCommentDelimiterEvent | Transition                       | [ConsumeBlockCommentState](#ConsumeBlockCommentState)             |
+| ExampleTableHeaderRowEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeExampleTableHeaderState](#ConsumeExampleTableHeaderState) |
+| SingleLineComment          | Absorb                           |                                                                   |
 
 #### ConsumeExampleTableHeaderState
 
@@ -271,7 +271,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | -------------------------- | ----------------------------------- | ------------------------------------------------------------------- |
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                 |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)               |
-| ExampleTableDataRowEvent   | Build;&amp;&nbsp;Transition         | [ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState) |
+| ExampleTableDataRowEvent   | Build&nbsp;&amp;&nbsp;Transition    | [ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState) |
 | SingleLineComment          | Absorb                              |                                                                     |
 
 #### ConsumeExampleTableDataState
