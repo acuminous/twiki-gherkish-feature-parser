@@ -127,6 +127,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent | Transition                      | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                                                                                                                                                     |
 | ExampleTableDataRowEvent   | Unwind&nbsp;&amp;&nbsp;Dispatch | [ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState)                                                                                                                                                                       |
 | FeatureEvent               | Unwind&nbsp;&amp;&nbsp;Dispatch | [InitialState](#InitialState)                                                                                                                                                                                                             |
+| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch | [BeginFeatureState](#BeginFeatureState), [ContinueFeatureState](#ContinueFeatureState), [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)                                            |
 | ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch | [BeginFeatureState](#BeginFeatureState), [ContinueFeatureState](#ContinueFeatureState), [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)                                            |
 | SingleLineComment          | Absorb                          |                                                                                                                                                                                                                                           |
 | StepEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch | [BeginBackgroundState](#BeginBackgroundState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginScenarioState](#BeginScenarioState), [ContinueScenarioState](#ContinueScenarioState) or [ConsumeStepsState](#ConsumeStepsState) |
@@ -172,6 +173,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                          |
 | BlankLineEvent             | Absorb                              |                                                                              |
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                        |
+| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch     | [BeginFeatureState](#BeginFeatureState)                                      |
 | ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [BeginFeatureState](#BeginFeatureState) or [BeginRuleState](#BeginRuleState) |
 | SingleLineComment          | Absorb                              |                                                                              |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                      |
@@ -216,7 +218,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                  |
 | EndEvent                   | Transition                          | [EndFeatureState](#EndFeatureState)                                                    |
 | ExampleTableEvent          | Transition                          | [BeginExampleTableState](#BeginExampleTableState)                                      |
-| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState)                                          |
+| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState), [ContinueRuleState](#ContinueRuleState) |
 | ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState), [ContinueRuleState](#ContinueRuleState) |
 | SingleLineComment          | Absorb                              |                                                                                        |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                                |
@@ -232,6 +234,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | ExampleTableEvent           | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)                                                        |
 | ExplicitDocStringBeginEvent | Transition                          | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                            |
 | ImplicitDocStringBeginEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                            |
+| RuleEvent                   | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState)                                                          |
 | ScenarioEvent               | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState) |
 | SingleLineComment           | Absorb                              |                                                                                                        |
 | StepEvent                   | Build                               |                                                                                                        |
