@@ -65,7 +65,15 @@ const feature = parser.parse(file, metadata);
 
 ## State Machine
 
-The parser uses a state machine which transitions between states when specific events are dispatched.
+The parser uses a state machine which transitions between states in response to certain events. The event are determined by asking the current state whether it can handle a line of text from the feature specification. The state maintains a list of potential events, which it asks to handle the line of text. The first event that supports the line of text, will parse the text and dispatch the event data to the current state. If no event accepts the line of text, then a MissingEventHandler event is dispatched instead.
+
+When handling an event, the state may do one or more of the following
+
+- Use the event data to construct an internal representation of the feature
+- Ask the state machine to transition to a new state
+- Forward the event data to the new state
+
+For example, the state machine starts off in the [Initial State](#InitialState). If the first line of text in the feature specifciation is `@skip` then this will be intercepted by the [Initial State's](#InitialState) AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data `{ name: "skip", value: true }`. The event data will be dispatched to the [Initial State's](#InitialState) `onAnnotation` event handler, which will ask the state machine to move to the [Annotation State](#AnnotationState) before invoking the Annotation State's `onAnnotation` event handler with the same event data. The [Annotation State's](#AnnotationState) `onAnnotation` event handler will ask the FeatureBuilder to stash the annotation data, until such time as a feature is created.
 
 ### Events
 
@@ -95,70 +103,81 @@ The parser uses a state machine which transitions between states when specific e
 
 #### InitialState
 
-InitialState [AnnotationEvent] ⇨ InitialState</br>
+InitialState [AnnotationEvent] ⇨ Forward to [AnnotationState](#AnnotationState)</br>
 InitialState [BlankLineEvent] ⇨ InitialState</br>
 InitialState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
 InitialState [FeatureEvent] ⇨ [FeatureState](#FeatureState)</br>
 InitialState [SingleLineComment] ⇨ InitialState</br>
 
+#### AnnotationState
+
+AnnotationState [AnnotationEvent] ⇨ AnnotationState</br>
+AnnotationState [BlankLineEvent] ⇨ AnnotationState</br>
+AnnotationState [BackgroundEvent] ⇨ Forward to $PreviousState</br>
+AnnotationState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+AnnotationState [ExampleTableDataRowEvent] ⇨ Forward to $PreviousState</br>
+AnnotationState [FeatureEvent] ⇨ Forward to $PreviousState</br>
+AnnotationState [ScenarioEvent] ⇨ Forward to $PreviousState</br>
+AnnotationState [SingleLineComment] ⇨ AnnotationState</br>
+AnnotationState [StepEvent] ⇨ Forward to $PreviousState</br>
+
 #### FeatureState
 
-FeatureState [AnnotationEvent] ⇨ FeatureState</br>
-FeatureState [BackgroundEvent] ⇨ [BackgroundState](#BackgroundState)</br>
+FeatureState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
+FeatureState [BackgroundEvent] ⇨ [BackgroundStateA](#BackgroundStateA)</br>
 FeatureState [BlankLineEvent] ⇨ FeatureState</br>
 FeatureState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-FeatureState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
+FeatureState [ScenarioEvent] ⇨ [ScenarioStateA](#ScenarioStateA)</br>
 FeatureState [SingleLineComment] ⇨ FeatureState</br>
 FeatureState [TextEvent] ⇨ FeatureState</br>
 
-#### BackgroundState
+#### BackgroundStateA
 
-BackgroundState [AnnotationEvent] ⇨ BackgroundState</br>
-BackgroundState [BlankLineEvent] ⇨ BackgroundState</br>
-BackgroundState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-BackgroundState [SingleLineComment] ⇨ BackgroundState</br>
-BackgroundState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState)</br>
+BackgroundStateA [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
+BackgroundStateA [BlankLineEvent] ⇨ BackgroundStateA</br>
+BackgroundStateA [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+BackgroundStateA [SingleLineComment] ⇨ BackgroundStateA</br>
+BackgroundStateA [StepEvent] ⇨ Forward to [BackgroundStateB](#BackgroundStateB)</br>
 
-#### BackgroundStepsState
+#### BackgroundStateB
 
-BackgroundStepsState [AnnotationEvent] ⇨ StepsAnnotationState</br>
-BackgroundStepsState [BlankLineEvent] ⇨ BackgroundStepsState</br>
-BackgroundStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-BackgroundStepsState [ExplicitDocStringStartEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
-BackgroundStepsState [ImplicitDocStringStartEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
-BackgroundStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
-BackgroundStepsState [SingleLineComment] ⇨ BackgroundStepsState</br>
-BackgroundStepsState [StepEvent] ⇨ BackgroundStepsState</br>
+BackgroundStateB [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
+BackgroundStateB [BlankLineEvent] ⇨ BackgroundStateB</br>
+BackgroundStateB [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+BackgroundStateB [ScenarioEvent] ⇨ ScenarioStateA</br>
+BackgroundStateB [SingleLineComment] ⇨ BackgroundStateB</br>
+BackgroundStateB [StepEvent] ⇨ [StepState](#StepState)</br>
 
-#### ScenarioState
+#### ScenarioStateA
 
-ScenarioState [AnnotationEvent] ⇨ ScenarioState</br>
-ScenarioState [BlankLineEvent] ⇨ ScenarioState</br>
+ScenarioState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
+ScenarioState [BlankLineEvent] ⇨ ScenarioStateA</br>
 ScenarioState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-ScenarioState [SingleLineComment] ⇨ ScenarioState</br>
-ScenarioState [StepEvent] ⇨ [ScenarioStepsState](#ScenarioStepsState)</br>
+ScenarioState [SingleLineComment] ⇨ ScenarioStateA</br>
+ScenarioState [StepEvent] ⇨ [ScenarioStateB](#ScenarioStateB)</br>
 
-#### ScenarioStepsState
+#### ScenarioStateB
 
-ScenarioStepsState [AnnotationEvent] ⇨ ScenarioStepsState</br>
-ScenarioStepsState [BlankLineEvent] ⇨ ScenarioStepsState</br>
-ScenarioStepsState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-ScenarioStepsState [ExplicitDocStringStartEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
-ScenarioStepsState [ImplicitDocStringStartEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
-ScenarioStepsState [ExampleTableEvent] ⇨ [ExampleTableState](#ExampleTableState)</br>
-ScenarioStepsState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
-ScenarioStepsState [SingleLineComment] ⇨ ScenarioStepsState</br>
-ScenarioStepsState [StepEvent] ⇨ ScenarioStepsState</br>
-ScenarioStepsState [EndEvent] ⇨ FinalState</br>
+ScenarioState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
+ScenarioState [BlankLineEvent] ⇨ ScenarioStateB</br>
+ScenarioState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+ScenarioState [EndEvent] ⇨ Forward to $PreviousState</br>
+ScenarioState [ScenarioEvent] ⇨ ScenarioStateB</br>
+ScenarioState [SingleLineComment] ⇨ ScenarioStateB</br>
+ScenarioState [StepEvent] ⇨ [StepState](#StepState)</br>
 
-#### StepsAnnotationState
+#### StepState
 
-StepsAnnotationState [AnnotationEvent] ⇨ StepsAnnotationState</br>
-StepsAnnotationState [BlankLineEvent] ⇨ StepsAnnotationState</br>
-StepsAnnotationState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
-StepsAnnotationState [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
-StepsAnnotationState [SingleLineComment] ⇨ StepsAnnotationState</br>
-StepsAnnotationState [StepEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
+StepState [AnnotationEvent] ⇨ Forward to $PreviousState</br>
+StepState [BlankLineEvent] ⇨ StepState</br>
+StepState [BlockCommentDelimiterEvent] ⇨ [BlockCommentState](#BlockCommentState)</br>
+StepState [EndEvent] ⇨ Forward to $PreviousState</br>
+StepState [ExampleTableEvent] ⇨ Forward to $PreviousState</br>
+StepState [ExplicitDocStringStartEvent] ⇨ [ExplicitDocStringStartState](#ExplicitDocStringStartState)</br>
+StepState [ImplicitDocStringStartEvent] ⇨ [ImplicitDocStringState](#ImplicitDocStringState)</br>
+StepState [ScenarioEvent] ⇨ Forward to $PreviousState</br>
+StepState [SingleLineComment] ⇨ StepState</br>
+StepState [StepEvent] ⇨ Forward to $PreviousState</br>
 
 #### ExplicitDocStringStartState
 
@@ -167,12 +186,12 @@ ExplicitDocStringStartState [DocStringTextEvent] ⇨ [ExplicitDocStringState](#E
 #### ExplicitDocStringState
 
 ExplicitDocStringState [DocStringTextEvent] ⇨ ExplicitDocStringState</br>
-ExplicitDocStringState [ExplicitDocStringStopEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
+ExplicitDocStringState [ExplicitDocStringStopEvent] ⇨ $PreviousState([StepState](#StepState))</br>
 
 #### ImplicitDocStringState
 
 ImplicitDocStringState [DocStringTextEvent] ⇨ ImplicitDocStringState</br>
-ImplicitDocStringState [ImplicitDocStringStopEvent] ⇨ [BackgroundStepsState](#BackgroundStepsState) | [ScenarioStepsState](ScenarioStepsState)</br>
+ImplicitDocStringState [ImplicitDocStringStopEvent] ⇨ $PreviousState([StepState](#StepState))</br>
 
 #### ExampleTableState
 
@@ -187,11 +206,12 @@ ExampleTableHeaderState [ExampleTableSeparaterRowEvent] ⇨ [ExampleTableSeparat
 
 #### ExampleTableSeparatorState
 
-ExampleTableSeparatorState [AnnotationEvent] ⇨ ExampleTableSeparatorState</br>
+ExampleTableSeparatorState [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
 ExampleTableSeparatorState [ExampleTableDataRowEvent] ⇨ [ExampleTableDataRow](#ExampleTableDataRow)</br>
 
 #### ExampleTableDataRow
 
+ExampleTableDataRow [AnnotationEvent] ⇨ [AnnotationState](#AnnotationState)</br>
 ExampleTableDataRow [ExampleTableDataRowEvent] ⇨ ExampleTableDataRow</br>
 ExampleTableDataRow [EndEvent] ⇨ FinalState</br>
 ExampleTableDataRow [ScenarioEvent] ⇨ [ScenarioState](#ScenarioState)</br>
