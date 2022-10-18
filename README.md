@@ -220,12 +220,12 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### ExampleTableState
 
-| Event                      | Action                                                             |
-| -------------------------- | ------------------------------------------------------------------ |
-| BlankLineEvent             |                                                                    |
-| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState)              |
-| ExampleTableHeaderRowEvent | Transiation to [ExampleTableHeaderState](#ExampleTableHeaderState) |
-| SingleLineComment          |                                                                    |
+| Event                      | Action                                                            |
+| -------------------------- | ----------------------------------------------------------------- |
+| BlankLineEvent             |                                                                   |
+| BlockCommentDelimiterEvent | Transition to [BlockCommentState](#BlockCommentState)             |
+| ExampleTableHeaderRowEvent | Transition to [ExampleTableHeaderState](#ExampleTableHeaderState) |
+| SingleLineComment          |                                                                   |
 
 #### ExampleTableHeaderState
 
