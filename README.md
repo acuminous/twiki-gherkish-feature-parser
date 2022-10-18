@@ -122,13 +122,13 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | -------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | AnnotationEvent            | Build             |                                                                                                                                                                                                                                                                      |
 | BlankLineEvent             | Absorb            |                                                                                                                                                                                                                                                                      |
-| BackgroundEvent            | Unwind & Dispatch | $PreviousSupportingState ([BeginFeatureState](#BeginFeatureState))                                                                                                                                                                                                   |
+| BackgroundEvent            | Unwind & Dispatch | $PreviousSupportingState [[BeginFeatureState](#BeginFeatureState)]                                                                                                                                                                                                   |
 | BlockCommentDelimiterEvent | Transition        | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                                                                                                                                                                                |
-| ExampleTableDataRowEvent   | Unwind & Dispatch | $PreviousSupportingState ([ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState))                                                                                                                                                                       |
-| FeatureEvent               | Unwind & Dispatch | $PreviousSupportingState ([InitialState](#InitialState))                                                                                                                                                                                                             |
-| ScenarioEvent              | Unwind & Dispatch | $PreviousSupportingState ([BeginFeatureState](#BeginFeatureState), [ContinueFeatureState](#ContinueFeatureState), [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState))                                            |
+| ExampleTableDataRowEvent   | Unwind & Dispatch | $PreviousSupportingState [[ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState)]                                                                                                                                                                       |
+| FeatureEvent               | Unwind & Dispatch | $PreviousSupportingState [[InitialState](#InitialState)]                                                                                                                                                                                                             |
+| ScenarioEvent              | Unwind & Dispatch | $PreviousSupportingState [[BeginFeatureState](#BeginFeatureState), [ContinueFeatureState](#ContinueFeatureState), [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)]                                            |
 | SingleLineComment          | Absorb            |                                                                                                                                                                                                                                                                      |
-| StepEvent                  | Unwind & Dispatch | $PreviousSupportingState ([BeginBackgroundState](#BeginBackgroundState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginScenarioState](#BeginScenarioState), [ContinueScenarioState](#ContinueScenarioState) or [ConsumeStepsState](#ConsumeStepsState)) |
+| StepEvent                  | Unwind & Dispatch | $PreviousSupportingState [[BeginBackgroundState](#BeginBackgroundState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginScenarioState](#BeginScenarioState), [ContinueScenarioState](#ContinueScenarioState) or [ConsumeStepsState](#ConsumeStepsState)] |
 
 #### BeginFeatureState
 
@@ -169,7 +169,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition & Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                |
 | BlankLineEvent             | Absorb                |                                                                    |
 | BlockCommentDelimiterEvent | Transition            | [ConsumeBlockCommentState](#ConsumeBlockCommentState)              |
-| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState ([BeginFeatureState](#BeginFeatureState)) |
+| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState [[BeginFeatureState](#BeginFeatureState)] |
 | SingleLineComment          | Absorb                |                                                                    |
 | StepEvent                  | Transition & Dispatch | [ConsumeStepsState](#ConsumeStepsState)                            |
 
@@ -192,7 +192,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent | Transition            | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                    |
 | EndEvent                   | Transition            | [EndFeatureState](#EndFeatureState)                                      |
 | ExampleTableEvent          | Transition            | [BeginExampleTableState](#BeginExampleTableState)                        |
-| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState ([ContinueFeatureState](#ContinueFeatureState)) |
+| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState [[ContinueFeatureState](#ContinueFeatureState)] |
 | SingleLineComment          | Absorb                |                                                                          |
 | StepEvent                  | Transition & Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                  |
 
@@ -203,11 +203,11 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent             | Transition & Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                                                               |
 | BlankLineEvent              | Absorb                |                                                                                                                                   |
 | BlockCommentDelimiterEvent  | Transition            | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                                             |
-| EndEvent                    | Unwind & Dispatch     | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState))                                                        |
-| ExampleTableEvent           | Unwind & Dispatch     | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState))                                                        |
+| EndEvent                    | Unwind & Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
+| ExampleTableEvent           | Unwind & Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
 | ExplicitDocStringStartEvent | Transition            | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                                                       |
 | ImplicitDocStringStartEvent | Transition & Dispatch | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                                                       |
-| ScenarioEvent               | Unwind & Dispatch     | $PreviousSupportingState ([ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)) |
+| ScenarioEvent               | Unwind & Dispatch     | $PreviousSupportingState [[ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)] |
 | SingleLineComment           | Absorb                |                                                                                                                                   |
 | StepEvent                   | Build                 |                                                                                                                                   |
 
@@ -241,14 +241,14 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 | Event                      | Action            | Destination                                                                                                                       |
 | -------------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| AnnotationEvent            | Unwind & Dispatch | $PreviousSupportingState ([ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)) |
+| AnnotationEvent            | Unwind & Dispatch | $PreviousSupportingState [[ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)] |
 | BlankLineEvent             | Absorb            |                                                                                                                                   |
 | BlockCommentDelimiterEvent | Transition        | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                                             |
-| EndEvent                   | Unwind & Dispatch | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState))                                                        |
-| ExampleTableEvent          | Unwind & Dispatch | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState))                                                        |
-| ScenarioEvent              | Unwind & Dispatch | $PreviousSupportingState ([ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)) |
+| EndEvent                   | Unwind & Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
+| ExampleTableEvent          | Unwind & Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
+| ScenarioEvent              | Unwind & Dispatch | $PreviousSupportingState [[ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)] |
 | SingleLineComment          | Absorb            |                                                                                                                                   |
-| StepEvent                  | Unwind & Dispatch | $PreviousSupportingState ([ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)) |
+| StepEvent                  | Unwind & Dispatch | $PreviousSupportingState [[ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)] |
 
 #### BeginExampleTableState
 
@@ -281,9 +281,9 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition & Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                        |
 | BlankLineEvent             | Transition            | [EndExampleTableState](#EndExampleTableState)                              |
 | BlockCommentDelimiterEvent | Transition            | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                      |
-| EndEvent                   | Unwind & Dispatch     | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState)) |
+| EndEvent                   | Unwind & Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)] |
 | ExampleTableDataRowEvent   | Build                 |                                                                            |
-| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState)) |
+| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)] |
 | SingleLineComment          | Absorb                |                                                                            |
 
 #### EndExampleTableState
@@ -293,15 +293,15 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | AnnotationEvent            | Transition & Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                      |
 | BlankLineEvent             | Absorb                |                                                                                          |
 | BlockCommentDelimiterEvent | Transition            | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                    |
-| EndEvent                   | Unwind & Dispatch     | $PreviousSupportingState ([ConsumeExampleTableDataState](#ConsumeExampleTableDataState)) |
-| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState ([ContinueScenarioState](#ContinueScenarioState))               |
+| EndEvent                   | Unwind & Dispatch     | $PreviousSupportingState [[ConsumeExampleTableDataState](#ConsumeExampleTableDataState)] |
+| ScenarioEvent              | Unwind & Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]               |
 | SingleLineComment          | Absorb                |                                                                                          |
 
 #### ConsumeBlockCommentState
 
 | Event                      | Action     | Destination                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | -------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BlockCommentDelimiterEvent | Transition | $PreviousSupportingState ([BeginBackgroundState](#BeginBackgroundState), [BeginFeatureState](#BeginFeatureState), [ConsumeAnnotationsState](#ConsumeAnnotationsState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginExampleTableState](#BeginExampleTableState), [BeginScenarioState](#BeginScenarioState), [ContinueFeatureState](#ContinueFeatureState), [ConsumeExampleTableDataState](#ConsumeExampleTableDataState), [ConsumeExampleTableSeparatorState](#ConsumeExampleTableSeparatorState), [ContinueScenarioState](#ContinueScenarioState), [ConsumeStepsState](#ConsumeStepsState), [EndDocStringState](#EndDocStringState) or [EndExampleTableState](#EndExampleTableState)) |
+| BlockCommentDelimiterEvent | Transition | $PreviousSupportingState [[BeginBackgroundState](#BeginBackgroundState), [BeginFeatureState](#BeginFeatureState), [ConsumeAnnotationsState](#ConsumeAnnotationsState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginExampleTableState](#BeginExampleTableState), [BeginScenarioState](#BeginScenarioState), [ContinueFeatureState](#ContinueFeatureState), [ConsumeExampleTableDataState](#ConsumeExampleTableDataState), [ConsumeExampleTableSeparatorState](#ConsumeExampleTableSeparatorState), [ContinueScenarioState](#ContinueScenarioState), [ConsumeStepsState](#ConsumeStepsState), [EndDocStringState](#EndDocStringState) or [EndExampleTableState](#EndExampleTableState)] |
 | TextEvent                  | Absorb     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 #### EndFeatureState
