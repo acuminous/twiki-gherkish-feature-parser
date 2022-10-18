@@ -74,7 +74,7 @@ When handling an event, the state may do one or more of the following
 - Ask the state machine to **unwind** to the previous state that supports the event
 - **Dispatch** the event to the new state after transitioning or unwinding
 - Ask the state machine to **handle** the original line of text after transitioning or unwinding
-- Absorb the event
+- **Absorb** the event
 - Report an unexpected event
 - Report a missing event handler
 
