@@ -108,13 +108,13 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### InitialState
 
-| Event                      | Action                         | Destination                                           |
-| -------------------------- | ------------------------------ | ----------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BlankLineEvent             | Absorb                         |                                                       |
-| BlockCommentDelimiterEvent | Transition                     | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| FeatureEvent               | Build;&amp;&nbsp;Transition    | [BeginFeatureState](#BeginFeatureState)               |
-| SingleLineComment          | Absorb                         |                                                       |
+| Event                      | Action                              | Destination                                           |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
+| BlankLineEvent             | Absorb                              |                                                       |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| FeatureEvent               | Build;&amp;&nbsp;Transition         | [BeginFeatureState](#BeginFeatureState)               |
+| SingleLineComment          | Absorb                              |                                                       |
 
 #### ConsumeAnnotationsState
 
@@ -132,90 +132,90 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### BeginFeatureState
 
-| Event                      | Action                         | Destination                                           |
-| -------------------------- | ------------------------------ | ----------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BackgroundEvent            | Build;&amp;&nbsp;Transition    | [BeginBackgroundState](#BeginBackgroundState)         |
-| BlankLineEvent             | Absorb                         |                                                       |
-| BlockCommentDelimiterEvent | Transition                     | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| ScenarioEvent              | Transition;&amp;&nbsp;Dispatch | [ContinueFeatureState](#ContinueFeatureState)         |
-| SingleLineComment          | Absorb                         |                                                       |
-| TextEvent                  | Build                          |                                                       |
+| Event                      | Action                              | Destination                                           |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
+| BackgroundEvent            | Build;&amp;&nbsp;Transition         | [BeginBackgroundState](#BeginBackgroundState)         |
+| BlankLineEvent             | Absorb                              |                                                       |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| ScenarioEvent              | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueFeatureState](#ContinueFeatureState)         |
+| SingleLineComment          | Absorb                              |                                                       |
+| TextEvent                  | Build                               |                                                       |
 
 #### ContinueFeatureState
 
-| Event                      | Action                         | Destination                                           |
-| -------------------------- | ------------------------------ | ----------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BlankLineEvent             | Absorb                         |                                                       |
-| BlockCommentDelimiterEvent | Transition                     | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| ScenarioEvent              | Build;&amp;&nbsp;Transition    | [BeginScenarioState](#BeginScenarioState)             |
-| SingleLineComment          | Absorb                         |                                                       |
+| Event                      | Action                              | Destination                                           |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
+| BlankLineEvent             | Absorb                              |                                                       |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| ScenarioEvent              | Build;&amp;&nbsp;Transition         | [BeginScenarioState](#BeginScenarioState)             |
+| SingleLineComment          | Absorb                              |                                                       |
 
 #### BeginBackgroundState
 
-| Event                      | Action                         | Destination                                           |
-| -------------------------- | ------------------------------ | ----------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BlankLineEvent             | Absorb                         |                                                       |
-| BlockCommentDelimiterEvent | Transition                     | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| SingleLineComment          | Absorb                         |                                                       |
-| StepEvent                  | Transition;&amp;&nbsp;Dispatch | [ContinueBackgroundState](#ContinueBackgroundState)   |
+| Event                      | Action                              | Destination                                           |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
+| BlankLineEvent             | Absorb                              |                                                       |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| SingleLineComment          | Absorb                              |                                                       |
+| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueBackgroundState](#ContinueBackgroundState)   |
 
 #### ContinueBackgroundState
 
-| Event                      | Action                          | Destination                                                        |
-| -------------------------- | ------------------------------- | ------------------------------------------------------------------ |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch  | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                |
-| BlankLineEvent             | Absorb                          |                                                                    |
-| BlockCommentDelimiterEvent | Transition                      | [ConsumeBlockCommentState](#ConsumeBlockCommentState)              |
-| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[BeginFeatureState](#BeginFeatureState)] |
-| SingleLineComment          | Absorb                          |                                                                    |
-| StepEvent                  | Transition;&amp;&nbsp;Dispatch  | [ConsumeStepsState](#ConsumeStepsState)                            |
+| Event                      | Action                              | Destination                                                        |
+| -------------------------- | ----------------------------------- | ------------------------------------------------------------------ |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                |
+| BlankLineEvent             | Absorb                              |                                                                    |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)              |
+| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[BeginFeatureState](#BeginFeatureState)] |
+| SingleLineComment          | Absorb                              |                                                                    |
+| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                            |
 
 #### BeginScenarioState
 
-| Event                      | Action                         | Destination                                           |
-| -------------------------- | ------------------------------ | ----------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
-| BlankLineEvent             | Absorb                         |                                                       |
-| BlockCommentDelimiterEvent | Transition                     | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
-| SingleLineComment          | Absorb                         |                                                       |
-| StepEvent                  | Transition;&amp;&nbsp;Dispatch | [ContinueScenarioState](#ContinueScenarioState)       |
+| Event                      | Action                              | Destination                                           |
+| -------------------------- | ----------------------------------- | ----------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)   |
+| BlankLineEvent             | Absorb                              |                                                       |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState) |
+| SingleLineComment          | Absorb                              |                                                       |
+| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ContinueScenarioState](#ContinueScenarioState)       |
 
 #### ContinueScenarioState
 
-| Event                      | Action                          | Destination                                                              |
-| -------------------------- | ------------------------------- | ------------------------------------------------------------------------ |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch  | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                      |
-| BlankLineEvent             | Absorb                          |                                                                          |
-| BlockCommentDelimiterEvent | Transition                      | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                    |
-| EndEvent                   | Transition                      | [EndFeatureState](#EndFeatureState)                                      |
-| ExampleTableEvent          | Transition                      | [BeginExampleTableState](#BeginExampleTableState)                        |
-| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueFeatureState](#ContinueFeatureState)] |
-| SingleLineComment          | Absorb                          |                                                                          |
-| StepEvent                  | Transition;&amp;&nbsp;Dispatch  | [ConsumeStepsState](#ConsumeStepsState)                                  |
+| Event                      | Action                              | Destination                                                              |
+| -------------------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                      |
+| BlankLineEvent             | Absorb                              |                                                                          |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                    |
+| EndEvent                   | Transition                          | [EndFeatureState](#EndFeatureState)                                      |
+| ExampleTableEvent          | Transition                          | [BeginExampleTableState](#BeginExampleTableState)                        |
+| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueFeatureState](#ContinueFeatureState)] |
+| SingleLineComment          | Absorb                              |                                                                          |
+| StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                  |
 
 #### ConsumeStepsState
 
-| Event                       | Action                          | Destination                                                                                                                       |
-| --------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| AnnotationEvent             | Transition;&amp;&nbsp;Dispatch  | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                                                               |
-| BlankLineEvent              | Absorb                          |                                                                                                                                   |
-| BlockCommentDelimiterEvent  | Transition                      | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                                             |
-| EndEvent                    | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
-| ExampleTableEvent           | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
-| ExplicitDocStringStartEvent | Transition                      | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                                                       |
-| ImplicitDocStringStartEvent | Transition;&amp;&nbsp;Dispatch  | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                                                       |
-| ScenarioEvent               | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)] |
-| SingleLineComment           | Absorb                          |                                                                                                                                   |
-| StepEvent                   | Build                           |                                                                                                                                   |
+| Event                       | Action                              | Destination                                                                                                                       |
+| --------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| AnnotationEvent             | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                                                               |
+| BlankLineEvent              | Absorb                              |                                                                                                                                   |
+| BlockCommentDelimiterEvent  | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                                             |
+| EndEvent                    | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
+| ExampleTableEvent           | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]                                                        |
+| ExplicitDocStringStartEvent | Transition                          | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                                                       |
+| ImplicitDocStringStartEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                                                       |
+| ScenarioEvent               | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState)] |
+| SingleLineComment           | Absorb                              |                                                                                                                                   |
+| StepEvent                   | Build                               |                                                                                                                                   |
 
 #### BeginExplicitDocStringState
 
-| Event              | Action                         | Destination                                                     |
-| ------------------ | ------------------------------ | --------------------------------------------------------------- |
-| DocStringTextEvent | Transition;&amp;&nbsp;Dispatch | [ConsumeExplicitDocStringState](#ConsumeExplicitDocStringState) |
+| Event              | Action                              | Destination                                                     |
+| ------------------ | ----------------------------------- | --------------------------------------------------------------- |
+| DocStringTextEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeExplicitDocStringState](#ConsumeExplicitDocStringState) |
 
 #### ConsumeExplicitDocStringState
 
@@ -232,10 +232,10 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### ConsumeImplicitDocStringState
 
-| Event                      | Action                       | Destination                             |
-| -------------------------- | ---------------------------- | --------------------------------------- |
-| DocStringTextEvent         | Build                        |                                         |
-| ImplicitDocStringStopEvent | Transition;&amp;&nbsp;Handle | [EndDocStringState](#EndDocStringState) |
+| Event                      | Action                            | Destination                             |
+| -------------------------- | --------------------------------- | --------------------------------------- |
+| DocStringTextEvent         | Build                             |                                         |
+| ImplicitDocStringStopEvent | Transition&nbsp;&amp;&nbsp;Handle | [EndDocStringState](#EndDocStringState) |
 
 #### EndDocStringState
 
@@ -267,35 +267,35 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 #### ConsumeExampleTableSeparatorState
 
-| Event                      | Action                         | Destination                                                         |
-| -------------------------- | ------------------------------ | ------------------------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                 |
-| BlockCommentDelimiterEvent | Transition                     | [ConsumeBlockCommentState](#ConsumeBlockCommentState)               |
-| ExampleTableDataRowEvent   | Build;&amp;&nbsp;Transition    | [ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState) |
-| SingleLineComment          | Absorb                         |                                                                     |
+| Event                      | Action                              | Destination                                                         |
+| -------------------------- | ----------------------------------- | ------------------------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                 |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)               |
+| ExampleTableDataRowEvent   | Build;&amp;&nbsp;Transition         | [ExampleTableDataRowConsumeState](#ExampleTableDataRowConsumeState) |
+| SingleLineComment          | Absorb                              |                                                                     |
 
 #### ConsumeExampleTableDataState
 
-| Event                      | Action                          | Destination                                                                |
-| -------------------------- | ------------------------------- | -------------------------------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch  | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                        |
-| BlankLineEvent             | Transition                      | [EndExampleTableState](#EndExampleTableState)                              |
-| BlockCommentDelimiterEvent | Transition                      | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                      |
-| EndEvent                   | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)] |
-| ExampleTableDataRowEvent   | Build                           |                                                                            |
-| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)] |
-| SingleLineComment          | Absorb                          |                                                                            |
+| Event                      | Action                              | Destination                                                                |
+| -------------------------- | ----------------------------------- | -------------------------------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                        |
+| BlankLineEvent             | Transition                          | [EndExampleTableState](#EndExampleTableState)                              |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                      |
+| EndEvent                   | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)] |
+| ExampleTableDataRowEvent   | Build                               |                                                                            |
+| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)] |
+| SingleLineComment          | Absorb                              |                                                                            |
 
 #### EndExampleTableState
 
-| Event                      | Action                          | Destination                                                                              |
-| -------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------- |
-| AnnotationEvent            | Transition;&amp;&nbsp;Dispatch  | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                      |
-| BlankLineEvent             | Absorb                          |                                                                                          |
-| BlockCommentDelimiterEvent | Transition                      | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                    |
-| EndEvent                   | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ConsumeExampleTableDataState](#ConsumeExampleTableDataState)] |
-| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]               |
-| SingleLineComment          | Absorb                          |                                                                                          |
+| Event                      | Action                              | Destination                                                                              |
+| -------------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------- |
+| AnnotationEvent            | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeAnnotationsState](#ConsumeAnnotationsState)                                      |
+| BlankLineEvent             | Absorb                              |                                                                                          |
+| BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                    |
+| EndEvent                   | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ConsumeExampleTableDataState](#ConsumeExampleTableDataState)] |
+| ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | $PreviousSupportingState [[ContinueScenarioState](#ContinueScenarioState)]               |
+| SingleLineComment          | Absorb                              |                                                                                          |
 
 #### ConsumeBlockCommentState
 
