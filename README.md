@@ -218,7 +218,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                  |
 | EndEvent                   | Transition                          | [EndFeatureState](#EndFeatureState)                                                    |
 | ExampleTableEvent          | Transition                          | [BeginExampleTableState](#BeginExampleTableState)                                      |
-| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState), [ContinueRuleState](#ContinueRuleState) |
+| RuleEvent                  | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState)                                          |
 | ScenarioEvent              | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState), [ContinueRuleState](#ContinueRuleState) |
 | SingleLineComment          | Absorb                              |                                                                                        |
 | StepEvent                  | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeStepsState](#ConsumeStepsState)                                                |
