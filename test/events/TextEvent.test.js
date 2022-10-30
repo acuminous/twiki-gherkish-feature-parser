@@ -13,8 +13,8 @@ describe('TextEvent', () => {
     const state = new StubState();
     const event = new TextEvent();
 
-    eq(event.handle({ line: 'some text' }, session, state), true);
-    eq(event.handle({ line: ' some text ' }, session, state), true);
+    eq(event.interpret({ line: 'some text' }, session, state), true);
+    eq(event.interpret({ line: ' some text ' }, session, state), true);
   });
 
   it('should recognise localised text', () => {
@@ -22,12 +22,12 @@ describe('TextEvent', () => {
     const state = new StubState();
     const event = new TextEvent();
 
-    eq(event.handle({ line: 'Given some text' }, session, state), true);
-    eq(event.handle({ line: 'When some text' }, session, state), true);
-    eq(event.handle({ line: 'Then some text' }, session, state), true);
-    eq(event.handle({ line: 'And some text' }, session, state), true);
-    eq(event.handle({ line: '  Given some text  ' }, session, state), true);
-    eq(event.handle({ line: 'some text' }, session, state), true);
+    eq(event.interpret({ line: 'Given some text' }, session, state), true);
+    eq(event.interpret({ line: 'When some text' }, session, state), true);
+    eq(event.interpret({ line: 'Then some text' }, session, state), true);
+    eq(event.interpret({ line: 'And some text' }, session, state), true);
+    eq(event.interpret({ line: '  Given some text  ' }, session, state), true);
+    eq(event.interpret({ line: 'some text' }, session, state), true);
   });
 
   it('should handle text', () => {
@@ -40,7 +40,7 @@ describe('TextEvent', () => {
     });
     const event = new TextEvent();
 
-    event.handle({ line: '  some text  ', number: 1 }, { ...session, indentation: 0 }, state);
+    event.interpret({ line: '  some text  ', number: 1 }, { ...session, indentation: 0 }, state);
 
     eq(state.count, 1);
   });

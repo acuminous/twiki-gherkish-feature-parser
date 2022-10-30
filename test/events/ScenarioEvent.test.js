@@ -13,12 +13,12 @@ describe('ScenarioEvent', () => {
     const state = new StubState();
     const event = new ScenarioEvent();
 
-    eq(event.handle({ line: 'scenario: Some scenario' }, session, state), true);
-    eq(event.handle({ line: 'Scenario: Some scenario' }, session, state), true);
-    eq(event.handle({ line: '  Scenario  : Some scenario  ' }, session, state), true);
-    eq(event.handle({ line: 'Scenario  :' }, session, state), true);
+    eq(event.interpret({ line: 'scenario: Some scenario' }, session, state), true);
+    eq(event.interpret({ line: 'Scenario: Some scenario' }, session, state), true);
+    eq(event.interpret({ line: '  Scenario  : Some scenario  ' }, session, state), true);
+    eq(event.interpret({ line: 'Scenario  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Scenario' }, session, state), false);
+    eq(event.interpret({ line: 'Scenario' }, session, state), false);
   });
 
   it('should recognise localised scenarios', () => {
@@ -26,12 +26,12 @@ describe('ScenarioEvent', () => {
     const state = new StubState();
     const event = new ScenarioEvent();
 
-    eq(event.handle({ line: 'sortie: Some scenario' }, session, state), true);
-    eq(event.handle({ line: 'Sortie: Some scenario' }, session, state), true);
-    eq(event.handle({ line: '  Sortie  : Some scenario  ' }, session, state), true);
-    eq(event.handle({ line: 'Sortie  :' }, session, state), true);
+    eq(event.interpret({ line: 'sortie: Some scenario' }, session, state), true);
+    eq(event.interpret({ line: 'Sortie: Some scenario' }, session, state), true);
+    eq(event.interpret({ line: '  Sortie  : Some scenario  ' }, session, state), true);
+    eq(event.interpret({ line: 'Sortie  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Scenario' }, session, state), false);
+    eq(event.interpret({ line: 'Scenario' }, session, state), false);
   });
 
   it('should handle scenarios', () => {
@@ -44,7 +44,7 @@ describe('ScenarioEvent', () => {
     });
     const event = new ScenarioEvent();
 
-    event.handle({ line: 'Scenario:  Some scenario ', number: 1 }, session, state);
+    event.interpret({ line: 'Scenario:  Some scenario ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

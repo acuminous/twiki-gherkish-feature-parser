@@ -17,7 +17,7 @@ describe('MissingEventHandlerEvent', () => {
     const state = new StubState();
     const event = new MissingEventHandlerEvent();
 
-    eq(event.handle({ line: 'anything' }, session, state), true);
+    eq(event.interpret({ line: 'anything' }, session, state), true);
   });
 
   it('should handle anything', () => {
@@ -29,7 +29,7 @@ describe('MissingEventHandlerEvent', () => {
     });
     const event = new MissingEventHandlerEvent();
 
-    event.handle({ line: 'anything', number: 1 }, session, state);
+    event.interpret({ line: 'anything', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

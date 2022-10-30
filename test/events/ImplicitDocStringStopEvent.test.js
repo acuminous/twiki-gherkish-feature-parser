@@ -23,7 +23,7 @@ describe('ImplicitDocStringStopEvent', () => {
     const event = new ImplicitDocStringStopEvent();
 
     session.docstring = { indentation: 6 };
-    event.handle({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
+    event.interpret({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
 
     eq(session.docstring, undefined);
     eq(state.count, 1);
@@ -34,14 +34,14 @@ describe('ImplicitDocStringStopEvent', () => {
     const event = new ImplicitDocStringStopEvent();
 
     session.docstring = { indentation: 6 };
-    eq(event.handle({ line: '   some text   ', indentation: 6 }, session, state), false);
+    eq(event.interpret({ line: '   some text   ', indentation: 6 }, session, state), false);
   });
 
   it('should do nothing when not handling an indented docstring', () => {
     const state = new StubState();
     const event = new ImplicitDocStringStopEvent();
 
-    eq(event.handle({ line: '   some text   ', indentation: 3 }, session, state), false);
+    eq(event.interpret({ line: '   some text   ', indentation: 3 }, session, state), false);
   });
 
   it('should do nothing when already handling an explicit docstring', () => {
@@ -49,6 +49,6 @@ describe('ImplicitDocStringStopEvent', () => {
     const event = new ImplicitDocStringStopEvent();
 
     session.docstring = { token: {} };
-    eq(event.handle({ line: '   some text   ', indentation: 3 }, session, state), false);
+    eq(event.interpret({ line: '   some text   ', indentation: 3 }, session, state), false);
   });
 });

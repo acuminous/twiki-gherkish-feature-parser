@@ -13,17 +13,17 @@ describe('ExampleTableHeaderRowEvent', () => {
     const state = new StubState();
     const event = new ExampleTableHeaderRowEvent();
 
-    eq(event.handle({ line: '| a |' }, session, state), true);
-    eq(event.handle({ line: '  | a |  ' }, session, state), true);
-    eq(event.handle({ line: '|   a   |' }, session, state), true);
-    eq(event.handle({ line: '| a | b | c |' }, session, state), true);
-    eq(event.handle({ line: '| abc |' }, session, state), true);
-    eq(event.handle({ line: '| a b c |' }, session, state), true);
+    eq(event.interpret({ line: '| a |' }, session, state), true);
+    eq(event.interpret({ line: '  | a |  ' }, session, state), true);
+    eq(event.interpret({ line: '|   a   |' }, session, state), true);
+    eq(event.interpret({ line: '| a | b | c |' }, session, state), true);
+    eq(event.interpret({ line: '| abc |' }, session, state), true);
+    eq(event.interpret({ line: '| a b c |' }, session, state), true);
 
-    eq(event.handle({ line: '|' }, session, state), false);
-    eq(event.handle({ line: '| a' }, session, state), false);
-    eq(event.handle({ line: '| a | b' }, session, state), false);
-    eq(event.handle({ line: 'a | b' }, session, state), false);
+    eq(event.interpret({ line: '|' }, session, state), false);
+    eq(event.interpret({ line: '| a' }, session, state), false);
+    eq(event.interpret({ line: '| a | b' }, session, state), false);
+    eq(event.interpret({ line: 'a | b' }, session, state), false);
   });
 
   it('should handle single column example table header row', () => {
@@ -36,7 +36,7 @@ describe('ExampleTableHeaderRowEvent', () => {
     });
     const event = new ExampleTableHeaderRowEvent();
 
-    event.handle({ line: '| a |', number: 1 }, session, state);
+    event.interpret({ line: '| a |', number: 1 }, session, state);
 
     eq(state.count, 1);
   });
@@ -51,7 +51,7 @@ describe('ExampleTableHeaderRowEvent', () => {
     });
     const event = new ExampleTableHeaderRowEvent();
 
-    event.handle({ line: '| a | b | cde |', number: 1 }, session, state);
+    event.interpret({ line: '| a | b | cde |', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

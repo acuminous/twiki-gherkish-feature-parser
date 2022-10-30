@@ -32,53 +32,53 @@ describe('ScenarioStepsState', () => {
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
-      handle('@foo=bar');
+      interpret('@foo=bar');
       eq(machine.state, 'ScenarioStepsState');
     });
   });
 
   describe('A background', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Background: Meh'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Background: Meh'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'ScenarioStepsState');
     });
   });
 
   describe('A block comment', () => {
     it('should cause a transition to BlockCommentState', () => {
-      handle('###');
+      interpret('###');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('An example table', () => {
     it('should cause a transition to CreateScenarioExampleTableState', () => {
-      handle('Where:');
+      interpret('Where:');
       eq(machine.state, 'CreateScenarioExampleTableState');
     });
   });
 
   describe('An explicit docstring', () => {
     it('should cause a transition to CreateScenarioStepExplicitDocStringState', () => {
-      handle('---');
+      interpret('---');
       eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
     });
   });
 
   describe('An implicit docstring', () => {
     it('should cause a transition to CreateScenarioStepImplicitDocStringState', () => {
-      handle('   some text');
+      interpret('   some text');
       eq(machine.state, 'CreateScenarioStepImplicitDocStringState');
     });
 
     it('should capture docstrings', () => {
-      handle('   some text');
+      interpret('   some text');
       const exported = machine.build();
       eq(exported.scenarios[0].steps[0].docstring, 'some text');
     });
@@ -86,32 +86,32 @@ describe('ScenarioStepsState', () => {
 
   describe('The end of the feature', () => {
     it('should cause a transition to FinalState', () => {
-      handle('\u0000');
+      interpret('\u0000');
       eq(machine.state, 'FinalState');
     });
   });
 
   describe('A feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Feature: Meh'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Feature: Meh'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
-      handle('#');
+      interpret('#');
       eq(machine.state, 'ScenarioStepsState');
     });
   });
 
   describe('A scenario', () => {
     it('should cause a transition to ScenarioState', () => {
-      handle('Scenario: foo');
+      interpret('Scenario: foo');
       eq(machine.state, 'ScenarioState');
     });
 
     it('should be captured without annotations', () => {
-      handle('Scenario: Second scenario');
+      interpret('Scenario: Second scenario');
 
       const exported = machine.build();
       eq(exported.scenarios.length, 2);
@@ -120,9 +120,9 @@ describe('ScenarioStepsState', () => {
     });
 
     it('should be captured with annotations', () => {
-      handle('@one=1');
-      handle('@two=2');
-      handle('Scenario: Second scenario');
+      interpret('@one=1');
+      interpret('@two=2');
+      interpret('Scenario: Second scenario');
 
       const exported = machine.build();
       eq(exported.scenarios.length, 2);
@@ -136,12 +136,12 @@ describe('ScenarioStepsState', () => {
 
   describe('A line of text', () => {
     it('should cause a transition to ScenarioStepsState', () => {
-      handle('Second step');
+      interpret('Second step');
       eq(machine.state, 'ScenarioStepsState');
     });
 
     it('should be captured without annotations', () => {
-      handle('Second step');
+      interpret('Second step');
 
       const exported = machine.build();
 
@@ -151,9 +151,9 @@ describe('ScenarioStepsState', () => {
     });
 
     it('should be captured with annotations', () => {
-      handle('@one=1');
-      handle('@two=2');
-      handle('Bah');
+      interpret('@one=1');
+      interpret('@two=2');
+      interpret('Bah');
 
       const exported = machine.build();
       eq(exported.scenarios[0].steps[1].annotations.length, 2);
@@ -162,7 +162,7 @@ describe('ScenarioStepsState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
+  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
     machine.interpret({ line, number, indentation });
   }
 });

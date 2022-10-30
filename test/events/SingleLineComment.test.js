@@ -17,12 +17,12 @@ describe('SingleLineCommentEvent', () => {
     const state = new StubState();
     const event = new SingleLineCommentEvent();
 
-    eq(event.handle({ line: '# Some comment' }, session, state), true);
-    eq(event.handle({ line: ' # Some comment' }, session, state), true);
-    eq(event.handle({ line: '#' }, session, state), true);
-    eq(event.handle({ line: '## Some comment' }, session, state), true);
+    eq(event.interpret({ line: '# Some comment' }, session, state), true);
+    eq(event.interpret({ line: ' # Some comment' }, session, state), true);
+    eq(event.interpret({ line: '#' }, session, state), true);
+    eq(event.interpret({ line: '## Some comment' }, session, state), true);
 
-    eq(event.handle({ line: 'No commment' }, session, state), false);
+    eq(event.interpret({ line: 'No commment' }, session, state), false);
   });
 
   it('should handle single line comments', () => {
@@ -34,7 +34,7 @@ describe('SingleLineCommentEvent', () => {
     });
     const event = new SingleLineCommentEvent();
 
-    event.handle({ line: '# Some comment ', number: 1 }, session, state);
+    event.interpret({ line: '# Some comment ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

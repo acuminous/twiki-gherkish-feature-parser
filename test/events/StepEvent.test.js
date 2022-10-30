@@ -13,8 +13,8 @@ describe('StepEvent', () => {
     const state = new StubState();
     const event = new StepEvent();
 
-    eq(event.handle({ line: 'Some step' }, session, state), true);
-    eq(event.handle({ line: ' Some step ' }, session, state), true);
+    eq(event.interpret({ line: 'Some step' }, session, state), true);
+    eq(event.interpret({ line: ' Some step ' }, session, state), true);
   });
 
   it('should recognise localised steps', () => {
@@ -22,11 +22,11 @@ describe('StepEvent', () => {
     const state = new StubState();
     const event = new StepEvent();
 
-    eq(event.handle({ line: 'Given some step' }, session, state), true);
-    eq(event.handle({ line: 'When some step' }, session, state), true);
-    eq(event.handle({ line: 'Then some step' }, session, state), true);
-    eq(event.handle({ line: 'And some step' }, session, state), true);
-    eq(event.handle({ line: '  Given some step  ' }, session, state), true);
+    eq(event.interpret({ line: 'Given some step' }, session, state), true);
+    eq(event.interpret({ line: 'When some step' }, session, state), true);
+    eq(event.interpret({ line: 'Then some step' }, session, state), true);
+    eq(event.interpret({ line: 'And some step' }, session, state), true);
+    eq(event.interpret({ line: '  Given some step  ' }, session, state), true);
   });
 
   it('should recognise unlocalised steps', () => {
@@ -34,8 +34,8 @@ describe('StepEvent', () => {
     const state = new StubState();
     const event = new StepEvent();
 
-    eq(event.handle({ line: 'some text' }, session, state), true);
-    eq(event.handle({ line: ' some text ' }, session, state), true);
+    eq(event.interpret({ line: 'some text' }, session, state), true);
+    eq(event.interpret({ line: ' some text ' }, session, state), true);
   });
 
   it('should handle localised steps', () => {
@@ -48,7 +48,7 @@ describe('StepEvent', () => {
     });
     const event = new StepEvent();
 
-    event.handle({ line: ' Given some step  ', number: 1 }, session, state);
+    event.interpret({ line: ' Given some step  ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });
@@ -63,7 +63,7 @@ describe('StepEvent', () => {
     });
 
     const event = new StepEvent();
-    event.handle({ line: '  Some step  ', number: 1 }, session, state);
+    event.interpret({ line: '  Some step  ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

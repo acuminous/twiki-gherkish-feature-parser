@@ -28,65 +28,65 @@ describe('InitialState', () => {
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
-      handle('@foo=bar');
+      interpret('@foo=bar');
       eq(machine.state, 'InitialState');
     });
   });
 
   describe('A background', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'InitialState');
     });
   });
 
   describe('An explicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An implicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => handle('   some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('   some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An example table', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A feature', () => {
     it('should cause a transition to FeatureState', () => {
-      handle('Feature: foo');
+      interpret('Feature: foo');
       eq(machine.state, 'FeatureState');
     });
 
     it('should be caputed without annotations', () => {
-      handle('Feature: Some feature');
+      interpret('Feature: Some feature');
 
       const exported = featureBuilder.build();
       eq(exported.title, 'Some feature');
     });
 
     it('should be captured with annotations', () => {
-      handle('@one = 1');
-      handle('@two = 2');
-      handle('Feature: First scenario');
+      interpret('@one = 1');
+      interpret('@two = 2');
+      interpret('Feature: First scenario');
 
       const exported = featureBuilder.build();
       eq(exported.annotations.length, 2);
@@ -97,31 +97,31 @@ describe('InitialState', () => {
 
   describe('A block comment delimiter', () => {
     it('should cause a transition to BlockCommentState', () => {
-      handle('###');
+      interpret('###');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
-      handle('# foo');
+      interpret('# foo');
       eq(machine.state, 'InitialState');
     });
   });
 
   describe('A scenario', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Scenario: foo'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Scenario: foo'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A line of text', () => {
     it('should be unexpected', () => {
-      throws(() => handle('some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
+    state.interpret({ line, number, indentation }, session);
   }
 });

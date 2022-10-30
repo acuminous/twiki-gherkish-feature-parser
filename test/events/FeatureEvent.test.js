@@ -13,12 +13,12 @@ describe('FeatureEvent', () => {
     const state = new StubState();
     const event = new FeatureEvent();
 
-    eq(event.handle({ line: 'feature: Some feature' }, session, state), true);
-    eq(event.handle({ line: 'Feature: Some feature' }, session, state), true);
-    eq(event.handle({ line: '  Feature  : Some feature  ' }, session, state), true);
-    eq(event.handle({ line: 'Feature  :' }, session, state), true);
+    eq(event.interpret({ line: 'feature: Some feature' }, session, state), true);
+    eq(event.interpret({ line: 'Feature: Some feature' }, session, state), true);
+    eq(event.interpret({ line: '  Feature  : Some feature  ' }, session, state), true);
+    eq(event.interpret({ line: 'Feature  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Feature' }, session, state), false);
+    eq(event.interpret({ line: 'Feature' }, session, state), false);
   });
 
   it('should recognise localised features', () => {
@@ -26,12 +26,12 @@ describe('FeatureEvent', () => {
     const state = new StubState();
     const event = new FeatureEvent();
 
-    eq(event.handle({ line: 'yarn: Some feature' }, session, state), true);
-    eq(event.handle({ line: 'Yarn: Some feature' }, session, state), true);
-    eq(event.handle({ line: '  Yarn  : Some feature  ' }, session, state), true);
-    eq(event.handle({ line: 'Yarn  :' }, session, state), true);
+    eq(event.interpret({ line: 'yarn: Some feature' }, session, state), true);
+    eq(event.interpret({ line: 'Yarn: Some feature' }, session, state), true);
+    eq(event.interpret({ line: '  Yarn  : Some feature  ' }, session, state), true);
+    eq(event.interpret({ line: 'Yarn  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Yarn' }, session, state), false);
+    eq(event.interpret({ line: 'Yarn' }, session, state), false);
   });
 
   it('should handle features', () => {
@@ -44,7 +44,7 @@ describe('FeatureEvent', () => {
     });
     const event = new FeatureEvent();
 
-    event.handle({ line: 'Feature:  Some feature ', number: 1 }, session, state);
+    event.interpret({ line: 'Feature:  Some feature ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

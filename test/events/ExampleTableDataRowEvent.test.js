@@ -13,19 +13,19 @@ describe('ExampleTableDataRowEvent', () => {
     const state = new StubState();
     const event = new ExampleTableDataRowEvent();
 
-    eq(event.handle({ line: '|a|' }, session, state), true);
-    eq(event.handle({ line: '| a |' }, session, state), true);
-    eq(event.handle({ line: '  |   a   |  ' }, session, state), true);
-    eq(event.handle({ line: '| abc |' }, session, state), true);
-    eq(event.handle({ line: '| a c |' }, session, state), true);
-    eq(event.handle({ line: '| a | b | c |' }, session, state), true);
-    eq(event.handle({ line: '| \u00A0a\u00A0 |' }, session, state), true);
+    eq(event.interpret({ line: '|a|' }, session, state), true);
+    eq(event.interpret({ line: '| a |' }, session, state), true);
+    eq(event.interpret({ line: '  |   a   |  ' }, session, state), true);
+    eq(event.interpret({ line: '| abc |' }, session, state), true);
+    eq(event.interpret({ line: '| a c |' }, session, state), true);
+    eq(event.interpret({ line: '| a | b | c |' }, session, state), true);
+    eq(event.interpret({ line: '| \u00A0a\u00A0 |' }, session, state), true);
 
-    eq(event.handle({ line: '|' }, session, state), false);
-    eq(event.handle({ line: '| |' }, session, state), false);
-    eq(event.handle({ line: '| a' }, session, state), false);
-    eq(event.handle({ line: '| a | b c | |' }, session, state), false);
-    eq(event.handle({ line: 'a |' }, session, state), false);
+    eq(event.interpret({ line: '|' }, session, state), false);
+    eq(event.interpret({ line: '| |' }, session, state), false);
+    eq(event.interpret({ line: '| a' }, session, state), false);
+    eq(event.interpret({ line: '| a | b c | |' }, session, state), false);
+    eq(event.interpret({ line: 'a |' }, session, state), false);
   });
 
   it('should handle example table data row', () => {
@@ -38,7 +38,7 @@ describe('ExampleTableDataRowEvent', () => {
     });
     const event = new ExampleTableDataRowEvent();
 
-    event.handle({ line: '   |  a  | b c | d |  ', number: 1 }, session, state);
+    event.interpret({ line: '   |  a  | b c | d |  ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });
@@ -53,7 +53,7 @@ describe('ExampleTableDataRowEvent', () => {
     });
     const event = new ExampleTableDataRowEvent();
 
-    event.handle({ line: '   | \u00A0a\u00A0 | \u00A0b c\u00A0 | \u00A0d\u00A0 |  ', number: 1 }, session, state);
+    event.interpret({ line: '   | \u00A0a\u00A0 | \u00A0b c\u00A0 | \u00A0d\u00A0 |  ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

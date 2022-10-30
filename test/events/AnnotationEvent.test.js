@@ -17,14 +17,14 @@ describe('AnnotationEvent', () => {
     const state = new StubState();
     const event = new AnnotationEvent();
 
-    eq(event.handle({ line: '@skip' }, session, state), true);
-    eq(event.handle({ line: '@name=value ' }, session, state), true);
-    eq(event.handle({ line: ' @skip ' }, session, state), true);
-    eq(event.handle({ line: ' @name = value ' }, session, state), true);
+    eq(event.interpret({ line: '@skip' }, session, state), true);
+    eq(event.interpret({ line: '@name=value ' }, session, state), true);
+    eq(event.interpret({ line: ' @skip ' }, session, state), true);
+    eq(event.interpret({ line: ' @name = value ' }, session, state), true);
 
-    eq(event.handle({ line: 'skip' }, session, state), false);
-    eq(event.handle({ line: 'name=value' }, session, state), false);
-    eq(event.handle({ line: 'email@example.com' }, session, state), false);
+    eq(event.interpret({ line: 'skip' }, session, state), false);
+    eq(event.interpret({ line: 'name=value' }, session, state), false);
+    eq(event.interpret({ line: 'email@example.com' }, session, state), false);
   });
 
   it('should handle simple annotations', () => {
@@ -37,7 +37,7 @@ describe('AnnotationEvent', () => {
     });
     const event = new AnnotationEvent();
 
-    event.handle({ line: '@skip', number: 1 }, session, state);
+    event.interpret({ line: '@skip', number: 1 }, session, state);
 
     eq(state.count, 1);
   });
@@ -52,7 +52,7 @@ describe('AnnotationEvent', () => {
     });
     const event = new AnnotationEvent();
 
-    event.handle({ line: '@foo=bar', number: 1 }, session, state);
+    event.interpret({ line: '@foo=bar', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

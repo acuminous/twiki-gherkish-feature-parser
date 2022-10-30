@@ -13,11 +13,11 @@ describe('ExampleTableEvent', () => {
     const state = new StubState();
     const event = new ExampleTableEvent();
 
-    eq(event.handle({ line: 'Examples:' }, session, state), true);
-    eq(event.handle({ line: '  Examples  :  ' }, session, state), true);
-    eq(event.handle({ line: 'Examples  :' }, session, state), true);
+    eq(event.interpret({ line: 'Examples:' }, session, state), true);
+    eq(event.interpret({ line: '  Examples  :  ' }, session, state), true);
+    eq(event.interpret({ line: 'Examples  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Examples' }, session, state), false);
+    eq(event.interpret({ line: 'Examples' }, session, state), false);
   });
 
   it('should recognise localised examples', () => {
@@ -25,11 +25,11 @@ describe('ExampleTableEvent', () => {
     const state = new StubState();
     const event = new ExampleTableEvent();
 
-    eq(event.handle({ line: 'Wherest:' }, session, state), true);
-    eq(event.handle({ line: '  Wherest  :  ' }, session, state), true);
-    eq(event.handle({ line: 'Wherest  :' }, session, state), true);
+    eq(event.interpret({ line: 'Wherest:' }, session, state), true);
+    eq(event.interpret({ line: '  Wherest  :  ' }, session, state), true);
+    eq(event.interpret({ line: 'Wherest  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Wherest' }, session, state), false);
+    eq(event.interpret({ line: 'Wherest' }, session, state), false);
   });
 
   it('should handle examples', () => {
@@ -41,7 +41,7 @@ describe('ExampleTableEvent', () => {
     });
     const event = new ExampleTableEvent();
 
-    event.handle({ line: 'Where:', number: 1 }, session, state);
+    event.interpret({ line: 'Where:', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

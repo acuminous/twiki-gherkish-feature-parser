@@ -13,15 +13,15 @@ describe('ExampleTableSeparatorRowEvent', () => {
     const state = new StubState();
     const event = new ExampleTableSeparatorRowEvent();
 
-    eq(event.handle({ line: '|-|' }, session, state), true);
-    eq(event.handle({ line: '  |-|  ' }, session, state), true);
-    eq(event.handle({ line: '|---|' }, session, state), true);
-    eq(event.handle({ line: '|---|-|---|' }, session, state), true);
+    eq(event.interpret({ line: '|-|' }, session, state), true);
+    eq(event.interpret({ line: '  |-|  ' }, session, state), true);
+    eq(event.interpret({ line: '|---|' }, session, state), true);
+    eq(event.interpret({ line: '|---|-|---|' }, session, state), true);
 
-    eq(event.handle({ line: '|' }, session, state), false);
-    eq(event.handle({ line: '| - |' }, session, state), false);
-    eq(event.handle({ line: '|- -|' }, session, state), false);
-    eq(event.handle({ line: '---|---' }, session, state), false);
+    eq(event.interpret({ line: '|' }, session, state), false);
+    eq(event.interpret({ line: '| - |' }, session, state), false);
+    eq(event.interpret({ line: '|- -|' }, session, state), false);
+    eq(event.interpret({ line: '---|---' }, session, state), false);
   });
 
   it('should handle example table separator row', () => {
@@ -34,7 +34,7 @@ describe('ExampleTableSeparatorRowEvent', () => {
     });
     const event = new ExampleTableSeparatorRowEvent();
 
-    event.handle({ line: '   |---|---|---|', number: 1 }, session, state);
+    event.interpret({ line: '   |---|---|---|', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

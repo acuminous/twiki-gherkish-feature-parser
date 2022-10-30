@@ -13,12 +13,12 @@ describe('BackgroundEvent', () => {
     const state = new StubState();
     const event = new BackgroundEvent();
 
-    eq(event.handle({ line: 'background: Some background' }, session, state), true);
-    eq(event.handle({ line: 'Background: Some background' }, session, state), true);
-    eq(event.handle({ line: '  Background  : Some background  ' }, session, state), true);
-    eq(event.handle({ line: 'Background  :' }, session, state), true);
+    eq(event.interpret({ line: 'background: Some background' }, session, state), true);
+    eq(event.interpret({ line: 'Background: Some background' }, session, state), true);
+    eq(event.interpret({ line: '  Background  : Some background  ' }, session, state), true);
+    eq(event.interpret({ line: 'Background  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Background' }, session, state), false);
+    eq(event.interpret({ line: 'Background' }, session, state), false);
   });
 
   it('should recognise localised backgrounds', () => {
@@ -26,12 +26,12 @@ describe('BackgroundEvent', () => {
     const state = new StubState();
     const event = new BackgroundEvent();
 
-    eq(event.handle({ line: 'Lore: Some background' }, session, state), true);
-    eq(event.handle({ line: 'Lore: Some background' }, session, state), true);
-    eq(event.handle({ line: '  Lore  : Some background  ' }, session, state), true);
-    eq(event.handle({ line: 'Lore  :' }, session, state), true);
+    eq(event.interpret({ line: 'Lore: Some background' }, session, state), true);
+    eq(event.interpret({ line: 'Lore: Some background' }, session, state), true);
+    eq(event.interpret({ line: '  Lore  : Some background  ' }, session, state), true);
+    eq(event.interpret({ line: 'Lore  :' }, session, state), true);
 
-    eq(event.handle({ line: 'Lore' }, session, state), false);
+    eq(event.interpret({ line: 'Lore' }, session, state), false);
   });
 
   it('should handle backgrounds', () => {
@@ -44,7 +44,7 @@ describe('BackgroundEvent', () => {
     });
     const event = new BackgroundEvent();
 
-    event.handle({ line: 'Background:  Some background ', number: 1 }, session, state);
+    event.interpret({ line: 'Background:  Some background ', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

@@ -22,8 +22,8 @@ describe('DocStringTextEvent', () => {
     const state = new StubState();
     const event = new DocStringTextEvent();
 
-    eq(event.handle({ line: 'some text' }, session, state), true);
-    eq(event.handle({ line: ' some text ' }, session, state), true);
+    eq(event.interpret({ line: 'some text' }, session, state), true);
+    eq(event.interpret({ line: ' some text ' }, session, state), true);
   });
 
   it('should handle docstrings', () => {
@@ -35,7 +35,7 @@ describe('DocStringTextEvent', () => {
     });
     const event = new DocStringTextEvent();
 
-    event.handle({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
+    event.interpret({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
 
     eq(state.count, 1);
   });

@@ -16,30 +16,30 @@ describe('ExplicitDocStringStartEvent', () => {
   it('should recognise explicit docstrings', () => {
     const state = new StubState();
     const event = new ExplicitDocStringStartEvent();
-    eq(event.handle({ line: '---' }, session, state), true);
+    eq(event.interpret({ line: '---' }, session, state), true);
     delete session.docstring;
-    eq(event.handle({ line: ' --- ' }, session, state), true);
+    eq(event.interpret({ line: ' --- ' }, session, state), true);
     delete session.docstring;
-    eq(event.handle({ line: ' ------ ' }, session, state), true);
+    eq(event.interpret({ line: ' ------ ' }, session, state), true);
     delete session.docstring;
-    eq(event.handle({ line: '"""' }, session, state), true);
+    eq(event.interpret({ line: '"""' }, session, state), true);
     delete session.docstring;
-    eq(event.handle({ line: ' """ ' }, session, state), true);
+    eq(event.interpret({ line: ' """ ' }, session, state), true);
     delete session.docstring;
-    eq(event.handle({ line: ' """""" ' }, session, state), true);
+    eq(event.interpret({ line: ' """""" ' }, session, state), true);
     delete session.docstring;
 
-    eq(event.handle({ line: '-' }, session, state), false);
+    eq(event.interpret({ line: '-' }, session, state), false);
     delete session.docstring;
-    eq(event.handle({ line: '--' }, session, state), false);
+    eq(event.interpret({ line: '--' }, session, state), false);
     delete session.docstring;
-    eq(event.handle({ line: '--- not a doc string' }, session, state), false);
+    eq(event.interpret({ line: '--- not a doc string' }, session, state), false);
     delete session.docstring;
-    eq(event.handle({ line: '"' }, session, state), false);
+    eq(event.interpret({ line: '"' }, session, state), false);
     delete session.docstring;
-    eq(event.handle({ line: '""' }, session, state), false);
+    eq(event.interpret({ line: '""' }, session, state), false);
     delete session.docstring;
-    eq(event.handle({ line: '""" not a doc string' }, session, state), false);
+    eq(event.interpret({ line: '""" not a doc string' }, session, state), false);
     delete session.docstring;
   });
 
@@ -48,8 +48,8 @@ describe('ExplicitDocStringStartEvent', () => {
     const event = new ExplicitDocStringStartEvent();
 
     session.docstring = {};
-    eq(event.handle({ line: '---' }, session, state), false);
-    eq(event.handle({ line: '"""' }, session, state), false);
+    eq(event.interpret({ line: '---' }, session, state), false);
+    eq(event.interpret({ line: '"""' }, session, state), false);
   });
 
   it('should handle --- docstrings', () => {
@@ -61,7 +61,7 @@ describe('ExplicitDocStringStartEvent', () => {
     });
     const event = new ExplicitDocStringStartEvent();
 
-    event.handle({ line: '   ---   ', indentation: 3, number: 1 }, session, state);
+    event.interpret({ line: '   ---   ', indentation: 3, number: 1 }, session, state);
 
     eq(session.docstring.token, '---');
     eq(state.count, 1);
@@ -76,7 +76,7 @@ describe('ExplicitDocStringStartEvent', () => {
     });
     const event = new ExplicitDocStringStartEvent();
 
-    event.handle({ line: '   """   ', indentation: 3, number: 1 }, session, state);
+    event.interpret({ line: '   """   ', indentation: 3, number: 1 }, session, state);
 
     eq(session.docstring.token, '"""');
     eq(state.count, 1);

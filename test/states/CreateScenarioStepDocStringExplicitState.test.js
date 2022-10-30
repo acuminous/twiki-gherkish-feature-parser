@@ -31,32 +31,32 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'ConsumeScenarioStepExplicitDocStringState');
     });
   });
 
   describe('A docstring token', () => {
     it('be unexpected', () => {
-      throws(() => handle('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
-      handle('some text');
+      interpret('some text');
       eq(machine.state, 'ConsumeScenarioStepExplicitDocStringState');
     });
 
     it('should be captured', () => {
-      handle('some text');
-      handle('some more text');
+      interpret('some text');
+      interpret('some more text');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
@@ -65,19 +65,19 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
 
   describe('An indented line of text', () => {
     it('should not cause a state transition', () => {
-      handle('   some text');
+      interpret('   some text');
       eq(machine.state, 'ConsumeScenarioStepExplicitDocStringState');
     });
 
     it('should be captured', () => {
-      handle('   some text');
+      interpret('   some text');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, '   some text');
     });
   });
 
-  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
+    state.interpret({ line, number, indentation }, session);
   }
 });

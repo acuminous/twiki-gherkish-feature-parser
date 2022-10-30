@@ -17,10 +17,10 @@ describe('BlankLineEvent', () => {
     const state = new StubState();
     const event = new BlankLineEvent();
 
-    eq(event.handle({ line: '' }, session, state), true);
-    eq(event.handle({ line: '   ' }, session, state), true);
+    eq(event.interpret({ line: '' }, session, state), true);
+    eq(event.interpret({ line: '   ' }, session, state), true);
 
-    eq(event.handle({ line: 'Not Blank' }, session, state), false);
+    eq(event.interpret({ line: 'Not Blank' }, session, state), false);
   });
 
   it('should handle blank lines', () => {
@@ -32,7 +32,7 @@ describe('BlankLineEvent', () => {
     });
     const event = new BlankLineEvent();
 
-    event.handle({ line: '', number: 1 }, session, state);
+    event.interpret({ line: '', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

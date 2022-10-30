@@ -17,10 +17,10 @@ describe('EndEvent', () => {
     const state = new StubState();
     const event = new EndEvent();
 
-    eq(event.handle({ line: '\u0000' }, session, state), true);
+    eq(event.interpret({ line: '\u0000' }, session, state), true);
 
-    eq(event.handle({ line: ' \u0000' }, session, state), false);
-    eq(event.handle({ line: '\u0000 ' }, session, state), false);
+    eq(event.interpret({ line: ' \u0000' }, session, state), false);
+    eq(event.interpret({ line: '\u0000 ' }, session, state), false);
   });
 
   it('should handle end of feature', () => {
@@ -32,7 +32,7 @@ describe('EndEvent', () => {
     });
     const event = new EndEvent();
 
-    event.handle({ line: '\u0000', number: 1 }, session, state);
+    event.interpret({ line: '\u0000', number: 1 }, session, state);
 
     eq(state.count, 1);
   });

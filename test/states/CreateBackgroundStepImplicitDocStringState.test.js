@@ -29,12 +29,12 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
 
   describe('A blank line indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
-      handle('   ');
+      interpret('   ');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
-      handle('   ');
+      interpret('   ');
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, '');
     });
@@ -42,12 +42,12 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
 
   describe('A blank line indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
-      handle('      ');
+      interpret('      ');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
-      handle('      ');
+      interpret('      ');
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, '   ');
     });
@@ -55,12 +55,12 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
 
   describe('A blank line outdated to the original depth', () => {
     it('should cause a transition to AfterBackgroundStepDocStringState', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });
 
     it('should not be captured on the docstring', () => {
-      handle('');
+      interpret('');
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, null);
     });
@@ -68,12 +68,12 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
 
   describe('A docstring token indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
-      handle('   ---');
+      interpret('   ---');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
-      handle('   ---');
+      interpret('   ---');
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, '---');
     });
@@ -81,12 +81,12 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
 
   describe('A docstring token indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
-      handle('      ---');
+      interpret('      ---');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
-      handle('      ---');
+      interpret('      ---');
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, '   ---');
     });
@@ -94,31 +94,31 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
 
   describe('A docstring token outdented to the original depth', () => {
     it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should cause a transition to FinalState', () => {
-      handle('\u0000');
+      interpret('\u0000');
       eq(machine.state, 'FinalState');
     });
   });
 
   describe('A line of text indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
-      handle('   some text');
+      interpret('   some text');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
     });
 
     it('should be captured on the docstring', () => {
-      handle('   some text');
+      interpret('   some text');
       const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 
-  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
+  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
     machine.interpret({ line, number, indentation });
   }
 });

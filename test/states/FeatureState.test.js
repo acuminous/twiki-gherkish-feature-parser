@@ -34,21 +34,21 @@ describe('FeatureState', () => {
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
-      handle('@foo=bar');
+      interpret('@foo=bar');
       eq(machine.state, 'FeatureState');
     });
   });
 
   describe('A background', () => {
     it('should cause a transition to BackgroundState', () => {
-      handle('Background: foo');
+      interpret('Background: foo');
       eq(machine.state, 'BackgroundState');
     });
 
     it('should capture backgrounds with annotations', () => {
-      handle('@one=1');
-      handle('@two=2');
-      handle('Background: First background');
+      interpret('@one=1');
+      interpret('@two=2');
+      interpret('Background: First background');
 
       const exported = featureBuilder.build();
       eq(exported.background.annotations.length, 2);
@@ -61,57 +61,57 @@ describe('FeatureState', () => {
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'FeatureState');
     });
   });
 
   describe('A block comment delimiter', () => {
     it('should cause a transition to BlockCommentState', () => {
-      handle('###');
+      interpret('###');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('An example table', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An explicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
-      handle('# Some comment');
+      interpret('# Some comment');
       eq(machine.state, 'FeatureState');
     });
   });
 
   describe('A scenario', () => {
     it('should cause a transition to ScenarioState', () => {
-      handle('Scenario: First scenario');
+      interpret('Scenario: First scenario');
       eq(machine.state, 'ScenarioState');
     });
 
     it('should be captured without annotations', () => {
-      handle('Scenario: First scenario');
+      interpret('Scenario: First scenario');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
@@ -119,9 +119,9 @@ describe('FeatureState', () => {
     });
 
     it('should be captured with annotations', () => {
-      handle('@one=1');
-      handle('@two=2');
-      handle('Scenario: First scenario');
+      interpret('@one=1');
+      interpret('@two=2');
+      interpret('Scenario: First scenario');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
@@ -133,21 +133,21 @@ describe('FeatureState', () => {
 
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
-      handle('some text');
+      interpret('some text');
       eq(machine.state, 'FeatureState');
     });
 
     it('should be captured in the feature description', () => {
-      handle('some text');
-      handle('some more text');
-      handle('   some indented text');
+      interpret('some text');
+      interpret('some more text');
+      interpret('   some indented text');
 
       const exported = featureBuilder.build();
       eq(exported.description, 'some text\nsome more text\n   some indented text');
     });
   });
 
-  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
+    state.interpret({ line, number, indentation }, session);
   }
 });

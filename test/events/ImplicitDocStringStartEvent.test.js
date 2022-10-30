@@ -20,14 +20,14 @@ describe('ImplicitDocStringStartEvent', () => {
     const state = new StubState();
     const event = new ImplicitDocStringStartEvent();
 
-    eq(event.handle({ line: ' some text', indentation: 1 }, session, state), true);
+    eq(event.interpret({ line: ' some text', indentation: 1 }, session, state), true);
   });
 
   it('should not recognise text that is not indented', () => {
     const state = new StubState();
     const event = new ImplicitDocStringStartEvent();
 
-    eq(event.handle({ line: 'some text', indentation: 0 }, session, state), false);
+    eq(event.interpret({ line: 'some text', indentation: 0 }, session, state), false);
   });
 
   it('should not recognise indented docstrings when already handling a docstring', () => {
@@ -35,7 +35,7 @@ describe('ImplicitDocStringStartEvent', () => {
     const event = new ImplicitDocStringStartEvent();
 
     session.docstring = {};
-    eq(event.handle({ line: ' some text', indentation: 1 }, session, state), false);
+    eq(event.interpret({ line: ' some text', indentation: 1 }, session, state), false);
   });
 
   it('should handle indented docstrings', () => {
@@ -47,7 +47,7 @@ describe('ImplicitDocStringStartEvent', () => {
     });
     const event = new ImplicitDocStringStartEvent();
 
-    event.handle({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
+    event.interpret({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
 
     eq(session.docstring.indentation, 3);
     eq(state.count, 1);

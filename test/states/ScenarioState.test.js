@@ -33,82 +33,82 @@ describe('ScenarioState', () => {
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
-      handle('@foo=bar');
+      interpret('@foo=bar');
       eq(machine.state, 'ScenarioState');
     });
   });
 
   describe('A background', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'ScenarioState');
     });
   });
 
   describe('A block comment', () => {
     it('should cause a transition to BlockCommentState', () => {
-      handle('###');
+      interpret('###');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('An explicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => handle('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An implicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => handle('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An example table', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
-      handle('# Some comment');
+      interpret('# Some comment');
       eq(machine.state, 'ScenarioState');
     });
   });
 
   describe('A scenario', () => {
     it('should be unexpected', () => {
-      throws(() => handle('Scenario: First scenario'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Scenario: First scenario'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A line of text', () => {
     it('should cause a transition to ScenarioStepsState', () => {
-      handle('First step');
+      interpret('First step');
       eq(machine.state, 'ScenarioStepsState');
     });
 
     it('should be captured without annotations', () => {
-      handle('First step');
+      interpret('First step');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps.length, 1);
@@ -116,9 +116,9 @@ describe('ScenarioState', () => {
     });
 
     it('should be captured with annotations', () => {
-      handle('@one=1');
-      handle('@two=2');
-      handle('First step');
+      interpret('@one=1');
+      interpret('@two=2');
+      interpret('First step');
 
       const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].annotations.length, 2);
@@ -127,7 +127,7 @@ describe('ScenarioState', () => {
     });
   });
 
-  function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
+    state.interpret({ line, number, indentation }, session);
   }
 });

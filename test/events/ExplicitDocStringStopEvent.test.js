@@ -22,7 +22,7 @@ describe('ExplicitDocStringStopEvent', () => {
     const event = new ExplicitDocStringStopEvent();
 
     session.docstring = { token: '---', indentation: 6 };
-    event.handle({ line: '   ---   ', number: 1 }, session, state);
+    event.interpret({ line: '   ---   ', number: 1 }, session, state);
 
     eq(state.count, 1);
     eq(session.docstring, undefined);
@@ -37,7 +37,7 @@ describe('ExplicitDocStringStopEvent', () => {
     const event = new ExplicitDocStringStopEvent();
 
     session.docstring = { token: '"""', indentation: 6 };
-    event.handle({ line: '   """   ', number: 1 }, session, state);
+    event.interpret({ line: '   """   ', number: 1 }, session, state);
 
     eq(state.count, 1);
     eq(session.docstring, undefined);
@@ -48,13 +48,13 @@ describe('ExplicitDocStringStopEvent', () => {
     const event = new ExplicitDocStringStopEvent();
 
     session.docstring = {};
-    eq(event.handle({ line: '   """   ' }, session, state), false);
+    eq(event.interpret({ line: '   """   ' }, session, state), false);
   });
 
   it('should do nothing when not handling an explicit docstring', () => {
     const state = new StubState();
     const event = new ExplicitDocStringStopEvent();
 
-    eq(event.handle({ line: '   """   ' }, session, state), false);
+    eq(event.interpret({ line: '   """   ' }, session, state), false);
   });
 });
