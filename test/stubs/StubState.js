@@ -9,10 +9,9 @@ export default class StubState {
 
   _defineEventHandlers() {
     Object.values(Events).forEach((EventClass) => {
-      const handlerName = EventClass.getHandlerName();
-      this[handlerName] = (session, event) => {
+      EventClass.defineEventHandler(this, (session, event) => {
         this.handleEvent(session, event);
-      };
+      });
     });
   }
 
