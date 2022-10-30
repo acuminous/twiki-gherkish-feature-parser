@@ -1,15 +1,11 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureParser, FeatureBuilder, StateMachine, States2 as States, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { InitialState } = States;
 
 describe('InitialState', () => {
-  let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a blank line',
     ' - a block comment delimiter',
@@ -19,10 +15,8 @@ describe('InitialState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
+    const featureBuilder = new FeatureBuilder();
     machine = new StateMachine({ featureBuilder }, true);
-    state = new InitialState({ featureBuilder, machine });
-    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -78,7 +72,7 @@ describe('InitialState', () => {
     it('should be caputed without annotations', () => {
       handle('Feature: Some feature');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.title, 'Some feature');
       eq(exported.annotations.length, 0);
     });
@@ -88,7 +82,7 @@ describe('InitialState', () => {
       handle('@two = 2');
       handle('Feature: First scenario');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.annotations.length, 2);
       deq(exported.annotations[0], { name: 'one', value: '1' });
       deq(exported.annotations[1], { name: 'two', value: '2' });
@@ -122,6 +116,6 @@ describe('InitialState', () => {
   });
 
   function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+    machine.handle({ line, number, indentation });
   }
 });

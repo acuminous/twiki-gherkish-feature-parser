@@ -1,15 +1,11 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States2 as States, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { DeclareFeatureState } = States;
 
 describe('DeclareFeatureState', () => {
-  let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a background',
     ' - a blank line',
@@ -21,15 +17,11 @@ describe('DeclareFeatureState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
+    const featureBuilder = new FeatureBuilder();
     featureBuilder.createFeature({ annotations: [], title: 'Meh' });
 
-    machine = new StateMachine({ featureBuilder }, true);
-    machine.toDeclareFeatureState();
-
-    state = new DeclareFeatureState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0 };
+    machine = new StateMachine({ featureBuilder }, true)
+      .toDeclareFeatureState();
   });
 
   describe('An annotation', () => {
@@ -50,7 +42,7 @@ describe('DeclareFeatureState', () => {
       handle('@two=2');
       handle('Background: First background');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.background.annotations.length, 2);
       eq(exported.background.annotations[0].name, 'one');
       eq(exported.background.annotations[0].value, '1');
@@ -113,7 +105,7 @@ describe('DeclareFeatureState', () => {
     it('should be captured without annotations', () => {
       handle('Scenario: First scenario');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
       eq(exported.annotations.length, 0);
@@ -124,7 +116,7 @@ describe('DeclareFeatureState', () => {
       handle('@two=2');
       handle('Scenario: First scenario');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       deq(exported.scenarios[0].annotations[0], { name: 'one', value: '1' });
@@ -143,12 +135,12 @@ describe('DeclareFeatureState', () => {
       handle('some more text');
       handle('   some indented text');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.description, 'some text\nsome more text\n   some indented text');
     });
   });
 
   function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+    machine.handle({ line, number, indentation });
   }
 });

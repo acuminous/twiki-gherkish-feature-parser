@@ -1,14 +1,11 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Languages } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { BlockCommentState } = States;
 
 describe('BlockCommentState', () => {
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a block comment delimiter',
     ' - some text',
@@ -16,15 +13,10 @@ describe('BlockCommentState', () => {
 
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder();
-
-    machine = new StateMachine({ featureBuilder });
-    machine.toFeatureState();
-    machine.checkpoint();
-    machine.toBlockCommentState();
-
-    state = new BlockCommentState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0 };
+    machine = new StateMachine({ featureBuilder })
+      .toFeatureState()
+      .checkpoint()
+      .toBlockCommentState();
   });
 
   describe('An annotation', () => {
@@ -64,7 +56,6 @@ describe('BlockCommentState', () => {
 
   describe('An implicit docstring', () => {
     it('should not cause a state transition', () => {
-      session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'BlockCommentState');
     });
@@ -112,6 +103,6 @@ describe('BlockCommentState', () => {
   });
 
   function handle(line, number = 1) {
-    state.handle({ line, number }, session);
+    machine.handle({ line, number });
   }
 });
