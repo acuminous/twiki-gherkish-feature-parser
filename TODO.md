@@ -10,4 +10,4 @@
     this._featureBuilder.createBackground({ ...event.data });
    }
    ```
-1. Remote toPreviousState
+1. Remove toPreviousState
