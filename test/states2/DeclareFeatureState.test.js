@@ -18,9 +18,10 @@ describe('DeclareFeatureState', () => {
 
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
-      .createFeature({ annotations: [], title: 'Meh' });
+      .createFeature({ title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder }, true)
+      .toInitialState()
       .toDeclareFeatureState();
   });
 
@@ -97,9 +98,9 @@ describe('DeclareFeatureState', () => {
   });
 
   describe('A scenario', () => {
-    it('should cause a transition to ScenarioState', () => {
+    it('should cause a transition to DeclareScenarioState', () => {
       interpret('Scenario: First scenario');
-      eq(machine.state, 'ScenarioState');
+      eq(machine.state, 'DeclareScenarioState');
     });
 
     it('should be captured without annotations', () => {

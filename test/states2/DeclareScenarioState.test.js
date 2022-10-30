@@ -4,7 +4,7 @@ import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('DeclareBackgroundState', () => {
+describe('DeclareScenarioState', () => {
   let machine;
   const expectedEvents = [
     ' - a blank line',
@@ -20,16 +20,15 @@ describe('DeclareBackgroundState', () => {
       .createBackground({ title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder }, true)
-      .toInitialState()
       .toDeclareFeatureState()
       .checkpoint()
-      .toDeclareBackgroundState();
+      .toDeclareScenarioState();
   });
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       interpret('@foo=bar');
-      eq(machine.state, 'DeclareBackgroundState');
+      eq(machine.state, 'DeclareScenarioState');
     });
   });
 
@@ -42,7 +41,7 @@ describe('DeclareBackgroundState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       interpret('');
-      eq(machine.state, 'DeclareBackgroundState');
+      eq(machine.state, 'DeclareScenarioState');
     });
   });
 
@@ -86,7 +85,7 @@ describe('DeclareBackgroundState', () => {
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       interpret('# Some comment');
-      eq(machine.state, 'DeclareBackgroundState');
+      eq(machine.state, 'DeclareScenarioState');
     });
   });
 
@@ -99,6 +98,7 @@ describe('DeclareBackgroundState', () => {
   describe('A line of text', () => {
     it('should cause a transition to CaptureStepState', () => {
       interpret('First step');
+
       eq(machine.state, 'CaptureStepState');
     });
 

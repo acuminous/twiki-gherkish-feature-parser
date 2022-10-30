@@ -11,3 +11,4 @@
    }
    ```
 1. Remove toPreviousState
+1. Sync FeatureBuilder and state transition naming, e.g. featureBuilder.createFeature => featureBuilder.declareFeature

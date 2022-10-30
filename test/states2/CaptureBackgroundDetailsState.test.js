@@ -4,14 +4,17 @@ import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('DeclareBackgroundState', () => {
+describe('CaptureBackgroundDetailsState', () => {
   let machine;
   const expectedEvents = [
     ' - a blank line',
     ' - a block comment delimiter',
+    ' - a scenario',
     ' - a single line comment',
     ' - a step',
     ' - an annotation',
+    ' - the start of an explicit docstring',
+    ' - the start of an implicit docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -23,13 +26,14 @@ describe('DeclareBackgroundState', () => {
       .toInitialState()
       .toDeclareFeatureState()
       .checkpoint()
-      .toDeclareBackgroundState();
+      .toDeclareBackgroundState()
+      .toCaptureBackgroundDetailsState();
   });
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       interpret('@foo=bar');
-      eq(machine.state, 'DeclareBackgroundState');
+      eq(machine.state, 'CaptureBackgroundDetailsState');
     });
   });
 
@@ -42,7 +46,7 @@ describe('DeclareBackgroundState', () => {
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       interpret('');
-      eq(machine.state, 'DeclareBackgroundState');
+      eq(machine.state, 'CaptureBackgroundDetailsState');
     });
   });
 
@@ -59,13 +63,13 @@ describe('DeclareBackgroundState', () => {
     });
   });
 
-  describe('An explicit docstring', () => {
+  xdescribe('An explicit docstring', () => {
     it('should be unexpected', () => {
       throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('An implicit docstring', () => {
+  xdescribe('An implicit docstring', () => {
     it('should be unexpected', () => {
       throws(() => interpret('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
@@ -86,13 +90,37 @@ describe('DeclareBackgroundState', () => {
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       interpret('# Some comment');
-      eq(machine.state, 'DeclareBackgroundState');
+      eq(machine.state, 'CaptureBackgroundDetailsState');
     });
   });
 
   describe('A scenario', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Scenario: First scenario'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+    it('should cause a transition to DeclareScenarioState', () => {
+      interpret('Scenario: First scenario');
+      eq(machine.state, 'DeclareScenarioState');
+    });
+
+    it('should be captured without annotations', () => {
+      interpret('Scenario: First scenario');
+
+      const exported = machine.build();
+      eq(exported.scenarios.length, 1);
+      eq(exported.scenarios[0].title, 'First scenario');
+      eq(exported.scenarios[0].annotations.length, 0);
+    });
+
+    it('should be captured with annotations', () => {
+      interpret('@one = 1');
+      interpret('@two = 2');
+      interpret('Scenario: First scenario');
+
+      const exported = machine.build();
+      eq(exported.scenarios.length, 1);
+      eq(exported.scenarios[0].annotations.length, 2);
+      eq(exported.scenarios[0].annotations[0].name, 'one');
+      eq(exported.scenarios[0].annotations[0].value, '1');
+      eq(exported.scenarios[0].annotations[1].name, 'two');
+      eq(exported.scenarios[0].annotations[1].value, '2');
     });
   });
 
