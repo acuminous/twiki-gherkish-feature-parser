@@ -118,6 +118,6 @@ describe('CreateScenarioStepImplicitDocStringState', () => {
   });
 
   function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    machine.handle({ line, number, indentation });
+    machine.interpret({ line, number, indentation });
   }
 });

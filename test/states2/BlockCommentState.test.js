@@ -21,88 +21,88 @@ describe('BlockCommentState', () => {
 
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
-      handle('@foo = bar');
+      interpret('@foo = bar');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('A background', () => {
     it('should not cause a state transition', () => {
-      handle('Background: foo');
+      interpret('Background: foo');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
-      handle('');
+      interpret('');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('An example table', () => {
     it('should not cause a state transition', () => {
-      handle('Where:');
+      interpret('Where:');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('An explicit docstring', () => {
     it('should not cause a state transition', () => {
-      handle('---');
+      interpret('---');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('An implicit docstring', () => {
     it('should not cause a state transition', () => {
-      handle('   some text');
+      interpret('   some text');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => handle('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A feature', () => {
     it('should not cause a state transition', () => {
-      handle('Feature: foo');
+      interpret('Feature: foo');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('A block comment', () => {
     it('should cause a transition to the previous state', () => {
-      handle('###');
+      interpret('###');
       eq(machine.state, 'FeatureState');
     });
   });
 
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
-      handle('# Single comment');
+      interpret('# Single comment');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('A scenario', () => {
     it('should not cause a state transition', () => {
-      handle('Scenario: foo');
+      interpret('Scenario: foo');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
-      handle('Given some text');
+      interpret('Given some text');
       eq(machine.state, 'BlockCommentState');
     });
   });
 
-  function handle(line, number = 1) {
-    machine.handle({ line, number });
+  function interpret(line, number = 1) {
+    machine.interpret({ line, number });
   }
 });
