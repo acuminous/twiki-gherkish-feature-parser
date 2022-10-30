@@ -3,13 +3,10 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepImplicitDocStringState } = States;
 
 describe('CreateBackgroundStepImplicitDocStringState', () => {
   let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a blank line',
     ' - a block comment delimiter',
@@ -25,12 +22,9 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
     featureBuilder.createBackground({ annotations: [], title: 'Meh' });
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
-    machine = new StateMachine({ featureBuilder });
+    const session = { language: Languages.English, indentation: 0, docstring: { indentation: 3 } };
+    machine = new StateMachine({ featureBuilder, session });
     machine.toCreateBackgroundStepImplicitDocStringState();
-
-    state = new CreateBackgroundStepImplicitDocStringState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0, docstring: { indentation: 3 } };
   });
 
   describe('A blank line indented to the same depth as the docstring', () => {
@@ -125,6 +119,6 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
   });
 
   function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+    machine.handle({ line, number, indentation });
   }
 });

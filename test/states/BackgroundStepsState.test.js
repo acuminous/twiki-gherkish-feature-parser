@@ -1,15 +1,12 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { BackgroundStepsState } = States;
 
 describe('BackgroundStepsState', () => {
   let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a blank line',
     ' - a block comment delimiter',
@@ -27,12 +24,9 @@ describe('BackgroundStepsState', () => {
     featureBuilder.createBackground({ annotations: [], title: 'Meh' });
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
-    machine = new StateMachine({ featureBuilder });
+    const session = { language: Languages.English, indentation: 0 };
+    machine = new StateMachine({ featureBuilder, session });
     machine.toBackgroundStepsState();
-
-    state = new BackgroundStepsState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -165,6 +159,6 @@ describe('BackgroundStepsState', () => {
   });
 
   function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+    machine.handle({ line, number, indentation });
   }
 });

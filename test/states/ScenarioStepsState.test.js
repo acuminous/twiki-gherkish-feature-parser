@@ -3,13 +3,9 @@ import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { ScenarioStepsState } = States;
 
 describe('ScenarioStepsState', () => {
-  let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a blank line',
     ' - a block comment delimiter',
@@ -24,17 +20,14 @@ describe('ScenarioStepsState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
+    const featureBuilder = new FeatureBuilder();
     featureBuilder.createFeature({ annotations: [], title: 'Some feature' });
     featureBuilder.createScenario({ annotations: [], title: 'First scenario' });
     featureBuilder.createScenarioStep({ annotations: [], text: 'First step' });
 
-    machine = new StateMachine({ featureBuilder });
+    const session = { language: Languages.English, indentation: 0 };
+    machine = new StateMachine({ featureBuilder, session });
     machine.toScenarioStepsState();
-
-    state = new ScenarioStepsState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0 };
   });
 
   describe('An annotation', () => {
@@ -80,14 +73,13 @@ describe('ScenarioStepsState', () => {
 
   describe('An implicit docstring', () => {
     it('should cause a transition to CreateScenarioStepImplicitDocStringState', () => {
-      session.indentation = 0;
       handle('   some text');
       eq(machine.state, 'CreateScenarioStepImplicitDocStringState');
     });
 
     it('should capture docstrings', () => {
       handle('   some text');
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios[0].steps[0].docstring, 'some text');
     });
   });
@@ -121,7 +113,7 @@ describe('ScenarioStepsState', () => {
     it('should be captured without annotations', () => {
       handle('Scenario: Second scenario');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios.length, 2);
       eq(exported.scenarios[0].title, 'First scenario');
       eq(exported.scenarios[1].title, 'Second scenario');
@@ -132,7 +124,7 @@ describe('ScenarioStepsState', () => {
       handle('@two=2');
       handle('Scenario: Second scenario');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios.length, 2);
       eq(exported.scenarios[1].annotations.length, 2);
       eq(exported.scenarios[1].annotations[0].name, 'one');
@@ -151,7 +143,7 @@ describe('ScenarioStepsState', () => {
     it('should be captured without annotations', () => {
       handle('Second step');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
 
       eq(exported.scenarios[0].steps.length, 2);
       eq(exported.scenarios[0].steps[0].text, 'First step');
@@ -163,7 +155,7 @@ describe('ScenarioStepsState', () => {
       handle('@two=2');
       handle('Bah');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios[0].steps[1].annotations.length, 2);
       deq(exported.scenarios[0].steps[1].annotations[0], { name: 'one', value: '1' });
       deq(exported.scenarios[0].steps[1].annotations[1], { name: 'two', value: '2' });
@@ -171,6 +163,6 @@ describe('ScenarioStepsState', () => {
   });
 
   function handle(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.handle({ line, number, indentation }, session);
+    machine.handle({ line, number, indentation });
   }
 });

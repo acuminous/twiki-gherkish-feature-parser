@@ -19,9 +19,8 @@ describe('InitialState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const parser = new FeatureParser();
     featureBuilder = new FeatureBuilder();
-    machine = new StateMachine({ parser, featureBuilder }, true);
+    machine = new StateMachine({ featureBuilder }, true);
     state = new InitialState({ featureBuilder, machine });
     session = { language: Languages.English, indentation: 0 };
   });
