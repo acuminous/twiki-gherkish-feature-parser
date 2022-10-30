@@ -17,12 +17,12 @@ describe('DeclareBackgroundState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
-    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
-    featureBuilder.createBackground({ annotations: [], title: 'Meh' });
+    featureBuilder = new FeatureBuilder()
+      .createFeature({ annotations: [], title: 'Meh' })
+      .createBackground({ annotations: [], title: 'Meh' });
 
-    machine = new StateMachine({ featureBuilder }, true);
-    machine.toDeclareBackgroundState({ featureBuilder });
+    machine = new StateMachine({ featureBuilder }, true)
+      .toDeclareBackgroundState({ featureBuilder });
   });
 
   describe('An annotation', () => {

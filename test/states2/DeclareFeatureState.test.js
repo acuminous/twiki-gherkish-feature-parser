@@ -17,8 +17,8 @@ describe('DeclareFeatureState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder();
-    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
+    const featureBuilder = new FeatureBuilder()
+      .createFeature({ annotations: [], title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder }, true)
       .toDeclareFeatureState();
