@@ -26,11 +26,11 @@ describe('BlockCommentEvent', () => {
   });
 
   it('should handle block comments', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'BlockCommentEvent');
-      eq(event.source.line, '### Some comment ');
-      eq(event.source.number, 1);
-      eq(event.data.text, 'Some comment');
+      eq(context.source.line, '### Some comment ');
+      eq(context.source.number, 1);
+      eq(context.data.text, 'Some comment');
     });
     const event = new BlockCommentEvent();
 

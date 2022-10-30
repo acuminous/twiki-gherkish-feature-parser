@@ -28,11 +28,11 @@ describe('ExampleTableHeaderRowEvent', () => {
 
   it('should handle single column example table header row', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExampleTableHeaderRowEvent');
-      eq(event.source.line, '| a |');
-      eq(event.source.number, 1);
-      deq(event.data.headings, ['a']);
+      eq(context.source.line, '| a |');
+      eq(context.source.number, 1);
+      deq(context.data.headings, ['a']);
     });
     const event = new ExampleTableHeaderRowEvent();
 
@@ -43,11 +43,11 @@ describe('ExampleTableHeaderRowEvent', () => {
 
   it('should handle multi column example table header row', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExampleTableHeaderRowEvent');
-      eq(event.source.line, '| a | b | cde |');
-      eq(event.source.number, 1);
-      deq(event.data.headings, ['a', 'b', 'cde']);
+      eq(context.source.line, '| a | b | cde |');
+      eq(context.source.number, 1);
+      deq(context.data.headings, ['a', 'b', 'cde']);
     });
     const event = new ExampleTableHeaderRowEvent();
 

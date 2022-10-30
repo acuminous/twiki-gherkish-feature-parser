@@ -21,11 +21,11 @@ describe('MissingEventHandlerEvent', () => {
   });
 
   it('should handle anything', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'MissingEventHandlerEvent');
-      eq(event.source.line, 'anything');
-      eq(event.source.number, 1);
-      deq(event.data, {});
+      eq(context.source.line, 'anything');
+      eq(context.source.number, 1);
+      deq(context.data, {});
     });
     const event = new MissingEventHandlerEvent();
 

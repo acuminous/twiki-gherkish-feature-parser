@@ -36,11 +36,11 @@ describe('FeatureEvent', () => {
 
   it('should handle features', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'FeatureEvent');
-      eq(event.source.line, 'Feature:  Some feature ');
-      eq(event.source.number, 1);
-      eq(event.data.title, 'Some feature');
+      eq(context.source.line, 'Feature:  Some feature ');
+      eq(context.source.number, 1);
+      eq(context.data.title, 'Some feature');
     });
     const event = new FeatureEvent();
 

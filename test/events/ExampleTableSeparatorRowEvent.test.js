@@ -26,11 +26,11 @@ describe('ExampleTableSeparatorRowEvent', () => {
 
   it('should handle example table separator row', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExampleTableSeparatorRowEvent');
-      eq(event.source.line, '   |---|---|---|');
-      eq(event.source.number, 1);
-      deq(event.data, {});
+      eq(context.source.line, '   |---|---|---|');
+      eq(context.source.number, 1);
+      deq(context.data, {});
     });
     const event = new ExampleTableSeparatorRowEvent();
 

@@ -14,10 +14,10 @@ describe('ExplicitDocStringStopEvent', () => {
   });
 
   it('should handle --- docstrings', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExplicitDocStringStopEvent');
-      eq(event.source.line, '   ---   ');
-      eq(event.source.number, 1);
+      eq(context.source.line, '   ---   ');
+      eq(context.source.number, 1);
     });
     const event = new ExplicitDocStringStopEvent();
 
@@ -29,10 +29,10 @@ describe('ExplicitDocStringStopEvent', () => {
   });
 
   it('should handle """ docstrings', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExplicitDocStringStopEvent');
-      eq(event.source.line, '   """   ');
-      eq(event.source.number, 1);
+      eq(context.source.line, '   """   ');
+      eq(context.source.number, 1);
     });
     const event = new ExplicitDocStringStopEvent();
 

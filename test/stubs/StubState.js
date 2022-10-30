@@ -9,14 +9,14 @@ export default class StubState {
 
   _defineEventHandlers() {
     Object.values(Events).forEach((EventClass) => {
-      EventClass.defineEventHandler(this, (session, event) => {
-        this.handleEvent(session, event);
+      EventClass.defineEventHandler(this, (session, event, context) => {
+        this.handleEvent(session, event, context);
       });
     });
   }
 
-  handleEvent(session, event) {
-    if (this.assertions[this.count]) this.assertions[this.count](event);
+  handleEvent(session, event, context) {
+    if (this.assertions[this.count]) this.assertions[this.count](event, context);
     this.count++;
     return this;
   }

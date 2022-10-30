@@ -40,11 +40,11 @@ describe('StepEvent', () => {
 
   it('should handle localised steps', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'StepEvent');
-      eq(event.source.line, ' Given some step  ');
-      eq(event.source.number, 1);
-      eq(event.data.text, 'Given some step');
+      eq(context.source.line, ' Given some step  ');
+      eq(context.source.number, 1);
+      eq(context.data.text, 'Given some step');
     });
     const event = new StepEvent();
 
@@ -55,11 +55,11 @@ describe('StepEvent', () => {
 
   it('should handle unlocalised steps', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'StepEvent');
-      eq(event.source.line, '  Some step  ');
-      eq(event.source.number, 1);
-      eq(event.data.text, 'Some step');
+      eq(context.source.line, '  Some step  ');
+      eq(context.source.number, 1);
+      eq(context.data.text, 'Some step');
     });
 
     const event = new StepEvent();

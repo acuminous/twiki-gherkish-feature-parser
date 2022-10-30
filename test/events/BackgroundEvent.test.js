@@ -36,11 +36,11 @@ describe('BackgroundEvent', () => {
 
   it('should handle backgrounds', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'BackgroundEvent');
-      eq(event.source.line, 'Background:  Some background ');
-      eq(event.source.number, 1);
-      eq(event.data.title, 'Some background');
+      eq(context.source.line, 'Background:  Some background ');
+      eq(context.source.number, 1);
+      eq(context.data.title, 'Some background');
     });
     const event = new BackgroundEvent();
 

@@ -30,11 +30,11 @@ describe('ExampleTableDataRowEvent', () => {
 
   it('should handle example table data row', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExampleTableDataRowEvent');
-      eq(event.source.line, '   |  a  | b c | d |  ');
-      eq(event.source.number, 1);
-      deq(event.data, { values: ['a', 'b c', 'd'] });
+      eq(context.source.line, '   |  a  | b c | d |  ');
+      eq(context.source.number, 1);
+      deq(context.data, { values: ['a', 'b c', 'd'] });
     });
     const event = new ExampleTableDataRowEvent();
 
@@ -45,11 +45,11 @@ describe('ExampleTableDataRowEvent', () => {
 
   it('should not strip special whitespace', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExampleTableDataRowEvent');
-      eq(event.source.line, '   | \u00A0a\u00A0 | \u00A0b c\u00A0 | \u00A0d\u00A0 |  ');
-      eq(event.source.number, 1);
-      deq(event.data, { values: ['\u00A0a\u00A0', '\u00A0b c\u00A0', '\u00A0d\u00A0'] });
+      eq(context.source.line, '   | \u00A0a\u00A0 | \u00A0b c\u00A0 | \u00A0d\u00A0 |  ');
+      eq(context.source.number, 1);
+      deq(context.data, { values: ['\u00A0a\u00A0', '\u00A0b c\u00A0', '\u00A0d\u00A0'] });
     });
     const event = new ExampleTableDataRowEvent();
 

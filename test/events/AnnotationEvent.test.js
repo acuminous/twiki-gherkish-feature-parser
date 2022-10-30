@@ -28,12 +28,12 @@ describe('AnnotationEvent', () => {
   });
 
   it('should handle simple annotations', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'AnnotationEvent');
-      eq(event.source.line, '@skip');
-      eq(event.source.number, 1);
-      eq(event.data.name, 'skip');
-      eq(event.data.value, true);
+      eq(context.source.line, '@skip');
+      eq(context.source.number, 1);
+      eq(context.data.name, 'skip');
+      eq(context.data.value, true);
     });
     const event = new AnnotationEvent();
 
@@ -43,12 +43,12 @@ describe('AnnotationEvent', () => {
   });
 
   it('should handle name/value annotations', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'AnnotationEvent');
-      eq(event.source.line, '@foo=bar');
-      eq(event.source.number, 1);
-      eq(event.data.name, 'foo');
-      eq(event.data.value, 'bar');
+      eq(context.source.line, '@foo=bar');
+      eq(context.source.number, 1);
+      eq(context.data.name, 'foo');
+      eq(context.data.value, 'bar');
     });
     const event = new AnnotationEvent();
 

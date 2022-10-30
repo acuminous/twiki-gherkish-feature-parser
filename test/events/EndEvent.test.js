@@ -24,11 +24,11 @@ describe('EndEvent', () => {
   });
 
   it('should handle end of feature', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'EndEvent');
-      eq(event.source.line, '\u0000');
-      eq(event.source.number, 1);
-      deq(event.data, {});
+      eq(context.source.line, '\u0000');
+      eq(context.source.number, 1);
+      deq(context.data, {});
     });
     const event = new EndEvent();
 

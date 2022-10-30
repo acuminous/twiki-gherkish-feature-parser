@@ -39,11 +39,11 @@ describe('ImplicitDocStringStartEvent', () => {
   });
 
   it('should handle indented docstrings', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ImplicitDocStringStartEvent');
-      eq(event.source.line, '   some text   ');
-      eq(event.source.number, 1);
-      eq(event.source.indentation, 3);
+      eq(context.source.line, '   some text   ');
+      eq(context.source.number, 1);
+      eq(context.source.indentation, 3);
     });
     const event = new ImplicitDocStringStartEvent();
 

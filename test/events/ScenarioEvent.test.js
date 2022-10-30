@@ -36,11 +36,11 @@ describe('ScenarioEvent', () => {
 
   it('should handle scenarios', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ScenarioEvent');
-      eq(event.source.line, 'Scenario:  Some scenario ');
-      eq(event.source.number, 1);
-      eq(event.data.title, 'Some scenario');
+      eq(context.source.line, 'Scenario:  Some scenario ');
+      eq(context.source.number, 1);
+      eq(context.data.title, 'Some scenario');
     });
     const event = new ScenarioEvent();
 

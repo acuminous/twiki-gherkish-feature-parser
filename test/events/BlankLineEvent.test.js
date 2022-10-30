@@ -24,11 +24,11 @@ describe('BlankLineEvent', () => {
   });
 
   it('should handle blank lines', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'BlankLineEvent');
-      eq(event.source.line, '');
-      eq(event.source.number, 1);
-      deq(event.data, {});
+      eq(context.source.line, '');
+      eq(context.source.number, 1);
+      deq(context.data, {});
     });
     const event = new BlankLineEvent();
 

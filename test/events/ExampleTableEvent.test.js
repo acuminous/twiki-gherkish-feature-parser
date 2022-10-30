@@ -34,10 +34,10 @@ describe('ExampleTableEvent', () => {
 
   it('should handle examples', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'ExampleTableEvent');
-      eq(event.source.line, 'Where:');
-      eq(event.source.number, 1);
+      eq(context.source.line, 'Where:');
+      eq(context.source.number, 1);
     });
     const event = new ExampleTableEvent();
 

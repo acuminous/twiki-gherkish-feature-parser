@@ -32,11 +32,11 @@ describe('TextEvent', () => {
 
   it('should handle text', () => {
     const session = { language: Languages.English };
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'TextEvent');
-      eq(event.source.line, '  some text  ');
-      eq(event.source.number, 1);
-      eq(event.data.text, '  some text  ');
+      eq(context.source.line, '  some text  ');
+      eq(context.source.number, 1);
+      eq(context.data.text, '  some text  ');
     });
     const event = new TextEvent();
 

@@ -26,11 +26,11 @@ describe('SingleLineCommentEvent', () => {
   });
 
   it('should handle single line comments', () => {
-    const state = new StubState((event) => {
+    const state = new StubState((event, context) => {
       eq(event.name, 'SingleLineCommentEvent');
-      eq(event.source.line, '# Some comment ');
-      eq(event.source.number, 1);
-      eq(event.data.text, 'Some comment');
+      eq(context.source.line, '# Some comment ');
+      eq(context.source.number, 1);
+      eq(context.data.text, 'Some comment');
     });
     const event = new SingleLineCommentEvent();
 
