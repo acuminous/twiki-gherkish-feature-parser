@@ -1,41 +1,29 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { BlockCommentEvent } = Events;
 
 describe('BlockCommentEvent', () => {
-  let session;
 
-  beforeEach(() => {
-    session = { language: Languages.English };
+  it('should test block comments', () => {
+    const event = new BlockCommentEvent();
+
+    eq(event.test({ line: '### Some comment' }), true);
+    eq(event.test({ line: ' ### Some comment' }), true);
+    eq(event.test({ line: '###' }), true);
+    eq(event.test({ line: '#### Some comment' }), true);
+
+    eq(event.test({ line: '## No commment' }), false);
   });
 
   it('should recognise block comments', () => {
-    const state = new StubState();
     const event = new BlockCommentEvent();
 
-    eq(event.interpret({ line: '### Some comment' }, session, state), true);
-    eq(event.interpret({ line: ' ### Some comment' }, session, state), true);
-    eq(event.interpret({ line: '###' }, session, state), true);
-    eq(event.interpret({ line: '#### Some comment' }, session, state), true);
-
-    eq(event.interpret({ line: '## No commment' }, session, state), false);
-  });
-
-  it('should handle block comments', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'BlockCommentEvent');
-      eq(context.source.line, '### Some comment ');
-      eq(context.source.number, 1);
-      eq(context.data.text, 'Some comment');
-    });
-    const event = new BlockCommentEvent();
-
-    event.interpret({ line: '### Some comment ', number: 1 }, session, state);
-
-    eq(state.count, 1);
+    deq(event.interpret({ line: '### Some comment' }), {});
+    deq(event.interpret({ line: ' ### Some comment' }), {});
+    deq(event.interpret({ line: '###' }), {});
+    deq(event.interpret({ line: '#### Some comment' }), {});
   });
 });

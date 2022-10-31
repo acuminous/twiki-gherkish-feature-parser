@@ -1,51 +1,53 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Languages, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { BackgroundEvent } = Events;
 
 describe('BackgroundEvent', () => {
 
-  it('should recognise backgrounds', () => {
-    const session = { language: Languages.English };
-    const state = new StubState();
+  it('should test backgrounds', () => {
+    const session = new Session();
     const event = new BackgroundEvent();
 
-    eq(event.interpret({ line: 'background: Some background' }, session, state), true);
-    eq(event.interpret({ line: 'Background: Some background' }, session, state), true);
-    eq(event.interpret({ line: '  Background  : Some background  ' }, session, state), true);
-    eq(event.interpret({ line: 'Background  :' }, session, state), true);
+    eq(event.test({ line: 'background: Some background' }, session), true);
+    eq(event.test({ line: 'Background: Some background' }, session), true);
+    eq(event.test({ line: '  Background  : Some background  ' }, session), true);
+    eq(event.test({ line: 'Background  :' }, session), true);
 
-    eq(event.interpret({ line: 'Background' }, session, state), false);
+    eq(event.test({ line: 'Background' }, session), false);
   });
 
-  it('should recognise localised backgrounds', () => {
-    const session = { language: Languages.Pirate };
-    const state = new StubState();
+  it('should test localised backgrounds', () => {
+    const session = new Session({ language: Languages.Pirate });
     const event = new BackgroundEvent();
 
-    eq(event.interpret({ line: 'Lore: Some background' }, session, state), true);
-    eq(event.interpret({ line: 'Lore: Some background' }, session, state), true);
-    eq(event.interpret({ line: '  Lore  : Some background  ' }, session, state), true);
-    eq(event.interpret({ line: 'Lore  :' }, session, state), true);
+    eq(event.test({ line: 'Lore: Some background' }, session), true);
+    eq(event.test({ line: 'Lore: Some background' }, session), true);
+    eq(event.test({ line: '  Lore  : Some background  ' }, session), true);
+    eq(event.test({ line: 'Lore  :' }, session), true);
 
-    eq(event.interpret({ line: 'Lore' }, session, state), false);
+    eq(event.test({ line: 'Lore' }, session), false);
   });
 
-  it('should handle backgrounds', () => {
-    const session = { language: Languages.English };
-    const state = new StubState((event, context) => {
-      eq(event.name, 'BackgroundEvent');
-      eq(context.source.line, 'Background:  Some background ');
-      eq(context.source.number, 1);
-      eq(context.data.title, 'Some background');
-    });
+  it('should interpret backgrounds', () => {
+    const session = new Session();
     const event = new BackgroundEvent();
 
-    event.interpret({ line: 'Background:  Some background ', number: 1 }, session, state);
+    deq(event.interpret({ line: 'background: Some background' }, session), { title: 'Some background' });
+    deq(event.interpret({ line: 'Background: Some background' }, session), { title: 'Some background' });
+    deq(event.interpret({ line: '  Background  : Some background  ' }, session), { title: 'Some background' });
+    deq(event.interpret({ line: 'Background  :' }, session), { title: '' });
+  });
 
-    eq(state.count, 1);
+  it('should interpret localised backgrounds', () => {
+    const session = new Session({ language: Languages.Pirate });
+    const event = new BackgroundEvent();
+
+    deq(event.interpret({ line: 'Lore: Some background' }, session), { title: 'Some background' });
+    deq(event.interpret({ line: 'Lore: Some background' }, session), { title: 'Some background' });
+    deq(event.interpret({ line: '  Lore  : Some background  ' }, session), { title: 'Some background' });
+    deq(event.interpret({ line: 'Lore  :' }, session), { title: '' });
   });
 });

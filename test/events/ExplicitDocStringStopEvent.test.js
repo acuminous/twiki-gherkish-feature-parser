@@ -1,60 +1,55 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ExplicitDocStringStopEvent } = Events;
 
 describe('ExplicitDocStringStopEvent', () => {
-  let session;
 
-  beforeEach(() => {
-    session = { language: Languages.English };
-  });
-
-  it('should handle --- docstrings', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExplicitDocStringStopEvent');
-      eq(context.source.line, '   ---   ');
-      eq(context.source.number, 1);
-    });
+  it('should test explicit --- docstrings', () => {
+    const session = new Session({ docstring: { token: '---' } });
     const event = new ExplicitDocStringStopEvent();
 
-    session.docstring = { token: '---', indentation: 6 };
-    event.interpret({ line: '   ---   ', number: 1 }, session, state);
+    eq(event.test({ line: '---' }, session), true);
+    eq(event.test({ line: ' --- ' }, session), true);
 
-    eq(state.count, 1);
-    eq(session.docstring, undefined);
+    eq(event.test({ line: '-' }, session), false);
+    eq(event.test({ line: '--' }, session), false);
+    eq(event.test({ line: '--- not a doc string' }, session), false);
+    eq(event.test({ line: '----' }, session), false);
+
+    eq(event.test({ line: '"""' }, session), false);
   });
 
-  it('should handle """ docstrings', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExplicitDocStringStopEvent');
-      eq(context.source.line, '   """   ');
-      eq(context.source.number, 1);
-    });
+  it('should test explicit """ docstrings', () => {
+    const session = new Session({ docstring: { token: '"""' } });
     const event = new ExplicitDocStringStopEvent();
 
-    session.docstring = { token: '"""', indentation: 6 };
-    event.interpret({ line: '   """   ', number: 1 }, session, state);
+    eq(event.test({ line: '"""' }, session), true);
+    eq(event.test({ line: ' """ ' }, session), true);
 
-    eq(state.count, 1);
-    eq(session.docstring, undefined);
+    eq(event.test({ line: '"' }, session), false);
+    eq(event.test({ line: '""' }, session), false);
+    eq(event.test({ line: '""" not a doc string' }, session), false);
+    eq(event.test({ line: '""""' }, session), false);
+
+    eq(event.test({ line: '---' }, session), false);
   });
 
-  it('should do nothing when already handling an indented docstring', () => {
-    const state = new StubState();
+  it('should interpret explicit --- docstrings', () => {
+    const session = new Session({ docstring: { token: '---' } });
     const event = new ExplicitDocStringStopEvent();
 
-    session.docstring = {};
-    eq(event.interpret({ line: '   """   ' }, session, state), false);
+    deq(event.interpret({ line: '---' }, session), {});
+    deq(session.isProcessingDocString(), false);
   });
 
-  it('should do nothing when not handling an explicit docstring', () => {
-    const state = new StubState();
+  it('should interpret explicit """ docstrings', () => {
+    const session = new Session({ docstring: { token: '"""' } });
     const event = new ExplicitDocStringStopEvent();
 
-    eq(event.interpret({ line: '   """   ' }, session, state), false);
+    deq(event.interpret({ line: '"""' }, session), {});
+    deq(session.isProcessingDocString(), false);
   });
 });

@@ -12,3 +12,9 @@
    ```
 1. Remove toPreviousState
 1. Sync FeatureBuilder and state transition naming, e.g. featureBuilder.createFeature => featureBuilder.declareFeature
+1. Find out why ExampleTableHeaderRowEvent stashes the headings in the session
+1. Session should not have to check hasOwnProperty('indentation')
+1. the end of an indented docstring => the end of an implicit docstring
+1. Decide docstring docString DocString case
+1. Do we remove indentation from steps
+1. Do we need DocStringTextEvent or will a regular TextEvent do? (maybe, depends on whether we remove indentation from steps)

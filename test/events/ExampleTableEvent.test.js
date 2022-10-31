@@ -1,48 +1,49 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Languages, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ExampleTableEvent } = Events;
 
 describe('ExampleTableEvent', () => {
 
-  it('should recognise examples', () => {
-    const session = { language: Languages.English };
-    const state = new StubState();
+  it('should test examples', () => {
+    const session = new Session();
     const event = new ExampleTableEvent();
 
-    eq(event.interpret({ line: 'Examples:' }, session, state), true);
-    eq(event.interpret({ line: '  Examples  :  ' }, session, state), true);
-    eq(event.interpret({ line: 'Examples  :' }, session, state), true);
+    eq(event.test({ line: 'Examples:' }, session), true);
+    eq(event.test({ line: '  Examples  :  ' }, session), true);
+    eq(event.test({ line: 'Examples  :' }, session), true);
 
-    eq(event.interpret({ line: 'Examples' }, session, state), false);
+    eq(event.test({ line: 'Examples' }, session), false);
   });
 
-  it('should recognise localised examples', () => {
-    const session = { language: Languages.Pirate };
-    const state = new StubState();
+  it('should test localised examples', () => {
+    const session = new Session({ language: Languages.Pirate });
     const event = new ExampleTableEvent();
 
-    eq(event.interpret({ line: 'Wherest:' }, session, state), true);
-    eq(event.interpret({ line: '  Wherest  :  ' }, session, state), true);
-    eq(event.interpret({ line: 'Wherest  :' }, session, state), true);
+    eq(event.test({ line: 'Wherest:' }, session), true);
+    eq(event.test({ line: '  Wherest  :  ' }, session), true);
+    eq(event.test({ line: 'Wherest  :' }, session), true);
 
-    eq(event.interpret({ line: 'Wherest' }, session, state), false);
+    eq(event.test({ line: 'Wherest' }, session), false);
   });
 
-  it('should handle examples', () => {
-    const session = { language: Languages.English };
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExampleTableEvent');
-      eq(context.source.line, 'Where:');
-      eq(context.source.number, 1);
-    });
+  it('should interpret examples', () => {
+    const session = new Session();
     const event = new ExampleTableEvent();
 
-    event.interpret({ line: 'Where:', number: 1 }, session, state);
+    deq(event.interpret({ line: 'Examples:' }, session), {});
+    deq(event.interpret({ line: '  Examples  :  ' }, session), {});
+    deq(event.interpret({ line: 'Examples  :' }, session), {});
+  });
 
-    eq(state.count, 1);
+  it('should interpret localised examples', () => {
+    const session = new Session({ language: Languages.Pirate });
+    const event = new ExampleTableEvent();
+
+    deq(event.interpret({ line: 'Wherest:' }, session), {});
+    deq(event.interpret({ line: '  Wherest  :  ' }, session), {});
+    deq(event.interpret({ line: 'Wherest  :' }, session), {});
   });
 });

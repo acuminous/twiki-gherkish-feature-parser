@@ -1,32 +1,26 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, Session, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateScenarioStepExplicitDocStringState } = States;
 
 describe('CreateScenarioStepExplicitDocStringState', () => {
-  let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a docstring line',
   ].join('\n');
 
   beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
-    featureBuilder.createFeature({ annotations: [], title: 'Meh' });
-    featureBuilder.createScenario({ annotations: [], title: 'Meh' });
-    featureBuilder.createScenarioStep({ annotations: [], text: 'Meh' });
+    const featureBuilder = new FeatureBuilder()
+      .createFeature({ annotations: [], title: 'Meh' })
+      .createScenario({ annotations: [], title: 'Meh' })
+      .createScenarioStep({ annotations: [], text: 'Meh' });
 
-    machine = new StateMachine({ featureBuilder });
-    machine.toCreateScenarioStepExplicitDocStringState();
+    const session = new Session({ indentation: 0, docstring: { token: '---' } });
 
-    state = new CreateScenarioStepExplicitDocStringState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0, docstring: { token: '---' } };
+    machine = new StateMachine({ featureBuilder, session })
+      .toCreateScenarioStepExplicitDocStringState();
   });
 
   describe('A blank line', () => {
@@ -58,7 +52,7 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
       interpret('some text');
       interpret('some more text');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
     });
   });
@@ -72,12 +66,12 @@ describe('CreateScenarioStepExplicitDocStringState', () => {
     it('should be captured', () => {
       interpret('   some text');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.scenarios[0].steps[0].docstring, '   some text');
     });
   });
 
   function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.interpret({ line, number, indentation }, session);
+    machine.interpret({ line, number, indentation });
   }
 });

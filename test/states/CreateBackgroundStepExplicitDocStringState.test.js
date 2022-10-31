@@ -1,31 +1,25 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, Session, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { CreateBackgroundStepExplicitDocStringState } = States;
 
 describe('CreateBackgroundStepExplicitDocStringState', () => {
-  let featureBuilder;
   let machine;
-  let state;
-  let session;
   const expectedEvents = [
     ' - a docstring line',
   ].join('\n');
 
   beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
+    const featureBuilder = new FeatureBuilder();
     featureBuilder.createFeature({ annotations: [], title: 'Meh' });
     featureBuilder.createBackground({ annotations: [], title: 'Meh' });
     featureBuilder.createBackgroundStep({ annotations: [], text: 'Meh' });
 
-    machine = new StateMachine({ featureBuilder });
-    machine.toCreateBackgroundStepExplicitDocStringState();
+    const session = new Session({ indentation: 0, docstring: { token: '---' } });
 
-    state = new CreateBackgroundStepExplicitDocStringState({ featureBuilder, machine });
-
-    session = { language: Languages.English, indentation: 0, docstring: { token: '---' } };
+    machine = new StateMachine({ featureBuilder, session })
+      .toCreateBackgroundStepExplicitDocStringState();
   });
 
   describe('A blank line', () => {
@@ -36,7 +30,7 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
 
     it('should be captured on the docstring', () => {
       interpret('');
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.background.steps[0].docstring, '');
     });
   });
@@ -49,7 +43,7 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
 
     it('should be captured on the docstring', () => {
       interpret('   ');
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.background.steps[0].docstring, '   ');
     });
   });
@@ -74,12 +68,12 @@ describe('CreateBackgroundStepExplicitDocStringState', () => {
 
     it('should be captured on the docstring', () => {
       interpret('some text');
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.background.steps[0].docstring, 'some text');
     });
   });
 
   function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.interpret({ line, number, indentation }, session);
+    machine.interpret({ line, number, indentation });
   }
 });

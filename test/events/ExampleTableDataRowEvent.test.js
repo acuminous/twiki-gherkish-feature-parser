@@ -1,60 +1,39 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ExampleTableDataRowEvent } = Events;
 
 describe('ExampleTableDataRowEvent', () => {
 
-  it('should recognise example table data row', () => {
-    const session = { language: Languages.English };
-    const state = new StubState();
+  it('should test example table data row', () => {
     const event = new ExampleTableDataRowEvent();
 
-    eq(event.interpret({ line: '|a|' }, session, state), true);
-    eq(event.interpret({ line: '| a |' }, session, state), true);
-    eq(event.interpret({ line: '  |   a   |  ' }, session, state), true);
-    eq(event.interpret({ line: '| abc |' }, session, state), true);
-    eq(event.interpret({ line: '| a c |' }, session, state), true);
-    eq(event.interpret({ line: '| a | b | c |' }, session, state), true);
-    eq(event.interpret({ line: '| \u00A0a\u00A0 |' }, session, state), true);
+    eq(event.test({ line: '|a|' }), true);
+    eq(event.test({ line: '| a |' }), true);
+    eq(event.test({ line: '  |   a   |  ' }), true);
+    eq(event.test({ line: '| abc |' }), true);
+    eq(event.test({ line: '| a c |' }), true);
+    eq(event.test({ line: '| a | b | c |' }), true);
+    eq(event.test({ line: '| \u00A0a\u00A0 |' }), true);
 
-    eq(event.interpret({ line: '|' }, session, state), false);
-    eq(event.interpret({ line: '| |' }, session, state), false);
-    eq(event.interpret({ line: '| a' }, session, state), false);
-    eq(event.interpret({ line: '| a | b c | |' }, session, state), false);
-    eq(event.interpret({ line: 'a |' }, session, state), false);
+    eq(event.test({ line: '|' }), false);
+    eq(event.test({ line: '| |' }), false);
+    eq(event.test({ line: '| a' }), false);
+    eq(event.test({ line: '| a | b c | |' }), false);
+    eq(event.test({ line: 'a |' }), false);
   });
 
-  it('should handle example table data row', () => {
-    const session = { language: Languages.English };
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExampleTableDataRowEvent');
-      eq(context.source.line, '   |  a  | b c | d |  ');
-      eq(context.source.number, 1);
-      deq(context.data, { values: ['a', 'b c', 'd'] });
-    });
+  it('should interpret example table data row', () => {
     const event = new ExampleTableDataRowEvent();
 
-    event.interpret({ line: '   |  a  | b c | d |  ', number: 1 }, session, state);
-
-    eq(state.count, 1);
-  });
-
-  it('should not strip special whitespace', () => {
-    const session = { language: Languages.English };
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExampleTableDataRowEvent');
-      eq(context.source.line, '   | \u00A0a\u00A0 | \u00A0b c\u00A0 | \u00A0d\u00A0 |  ');
-      eq(context.source.number, 1);
-      deq(context.data, { values: ['\u00A0a\u00A0', '\u00A0b c\u00A0', '\u00A0d\u00A0'] });
-    });
-    const event = new ExampleTableDataRowEvent();
-
-    event.interpret({ line: '   | \u00A0a\u00A0 | \u00A0b c\u00A0 | \u00A0d\u00A0 |  ', number: 1 }, session, state);
-
-    eq(state.count, 1);
+    deq(event.interpret({ line: '|a|' }), { values: ['a'] });
+    deq(event.interpret({ line: '| a |' }), { values: ['a'] });
+    deq(event.interpret({ line: '  |   a   |  ' }), { values: ['a'] });
+    deq(event.interpret({ line: '| abc |' }), { values: ['abc'] });
+    deq(event.interpret({ line: '| a c |' }), { values: ['a c'] });
+    deq(event.interpret({ line: '| a | b | c |' }), { values: ['a', 'b', 'c'] });
+    deq(event.interpret({ line: '| \u00A0a\u00A0 |' }), { values: ['\u00A0a\u00A0'] });
   });
 });

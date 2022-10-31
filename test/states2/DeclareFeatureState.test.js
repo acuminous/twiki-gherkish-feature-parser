@@ -21,7 +21,6 @@ describe('DeclareFeatureState', () => {
       .createFeature({ title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder }, true)
-      .toInitialState()
       .toDeclareFeatureState();
   });
 

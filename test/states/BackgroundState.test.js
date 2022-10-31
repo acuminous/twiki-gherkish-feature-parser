@@ -1,14 +1,12 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, Languages, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { BackgroundState } = States;
 
 describe('BackgroundState', () => {
   let featureBuilder;
   let machine;
-  let state;
   let session;
   const expectedEvents = [
     ' - a blank line',
@@ -25,8 +23,6 @@ describe('BackgroundState', () => {
 
     machine = new StateMachine({ featureBuilder });
     machine.toBackgroundState({ featureBuilder });
-
-    state = new BackgroundState({ machine, featureBuilder });
 
     session = { language: Languages.English, indentation: 0 };
   });
@@ -131,6 +127,6 @@ describe('BackgroundState', () => {
   });
 
   function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    state.interpret({ line, number, indentation }, session);
+    machine.interpret({ line, number, indentation }, session);
   }
 });

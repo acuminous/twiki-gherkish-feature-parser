@@ -25,7 +25,6 @@ describe('CaptureScenarioDetailsState', () => {
       .createScenario({ title: 'First scenario' });
 
     machine = new StateMachine({ featureBuilder }, true)
-      .toInitialState()
       .toDeclareFeatureState()
       .checkpoint()
       .toDeclareScenarioState()

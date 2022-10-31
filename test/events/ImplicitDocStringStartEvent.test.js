@@ -1,55 +1,45 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ImplicitDocStringStartEvent } = Events;
 
 describe('ImplicitDocStringStartEvent', () => {
-  let session;
 
-  beforeEach(() => {
-    session = {
-      language: Languages.English,
-      indentation: 0,
-    };
-  });
-
-  it('should recognise indented docstrings', () => {
-    const state = new StubState();
+  it('should recognise indented text', () => {
+    const session = new Session();
     const event = new ImplicitDocStringStartEvent();
 
-    eq(event.interpret({ line: ' some text', indentation: 1 }, session, state), true);
+    eq(event.test({ line: ' some text', indentation: 1 }, session), true);
   });
 
-  it('should not recognise text that is not indented', () => {
-    const state = new StubState();
+  it('should not recognise flat text', () => {
+    const session = new Session();
     const event = new ImplicitDocStringStartEvent();
 
-    eq(event.interpret({ line: 'some text', indentation: 0 }, session, state), false);
+    eq(event.test({ line: 'some text', indentation: 0 }, session), false);
   });
 
-  it('should not recognise indented docstrings when already handling a docstring', () => {
-    const state = new StubState();
+  it('should not recognise indented docstrings when already handling an implicit docstring', () => {
+    const session = new Session({ docstring: {} });
     const event = new ImplicitDocStringStartEvent();
 
-    session.docstring = {};
-    eq(event.interpret({ line: ' some text', indentation: 1 }, session, state), false);
+    eq(event.test({ line: ' some text', indentation: 1 }, session), false);
   });
 
-  it('should handle indented docstrings', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ImplicitDocStringStartEvent');
-      eq(context.source.line, '   some text   ');
-      eq(context.source.number, 1);
-      eq(context.source.indentation, 3);
-    });
+  it('should not recognise indented docstrings when already handling an explicit docstring', () => {
+    const session = new Session({ docstring: { token: '---' } });
     const event = new ImplicitDocStringStartEvent();
 
-    event.interpret({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
+    eq(event.test({ line: ' some text', indentation: 1 }, session), false);
+  });
 
-    eq(session.docstring.indentation, 3);
-    eq(state.count, 1);
+  it('should interpret indented text', () => {
+    const session = new Session();
+    const event = new ImplicitDocStringStartEvent();
+
+    deq(event.interpret({ line: ' some text', indentation: 1 }, session), {});
+    eq(session.docstring.indentation, 1);
   });
 });

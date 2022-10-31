@@ -1,42 +1,28 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { DocStringTextEvent } = Events;
 
 describe('DocStringTextEvent', () => {
-  let session;
 
-  beforeEach(() => {
-    session = {
-      language: Languages.English,
-      docstring: {
-        indentation: 3,
-      },
-    };
-  });
-
-  it('should recognise docstrings', () => {
-    const state = new StubState();
+  it('should test docstrings', () => {
+    const session = new Session({ docstring: {} });
     const event = new DocStringTextEvent();
 
-    eq(event.interpret({ line: 'some text' }, session, state), true);
-    eq(event.interpret({ line: ' some text ' }, session, state), true);
+    eq(event.test({ line: 'some text' }, session), true);
+    eq(event.test({ line: ' some text ' }, session), true);
+
+    delete session.docstring;
+    eq(event.test({ line: ' some text ' }, session), false);
   });
 
-  it('should handle docstrings', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'DocStringTextEvent');
-      eq(context.source.line, '   some text   ');
-      eq(context.source.indentation, 3);
-      eq(context.source.number, 1);
-    });
+  it('should interpret docstrings', () => {
+    const session = new Session({ docstring: {} });
     const event = new DocStringTextEvent();
 
-    event.interpret({ line: '   some text   ', indentation: 3, number: 1 }, session, state);
-
-    eq(state.count, 1);
+    deq(event.interpret({ line: 'some text' }, session), { text: 'some text' });
+    deq(event.interpret({ line: ' some text ' }, session), { text: ' some text ' });
   });
 });

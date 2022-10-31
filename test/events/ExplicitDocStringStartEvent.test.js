@@ -1,84 +1,61 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ExplicitDocStringStartEvent } = Events;
 
 describe('ExplicitDocStringStartEvent', () => {
-  let session;
 
-  beforeEach(() => {
-    session = { language: Languages.English };
+  it('should test explicit docstrings', () => {
+    const session = new Session();
+    const event = new ExplicitDocStringStartEvent();
+    eq(event.test({ line: '---' }, session), true);
+    eq(event.test({ line: ' --- ' }, session), true);
+    eq(event.test({ line: ' ------ ' }, session), true);
+    eq(event.test({ line: '"""' }, session), true);
+    eq(event.test({ line: ' """ ' }, session), true);
+    eq(event.test({ line: ' """""" ' }, session), true);
+
+    eq(event.test({ line: '-' }, session), false);
+    eq(event.test({ line: '--' }, session), false);
+    eq(event.test({ line: '--- not a doc string' }, session), false);
+    eq(event.test({ line: '"' }, session), false);
+    eq(event.test({ line: '""' }, session), false);
+    eq(event.test({ line: '""" not a doc string' }, session), false);
   });
 
-  it('should recognise explicit docstrings', () => {
-    const state = new StubState();
+  it('should not recognise token docstrings when already handling an implicit docstring', () => {
+    const session = new Session({ docstring: {} });
     const event = new ExplicitDocStringStartEvent();
-    eq(event.interpret({ line: '---' }, session, state), true);
-    delete session.docstring;
-    eq(event.interpret({ line: ' --- ' }, session, state), true);
-    delete session.docstring;
-    eq(event.interpret({ line: ' ------ ' }, session, state), true);
-    delete session.docstring;
-    eq(event.interpret({ line: '"""' }, session, state), true);
-    delete session.docstring;
-    eq(event.interpret({ line: ' """ ' }, session, state), true);
-    delete session.docstring;
-    eq(event.interpret({ line: ' """""" ' }, session, state), true);
-    delete session.docstring;
 
-    eq(event.interpret({ line: '-' }, session, state), false);
-    delete session.docstring;
-    eq(event.interpret({ line: '--' }, session, state), false);
-    delete session.docstring;
-    eq(event.interpret({ line: '--- not a doc string' }, session, state), false);
-    delete session.docstring;
-    eq(event.interpret({ line: '"' }, session, state), false);
-    delete session.docstring;
-    eq(event.interpret({ line: '""' }, session, state), false);
-    delete session.docstring;
-    eq(event.interpret({ line: '""" not a doc string' }, session, state), false);
-    delete session.docstring;
+    eq(event.test({ line: '---' }, session), false);
+    eq(event.test({ line: '"""' }, session), false);
   });
 
-  it('should not recognise token docstrings when already handling a docstring', () => {
-    const state = new StubState();
+  it('should not recognise token docstrings when already handling a matching explicit docstring', () => {
+    const session = new Session({ docstring: { token: '---' } });
     const event = new ExplicitDocStringStartEvent();
 
-    session.docstring = {};
-    eq(event.interpret({ line: '---' }, session, state), false);
-    eq(event.interpret({ line: '"""' }, session, state), false);
+    eq(event.test({ line: '---' }, session), false);
   });
 
-  it('should handle --- docstrings', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExplicitDocStringStartEvent');
-      eq(context.source.line, '   ---   ');
-      eq(context.source.number, 1);
-      eq(context.source.indentation, 3);
-    });
+  it('should not recognise token docstrings when already handling an alternative explicit docstring', () => {
+    const session = new Session({ docstring: { token: '---' } });
     const event = new ExplicitDocStringStartEvent();
 
-    event.interpret({ line: '   ---   ', indentation: 3, number: 1 }, session, state);
-
-    eq(session.docstring.token, '---');
-    eq(state.count, 1);
+    eq(event.test({ line: '"""' }, session), false);
   });
 
-  it('should handle """ docstrings', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ExplicitDocStringStartEvent');
-      eq(context.source.line, '   """   ');
-      eq(context.source.number, 1);
-      eq(context.source.indentation, 3);
-    });
+  it('should interpret explicit docstrings', () => {
+    const session = new Session();
     const event = new ExplicitDocStringStartEvent();
 
-    event.interpret({ line: '   """   ', indentation: 3, number: 1 }, session, state);
-
-    eq(session.docstring.token, '"""');
-    eq(state.count, 1);
+    deq(event.interpret({ line: '---' }, session), {});
+    deq(event.interpret({ line: ' --- ' }, session), {});
+    deq(event.interpret({ line: ' ------ ' }, session), {});
+    deq(event.interpret({ line: '"""' }, session), {});
+    deq(event.interpret({ line: ' """ ' }, session), {});
+    deq(event.interpret({ line: ' """""" ' }, session), {});
   });
 });

@@ -1,51 +1,53 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Languages, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { ScenarioEvent } = Events;
 
 describe('ScenarioEvent', () => {
 
-  it('should recognise scenarios', () => {
-    const session = { language: Languages.English };
-    const state = new StubState();
+  it('should test scenarios', () => {
+    const session = new Session();
     const event = new ScenarioEvent();
 
-    eq(event.interpret({ line: 'scenario: Some scenario' }, session, state), true);
-    eq(event.interpret({ line: 'Scenario: Some scenario' }, session, state), true);
-    eq(event.interpret({ line: '  Scenario  : Some scenario  ' }, session, state), true);
-    eq(event.interpret({ line: 'Scenario  :' }, session, state), true);
+    eq(event.test({ line: 'scenario: Some scenario' }, session), true);
+    eq(event.test({ line: 'Scenario: Some scenario' }, session), true);
+    eq(event.test({ line: '  Scenario  : Some scenario  ' }, session), true);
+    eq(event.test({ line: 'Scenario  :' }, session), true);
 
-    eq(event.interpret({ line: 'Scenario' }, session, state), false);
+    eq(event.test({ line: 'Scenario' }, session), false);
   });
 
-  it('should recognise localised scenarios', () => {
-    const session = { language: Languages.Pirate };
-    const state = new StubState();
+  it('should test localised scenarios', () => {
+    const session = new Session({ language: Languages.Pirate });
     const event = new ScenarioEvent();
 
-    eq(event.interpret({ line: 'sortie: Some scenario' }, session, state), true);
-    eq(event.interpret({ line: 'Sortie: Some scenario' }, session, state), true);
-    eq(event.interpret({ line: '  Sortie  : Some scenario  ' }, session, state), true);
-    eq(event.interpret({ line: 'Sortie  :' }, session, state), true);
+    eq(event.test({ line: 'sortie: Some scenario' }, session), true);
+    eq(event.test({ line: 'Sortie: Some scenario' }, session), true);
+    eq(event.test({ line: '  Sortie  : Some scenario  ' }, session), true);
+    eq(event.test({ line: 'Sortie  :' }, session), true);
 
-    eq(event.interpret({ line: 'Scenario' }, session, state), false);
+    eq(event.test({ line: 'Scenario' }, session), false);
   });
 
-  it('should handle scenarios', () => {
-    const session = { language: Languages.English };
-    const state = new StubState((event, context) => {
-      eq(event.name, 'ScenarioEvent');
-      eq(context.source.line, 'Scenario:  Some scenario ');
-      eq(context.source.number, 1);
-      eq(context.data.title, 'Some scenario');
-    });
+  it('should test scenarios', () => {
+    const session = new Session();
     const event = new ScenarioEvent();
 
-    event.interpret({ line: 'Scenario:  Some scenario ', number: 1 }, session, state);
+    deq(event.interpret({ line: 'scenario: Some scenario' }, session), { title: 'Some scenario' });
+    deq(event.interpret({ line: 'Scenario: Some scenario' }, session), { title: 'Some scenario' });
+    deq(event.interpret({ line: '  Scenario  : Some scenario  ' }, session), { title: 'Some scenario' });
+    deq(event.interpret({ line: 'Scenario  :' }, session), { title: '' });
+  });
 
-    eq(state.count, 1);
+  it('should interpret localised scenarios', () => {
+    const session = new Session({ language: Languages.Pirate });
+    const event = new ScenarioEvent();
+
+    deq(event.interpret({ line: 'sortie: Some scenario' }, session), { title: 'Some scenario' });
+    deq(event.interpret({ line: 'Sortie: Some scenario' }, session), { title: 'Some scenario' });
+    deq(event.interpret({ line: '  Sortie  : Some scenario  ' }, session), { title: 'Some scenario' });
+    deq(event.interpret({ line: 'Sortie  :' }, session), { title: '' });
   });
 });

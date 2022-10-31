@@ -1,6 +1,6 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, Session, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -21,7 +21,7 @@ describe('CreateScenarioStepImplicitDocStringState', () => {
     featureBuilder.createScenario({ annotations: [], title: 'Meh' });
     featureBuilder.createScenarioStep({ annotations: [], text: 'Meh' });
 
-    const session = { language: Languages.English, indentation: 0, docstring: { indentation: 3 } };
+    const session = new Session({ indentation: 0, docstring: { indentation: 3 } });
     machine = new StateMachine({ featureBuilder, session });
     machine.toCreateScenarioStepImplicitDocStringState();
   });

@@ -1,51 +1,53 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events, Languages, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { FeatureEvent } = Events;
 
 describe('FeatureEvent', () => {
 
-  it('should recognise features', () => {
-    const session = { language: Languages.English };
-    const state = new StubState();
+  it('should test features', () => {
+    const session = new Session();
     const event = new FeatureEvent();
 
-    eq(event.interpret({ line: 'feature: Some feature' }, session, state), true);
-    eq(event.interpret({ line: 'Feature: Some feature' }, session, state), true);
-    eq(event.interpret({ line: '  Feature  : Some feature  ' }, session, state), true);
-    eq(event.interpret({ line: 'Feature  :' }, session, state), true);
+    eq(event.test({ line: 'feature: Some feature' }, session), true);
+    eq(event.test({ line: 'Feature: Some feature' }, session), true);
+    eq(event.test({ line: '  Feature  : Some feature  ' }, session), true);
+    eq(event.test({ line: 'Feature  :' }, session), true);
 
-    eq(event.interpret({ line: 'Feature' }, session, state), false);
+    eq(event.test({ line: 'Feature' }, session), false);
   });
 
-  it('should recognise localised features', () => {
-    const session = { language: Languages.Pirate };
-    const state = new StubState();
+  it('should test localised features', () => {
+    const session = new Session({ language: Languages.Pirate });
     const event = new FeatureEvent();
 
-    eq(event.interpret({ line: 'yarn: Some feature' }, session, state), true);
-    eq(event.interpret({ line: 'Yarn: Some feature' }, session, state), true);
-    eq(event.interpret({ line: '  Yarn  : Some feature  ' }, session, state), true);
-    eq(event.interpret({ line: 'Yarn  :' }, session, state), true);
+    eq(event.test({ line: 'yarn: Some feature' }, session), true);
+    eq(event.test({ line: 'Yarn: Some feature' }, session), true);
+    eq(event.test({ line: '  Yarn  : Some feature  ' }, session), true);
+    eq(event.test({ line: 'Yarn  :' }, session), true);
 
-    eq(event.interpret({ line: 'Yarn' }, session, state), false);
+    eq(event.test({ line: 'Yarn' }, session), false);
   });
 
-  it('should handle features', () => {
-    const session = { language: Languages.English };
-    const state = new StubState((event, context) => {
-      eq(event.name, 'FeatureEvent');
-      eq(context.source.line, 'Feature:  Some feature ');
-      eq(context.source.number, 1);
-      eq(context.data.title, 'Some feature');
-    });
+  it('should interpret features', () => {
+    const session = new Session();
     const event = new FeatureEvent();
 
-    event.interpret({ line: 'Feature:  Some feature ', number: 1 }, session, state);
+    deq(event.interpret({ line: 'feature: Some feature' }, session), { title: 'Some feature' });
+    deq(event.interpret({ line: 'Feature: Some feature' }, session), { title: 'Some feature' });
+    deq(event.interpret({ line: '  Feature  : Some feature  ' }, session), { title: 'Some feature' });
+    deq(event.interpret({ line: 'Feature  :' }, session), { title: '' });
+  });
 
-    eq(state.count, 1);
+  it('should interpret localised features', () => {
+    const session = new Session({ language: Languages.Pirate });
+    const event = new FeatureEvent();
+
+    deq(event.interpret({ line: 'yarn: Some feature' }, session), { title: 'Some feature' });
+    deq(event.interpret({ line: 'Yarn: Some feature' }, session), { title: 'Some feature' });
+    deq(event.interpret({ line: '  Yarn  : Some feature  ' }, session), { title: 'Some feature' });
+    deq(event.interpret({ line: 'Yarn  :' }, session), { title: '' });
   });
 });

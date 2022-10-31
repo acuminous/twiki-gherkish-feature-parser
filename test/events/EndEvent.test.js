@@ -1,39 +1,23 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
-import { Events, Languages } from '../../lib/index.js';
-import StubState from '../stubs/StubState.js';
+import { Events } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { EndEvent } = Events;
 
 describe('EndEvent', () => {
-  let session;
-
-  beforeEach(() => {
-    session = { language: Languages.English };
-  });
-
-  it('should recognise end of feature', () => {
-    const state = new StubState();
+  it('should test end of feature', () => {
     const event = new EndEvent();
 
-    eq(event.interpret({ line: '\u0000' }, session, state), true);
+    eq(event.test({ line: '\u0000' }), true);
 
-    eq(event.interpret({ line: ' \u0000' }, session, state), false);
-    eq(event.interpret({ line: '\u0000 ' }, session, state), false);
+    eq(event.test({ line: ' \u0000' }), false);
+    eq(event.test({ line: '\u0000 ' }), false);
   });
 
-  it('should handle end of feature', () => {
-    const state = new StubState((event, context) => {
-      eq(event.name, 'EndEvent');
-      eq(context.source.line, '\u0000');
-      eq(context.source.number, 1);
-      deq(context.data, {});
-    });
+  it('should interpret end of feature', () => {
     const event = new EndEvent();
 
-    event.interpret({ line: '\u0000', number: 1 }, session, state);
-
-    eq(state.count, 1);
+    deq(event.interpret({ line: '\u0000' }), {});
   });
 });
