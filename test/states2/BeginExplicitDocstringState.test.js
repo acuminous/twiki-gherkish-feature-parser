@@ -5,7 +5,7 @@ import { FeatureBuilder, StateMachine, Session, utils } from '../../lib/index.js
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('DeclareExplicitDocstringState', () => {
+describe('BeginExplicitDocstringState', () => {
   let machine;
 
   describe('Background Steps', () => {
@@ -30,7 +30,7 @@ describe('DeclareExplicitDocstringState', () => {
         .toCaptureBackgroundDetailsState()
         .checkpoint()
         .toCaptureStepState()
-        .toDeclareExplicitDocstringState();
+        .toBeginExplicitDocstringState();
     });
 
     describe('A blank line', () => {
