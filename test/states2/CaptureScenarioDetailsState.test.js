@@ -59,9 +59,10 @@ describe('CaptureScenarioDetailsState', () => {
     });
   });
 
-  xdescribe('An example table', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  describe('An example table', () => {
+    it('should cause a transition to DeclareExampleTableState', () => {
+      interpret('Where:');
+      eq(machine.state, 'DeclareExampleTableState');
     });
   });
 

@@ -248,10 +248,10 @@ describe('CaptureStepState', () => {
       });
     });
 
-    xdescribe('An example table', () => {
-      it('should cause a transition to CreateScenarioExampleTableState', () => {
+    describe('An example table', () => {
+      it('should cause a transition to DeclareExampleTableState', () => {
         interpret('Where:');
-        eq(machine.state, 'CreateScenarioExampleTableState');
+        eq(machine.state, 'DeclareExampleTableState');
       });
     });
 

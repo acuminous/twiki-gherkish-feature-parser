@@ -20,5 +20,8 @@
 1. Do we need DocStringTextEvent or will a regular TextEvent do? (maybe, depends on whether we remove indentation from steps)
 1. Delete unused featurebuilder methods
 1. Check for annotations: [] in featureBuilder calls
-1. Shoudl feature builder be more explicit about appending or creating things like steps and docstrings?
+1. Should feature builder be more explicit about appending or creating things like steps and docstrings?
 1. Rather than update the session, should events record things like token and indentation in the context?
+1. Add ExampleTable events to each states anticipated events list
+1. What happens if annotations are stashed, then the next element doesn't suppor them (e.g. an example table)
+   - I need to have an AnnotationState which will not support example table
