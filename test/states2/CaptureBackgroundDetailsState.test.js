@@ -20,7 +20,8 @@ describe('CaptureBackgroundDetailsState', () => {
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
-      .createBackground({ title: 'Meh' });
+      .createBackground({ title: 'Meh' })
+      .createStep({ text: 'First step' });
 
     machine = new StateMachine({ featureBuilder }, true)
       .toInitialState()
@@ -76,9 +77,23 @@ describe('CaptureBackgroundDetailsState', () => {
     });
   });
 
-  xdescribe('An implicit docstring', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  describe('An implicit docstring', () => {
+    it('should cause a transition to CaptureImplicitDocstringState', () => {
+      interpret('   some text');
+      eq(machine.state, 'CaptureImplicitDocstringState');
+    });
+
+    it('should be captured', () => {
+      interpret('   some text');
+
+      const exported = machine.build();
+      eq(exported.background.steps[0].docstring, 'some text');
+    });
+
+    it('should checkpoint', () => {
+      interpret('   some text');
+      machine.toPreviousCheckpoint();
+      eq(machine.state, 'CaptureBackgroundDetailsState');
     });
   });
 
@@ -133,28 +148,28 @@ describe('CaptureBackgroundDetailsState', () => {
 
   describe('A line of text', () => {
     it('should cause a transition to CaptureStepState', () => {
-      interpret('First step');
+      interpret('Second step');
       eq(machine.state, 'CaptureStepState');
     });
 
     it('should be captured without annotations', () => {
-      interpret('First step');
+      interpret('Second step');
 
       const exported = machine.build();
-      eq(exported.background.steps.length, 1);
-      eq(exported.background.steps[0].text, 'First step');
-      eq(exported.background.steps[0].annotations.length, 0);
+      eq(exported.background.steps.length, 2);
+      eq(exported.background.steps[1].text, 'Second step');
+      eq(exported.background.steps[1].annotations.length, 0);
     });
 
     it('should be captured with annotations', () => {
       interpret('@one=1');
       interpret('@two=2');
-      interpret('First step');
+      interpret('Second step');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].annotations.length, 2);
-      deq(exported.background.steps[0].annotations[0], { name: 'one', value: '1' });
-      deq(exported.background.steps[0].annotations[1], { name: 'two', value: '2' });
+      eq(exported.background.steps[1].annotations.length, 2);
+      deq(exported.background.steps[1].annotations[0], { name: 'one', value: '1' });
+      deq(exported.background.steps[1].annotations[1], { name: 'two', value: '2' });
     });
   });
 

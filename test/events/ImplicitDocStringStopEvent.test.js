@@ -14,6 +14,13 @@ describe('ImplicitDocStringStopEvent', () => {
     eq(event.test({ line: 'some text', indentation: 0 }, session), true);
   });
 
+  it('should recognise end of feature', () => {
+    const session = new Session({ docstring: { indentation: 3 } });
+    const event = new ImplicitDocStringStopEvent();
+
+    eq(event.test({ line: '\u0000' }, session), true);
+  });
+
   it('should not recognise indented text', () => {
     const session = new Session({ docstring: { indentation: 3 } });
     const event = new ImplicitDocStringStopEvent();

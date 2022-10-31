@@ -39,7 +39,7 @@ describe('ImplicitDocStringStartEvent', () => {
     const session = new Session();
     const event = new ImplicitDocStringStartEvent();
 
-    deq(event.interpret({ line: ' some text', indentation: 1 }, session), {});
+    deq(event.interpret({ line: ' some text', indentation: 1 }, session), { text: 'some text' });
     eq(session.docstring.indentation, 1);
   });
 });
