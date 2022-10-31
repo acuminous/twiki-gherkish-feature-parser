@@ -18,3 +18,7 @@
 1. Decide docstring docString DocString case
 1. Do we remove indentation from steps
 1. Do we need DocStringTextEvent or will a regular TextEvent do? (maybe, depends on whether we remove indentation from steps)
+1. Delete unused featurebuilder methods
+1. Check for annotations: [] in featureBuilder calls
+1. Shoudl feature builder be more explicit about appending or creating things like steps and docstrings?
+1. Rather than update the session, should events record things like token and indentation in the context?

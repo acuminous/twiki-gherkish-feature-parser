@@ -22,11 +22,10 @@ describe('CaptureStepState', () => {
 
     beforeEach(() => {
       const featureBuilder = new FeatureBuilder()
-        .createFeature({ annotations: [], title: 'Meh' })
-        .createBackground({ annotations: [], title: 'Meh' });
+        .createFeature({ title: 'Meh' })
+        .createBackground({ title: 'Meh' });
 
       machine = new StateMachine({ featureBuilder }, true)
-        .toInitialState()
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareBackgroundState()
@@ -177,7 +176,7 @@ describe('CaptureStepState', () => {
     });
   });
 
-  xdescribe('Scenario Steps', () => {
+  describe('Scenario Steps', () => {
 
     const expectedEvents = [
       ' - a blank line',
@@ -195,10 +194,9 @@ describe('CaptureStepState', () => {
     beforeEach(() => {
       const featureBuilder = new FeatureBuilder()
         .createFeature({ title: 'Meh' })
-        .createScenario({ title: 'Meh' });
+        .createScenario({ title: 'First scenario' });
 
-      machine = new StateMachine({ featureBuilder })
-        .toInitialState()
+      machine = new StateMachine({ featureBuilder }, true)
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareScenarioState()
@@ -210,7 +208,7 @@ describe('CaptureStepState', () => {
     describe('An annotation', () => {
       it('should not cause a state transition', () => {
         interpret('@foo=bar');
-        eq(machine.state, 'ScenarioStepsState');
+        eq(machine.state, 'CaptureStepState');
       });
     });
 
@@ -223,7 +221,7 @@ describe('CaptureStepState', () => {
     describe('A blank line', () => {
       it('should not cause a state transition', () => {
         interpret('');
-        eq(machine.state, 'ScenarioStepsState');
+        eq(machine.state, 'CaptureStepState');
       });
     });
 
@@ -234,21 +232,21 @@ describe('CaptureStepState', () => {
       });
     });
 
-    describe('An example table', () => {
+    xdescribe('An example table', () => {
       it('should cause a transition to CreateScenarioExampleTableState', () => {
         interpret('Where:');
         eq(machine.state, 'CreateScenarioExampleTableState');
       });
     });
 
-    describe('An explicit docstring', () => {
+    xdescribe('An explicit docstring', () => {
       it('should cause a transition to CreateScenarioStepExplicitDocStringState', () => {
         interpret('---');
         eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
       });
     });
 
-    describe('An implicit docstring', () => {
+    xdescribe('An implicit docstring', () => {
       it('should cause a transition to CreateScenarioStepImplicitDocStringState', () => {
         interpret('   some text');
         eq(machine.state, 'CreateScenarioStepImplicitDocStringState');
@@ -277,7 +275,7 @@ describe('CaptureStepState', () => {
     describe('A single line comment', () => {
       it('should not cause a state transition', () => {
         interpret('#');
-        eq(machine.state, 'ScenarioStepsState');
+        eq(machine.state, 'CaptureStepState');
       });
     });
 
@@ -312,19 +310,18 @@ describe('CaptureStepState', () => {
     });
 
     describe('A line of text', () => {
-      it('should cause a transition to ScenarioStepsState', () => {
+      it('should cause a transition to CaptureStepState', () => {
         interpret('Second step');
-        eq(machine.state, 'ScenarioStepsState');
+        eq(machine.state, 'CaptureStepState');
       });
 
       it('should be captured without annotations', () => {
-        interpret('Second step');
+        interpret('First step');
 
         const exported = machine.build();
 
-        eq(exported.scenarios[0].steps.length, 2);
+        eq(exported.scenarios[0].steps.length, 1);
         eq(exported.scenarios[0].steps[0].text, 'First step');
-        eq(exported.scenarios[0].steps[1].text, 'Second step');
       });
 
       it('should be captured with annotations', () => {
@@ -333,9 +330,9 @@ describe('CaptureStepState', () => {
         interpret('Bah');
 
         const exported = machine.build();
-        eq(exported.scenarios[0].steps[1].annotations.length, 2);
-        deq(exported.scenarios[0].steps[1].annotations[0], { name: 'one', value: '1' });
-        deq(exported.scenarios[0].steps[1].annotations[1], { name: 'two', value: '2' });
+        eq(exported.scenarios[0].steps[0].annotations.length, 2);
+        deq(exported.scenarios[0].steps[0].annotations[0], { name: 'one', value: '1' });
+        deq(exported.scenarios[0].steps[0].annotations[1], { name: 'two', value: '2' });
       });
     });
   });
