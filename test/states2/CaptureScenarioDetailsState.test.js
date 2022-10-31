@@ -64,9 +64,16 @@ describe('CaptureScenarioDetailsState', () => {
     });
   });
 
-  xdescribe('An explicit docstring', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  describe('An explicit docstring', () => {
+    it('should cause a transition to BeginExplicitDocstringState', () => {
+      interpret('---');
+      eq(machine.state, 'BeginExplicitDocstringState');
+    });
+
+    it('should checkpoint', () => {
+      interpret('---');
+      machine.toPreviousCheckpoint();
+      eq(machine.state, 'CaptureScenarioDetailsState');
     });
   });
 

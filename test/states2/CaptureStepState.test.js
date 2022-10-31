@@ -67,10 +67,16 @@ describe('CaptureStepState', () => {
       });
     });
 
-    xdescribe('An explicit docstring', () => {
-      it('should cause a transition to CreateBackgroundStepExplicitDocStringState', () => {
+    describe('An explicit docstring', () => {
+      it('should cause a transition to BeginExplicitDocstringState', () => {
         interpret('---');
-        eq(machine.state, 'CreateBackgroundStepExplicitDocStringState');
+        eq(machine.state, 'BeginExplicitDocstringState');
+      });
+
+      it('should checkpoint', () => {
+        interpret('---');
+        machine.toPreviousCheckpoint();
+        eq(machine.state, 'CaptureStepState');
       });
     });
 
@@ -239,10 +245,16 @@ describe('CaptureStepState', () => {
       });
     });
 
-    xdescribe('An explicit docstring', () => {
-      it('should cause a transition to CreateScenarioStepExplicitDocStringState', () => {
+    describe('An explicit docstring', () => {
+      it('should cause a transition to BeginExplicitDocstringState', () => {
         interpret('---');
-        eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
+        eq(machine.state, 'BeginExplicitDocstringState');
+      });
+
+      it('should checkpoint', () => {
+        interpret('---');
+        machine.toPreviousCheckpoint();
+        eq(machine.state, 'CaptureStepState');
       });
     });
 
