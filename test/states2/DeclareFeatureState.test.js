@@ -37,6 +37,13 @@ describe('DeclareFeatureState', () => {
       eq(machine.state, 'DeclareBackgroundState');
     });
 
+    it('should create a checkpoint', () => {
+      interpret('Background: foo');
+
+      machine.toPreviousCheckpoint();
+      eq(machine.state, 'DeclareFeatureState');
+    });
+
     it('should capture backgrounds with annotations', () => {
       interpret('@one=1');
       interpret('@two=2');

@@ -72,7 +72,7 @@ describe('CaptureScenarioDetailsState', () => {
       eq(machine.state, 'BeginExplicitDocstringState');
     });
 
-    it('should checkpoint', () => {
+    it('should create a checkpoint', () => {
       interpret('---');
       machine.toPreviousCheckpoint();
       eq(machine.state, 'CaptureScenarioDetailsState');
@@ -92,7 +92,7 @@ describe('CaptureScenarioDetailsState', () => {
       eq(exported.scenarios[0].steps[0].docstring, 'some text');
     });
 
-    it('should checkpoint', () => {
+    it('should create a checkpoint', () => {
       interpret('   some text');
       machine.toPreviousCheckpoint();
       eq(machine.state, 'CaptureScenarioDetailsState');

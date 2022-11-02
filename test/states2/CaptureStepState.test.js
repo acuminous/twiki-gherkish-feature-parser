@@ -74,7 +74,7 @@ describe('CaptureStepState', () => {
         eq(machine.state, 'BeginExplicitDocstringState');
       });
 
-      it('should checkpoint', () => {
+      it('should create a checkpoint', () => {
         interpret('---');
         machine.toPreviousCheckpoint();
         eq(machine.state, 'CaptureStepState');
@@ -94,7 +94,7 @@ describe('CaptureStepState', () => {
         eq(exported.background.steps[0].docstring, 'some text');
       });
 
-      it('should checkpoint', () => {
+      it('should create a checkpoint', () => {
         interpret('   some text');
         machine.toPreviousCheckpoint();
         eq(machine.state, 'CaptureStepState');
@@ -261,7 +261,7 @@ describe('CaptureStepState', () => {
         eq(machine.state, 'BeginExplicitDocstringState');
       });
 
-      it('should checkpoint', () => {
+      it('should create a checkpoint', () => {
         interpret('---');
         machine.toPreviousCheckpoint();
         eq(machine.state, 'CaptureStepState');
@@ -281,7 +281,7 @@ describe('CaptureStepState', () => {
         eq(exported.scenarios[0].steps[0].docstring, 'some text');
       });
 
-      it('should checkpoint', () => {
+      it('should create a checkpoint', () => {
         interpret('   some text');
         machine.toPreviousCheckpoint();
         eq(machine.state, 'CaptureStepState');

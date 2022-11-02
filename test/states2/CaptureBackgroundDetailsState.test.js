@@ -70,7 +70,7 @@ describe('CaptureBackgroundDetailsState', () => {
       eq(machine.state, 'BeginExplicitDocstringState');
     });
 
-    it('should checkpoint', () => {
+    it('should create a checkpoint', () => {
       interpret('---');
       machine.toPreviousCheckpoint();
       eq(machine.state, 'CaptureBackgroundDetailsState');
@@ -90,7 +90,7 @@ describe('CaptureBackgroundDetailsState', () => {
       eq(exported.background.steps[0].docstring, 'some text');
     });
 
-    it('should checkpoint', () => {
+    it('should create a checkpoint', () => {
       interpret('   some text');
       machine.toPreviousCheckpoint();
       eq(machine.state, 'CaptureBackgroundDetailsState');
