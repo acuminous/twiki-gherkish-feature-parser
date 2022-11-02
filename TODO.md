@@ -24,6 +24,8 @@
 1. Rather than update the session, should events record things like token and indentation in the context?
 1. Add ExampleTable events to each states anticipated events list
 1. What happens if annotations are stashed, then the next element doesn't suppor them (e.g. an example table)
-   - I need to have an AnnotationState which will not support example table
+   - I need to have an AnnotationState which will not support example table, i.e.
+     @foo=bar
+     Where:
 1. machine should not have responsibility for building features (machine.build)
 1. FeatureBuilder.build should not need a ternary

@@ -55,7 +55,7 @@ describe('AfterBackgroundStepDocStringState', () => {
     });
   });
 
-  describe('A docstring token', () => {
+  describe('An explicit docstring delimiter', () => {
     it('should be unexpected', () => {
       throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });

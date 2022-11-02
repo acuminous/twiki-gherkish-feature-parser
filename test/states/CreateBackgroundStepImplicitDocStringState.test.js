@@ -66,7 +66,7 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
     });
   });
 
-  describe('A docstring token indented to the same depth as the docstring', () => {
+  describe('An explicit docstring delimiter indented to the same depth as the docstring', () => {
     it('should not cause a state transition', () => {
       interpret('   ---');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
@@ -79,7 +79,7 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
     });
   });
 
-  describe('A docstring token indented more deeply than the docstring', () => {
+  describe('An explicit docstring delimiter indented more deeply than the docstring', () => {
     it('should not cause a state transition', () => {
       interpret('      ---');
       eq(machine.state, 'CreateBackgroundStepImplicitDocStringState');
@@ -92,7 +92,7 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
     });
   });
 
-  describe('A docstring token outdented to the original depth', () => {
+  describe('An explicit docstring delimiter outdented to the original depth', () => {
     it('should be unexpected', () => {
       throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
