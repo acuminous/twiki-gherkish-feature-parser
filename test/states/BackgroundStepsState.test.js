@@ -49,7 +49,7 @@ describe('BackgroundStepsState', () => {
     });
   });
 
-  describe('A block comment delimter', () => {
+  describe('A block comment delimiter delimter', () => {
     it('should cause a transition to BlockCommentState', () => {
       interpret('###');
       eq(machine.state, 'ConsumeBlockCommentState');

@@ -129,7 +129,7 @@ describe('CaptureExplicitDocstringState', () => {
     });
   });
 
-  describe('A block comment', () => {
+  describe('A block comment delimiter', () => {
     it('should not cause a state transition', () => {
       interpret('###');
       eq(machine.state, 'CaptureExplicitDocstringState');

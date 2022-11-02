@@ -3,12 +3,12 @@ import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
 import { Events } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { BlockCommentEvent } = Events;
+const { BlockCommentDelimiterEvent } = Events;
 
-describe('BlockCommentEvent', () => {
+describe('BlockCommentDelimiterEvent', () => {
 
   it('should test block comments', () => {
-    const event = new BlockCommentEvent();
+    const event = new BlockCommentDelimiterEvent();
 
     eq(event.test({ line: '### Some comment' }), true);
     eq(event.test({ line: ' ### Some comment' }), true);
@@ -19,7 +19,7 @@ describe('BlockCommentEvent', () => {
   });
 
   it('should recognise block comments', () => {
-    const event = new BlockCommentEvent();
+    const event = new BlockCommentDelimiterEvent();
 
     deq(event.interpret({ line: '### Some comment' }), {});
     deq(event.interpret({ line: ' ### Some comment' }), {});

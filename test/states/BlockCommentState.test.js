@@ -78,7 +78,7 @@ describe('ConsumeBlockCommentState', () => {
     });
   });
 
-  describe('A block comment', () => {
+  describe('A block comment delimiter', () => {
     it('should cause a transition to the previous state', () => {
       interpret('###');
       eq(machine.state, 'FeatureState');

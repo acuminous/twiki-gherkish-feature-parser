@@ -55,7 +55,7 @@ describe('CaptureStepState', () => {
       });
     });
 
-    describe('A block comment delimter', () => {
+    describe('A block comment delimiter delimter', () => {
       it('should cause a transition to BlockCommentState', () => {
         interpret('###');
         eq(machine.state, 'ConsumeBlockCommentState');
@@ -241,7 +241,7 @@ describe('CaptureStepState', () => {
       });
     });
 
-    describe('A block comment', () => {
+    describe('A block comment delimiter', () => {
       it('should cause a transition to BlockCommentState', () => {
         interpret('###');
         eq(machine.state, 'ConsumeBlockCommentState');

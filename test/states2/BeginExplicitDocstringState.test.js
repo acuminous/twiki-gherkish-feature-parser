@@ -115,7 +115,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A block comment', () => {
+    describe('A block comment delimiter', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('###');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -278,7 +278,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A block comment', () => {
+    describe('A block comment delimiter', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('###');
         eq(machine.state, 'CaptureExplicitDocstringState');
