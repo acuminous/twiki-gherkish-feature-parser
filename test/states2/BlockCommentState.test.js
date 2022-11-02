@@ -47,7 +47,7 @@ describe('BlockCommentState', () => {
     });
   });
 
-  describe('An explicit docstring', () => {
+  describe('An explicit docstring delimiter', () => {
     it('should not cause a state transition', () => {
       interpret('---');
       eq(machine.state, 'BlockCommentState');

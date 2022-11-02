@@ -66,7 +66,7 @@ describe('CaptureScenarioDetailsState', () => {
     });
   });
 
-  describe('An explicit docstring', () => {
+  describe('An explicit docstring delimiter', () => {
     it('should cause a transition to BeginExplicitDocstringState', () => {
       interpret('---');
       eq(machine.state, 'BeginExplicitDocstringState');

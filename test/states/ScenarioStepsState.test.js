@@ -64,7 +64,7 @@ describe('ScenarioStepsState', () => {
     });
   });
 
-  describe('An explicit docstring', () => {
+  describe('An explicit docstring delimiter', () => {
     it('should cause a transition to CreateScenarioStepExplicitDocStringState', () => {
       interpret('---');
       eq(machine.state, 'CreateScenarioStepExplicitDocStringState');
