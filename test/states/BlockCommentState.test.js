@@ -4,7 +4,7 @@ import { FeatureBuilder, StateMachine, Languages } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('BlockCommentState', () => {
+describe('ConsumeBlockCommentState', () => {
   let machine;
   let session;
   const expectedEvents = [
@@ -17,7 +17,7 @@ describe('BlockCommentState', () => {
 
     machine = new StateMachine({ featureBuilder });
     machine.toFeatureState();
-    machine.toBlockCommentState();
+    machine.toConsumeBlockCommentState();
 
     session = { language: Languages.English, indentation: 0 };
   });
@@ -25,35 +25,35 @@ describe('BlockCommentState', () => {
   describe('An annotation', () => {
     it('should not cause a state transition', () => {
       interpret('@foo = bar');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A background', () => {
     it('should not cause a state transition', () => {
       interpret('Background: foo');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A blank line', () => {
     it('should not cause a state transition', () => {
       interpret('');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('An example table', () => {
     it('should not cause a state transition', () => {
       interpret('Where:');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('An explicit docstring delimiter', () => {
     it('should not cause a state transition', () => {
       interpret('---');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
@@ -61,7 +61,7 @@ describe('BlockCommentState', () => {
     it('should not cause a state transition', () => {
       session.indentation = 0;
       interpret('   some text');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
@@ -74,7 +74,7 @@ describe('BlockCommentState', () => {
   describe('A feature', () => {
     it('should not cause a state transition', () => {
       interpret('Feature: foo');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
@@ -88,21 +88,21 @@ describe('BlockCommentState', () => {
   describe('A single line comment', () => {
     it('should not cause a state transition', () => {
       interpret('# Single comment');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A scenario', () => {
     it('should not cause a state transition', () => {
       interpret('Scenario: foo');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
   describe('A line of text', () => {
     it('should not cause a state transition', () => {
       interpret('Given some text');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 

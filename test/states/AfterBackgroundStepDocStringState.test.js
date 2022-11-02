@@ -74,9 +74,9 @@ describe('AfterBackgroundStepDocStringState', () => {
   });
 
   describe('A block comment', () => {
-    it('should cause a transition to BlockCommentState', () => {
+    it('should cause a transition to ConsumeBlockCommentState', () => {
       interpret('###');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 

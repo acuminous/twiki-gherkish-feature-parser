@@ -71,7 +71,7 @@ describe('AfterScenarioStepDocStringState', () => {
   describe('A block comment', () => {
     it('should cause a transition to BlockCommentState', () => {
       interpret('###');
-      eq(machine.state, 'BlockCommentState');
+      eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
