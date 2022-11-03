@@ -18,6 +18,6 @@ describe('EndEvent', () => {
   it('should interpret end of feature', () => {
     const event = new EndEvent();
 
-    deq(event.interpret({ line: '\u0000' }), {});
+    eq(event.interpret({ line: '\u0000' }), undefined);
   });
 });

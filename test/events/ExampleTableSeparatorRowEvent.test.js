@@ -24,9 +24,9 @@ describe('ExampleTableSeparatorRowEvent', () => {
   it('should interpret example table separator row', () => {
     const event = new ExampleTableSeparatorRowEvent();
 
-    deq(event.interpret({ line: '|-|' }), {});
-    deq(event.interpret({ line: '  |-|  ' }), {});
-    deq(event.interpret({ line: '|---|' }), {});
-    deq(event.interpret({ line: '|---|-|---|' }), {});
+    eq(event.interpret({ line: '|-|' }), undefined);
+    eq(event.interpret({ line: '  |-|  ' }), undefined);
+    eq(event.interpret({ line: '|---|' }), undefined);
+    eq(event.interpret({ line: '|---|-|---|' }), undefined);
   });
 });

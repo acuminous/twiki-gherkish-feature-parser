@@ -51,11 +51,11 @@ describe('ExplicitDocstringStartEvent', () => {
     const session = new Session();
     const event = new ExplicitDocstringStartEvent();
 
-    deq(event.interpret({ line: '---' }, session), {});
-    deq(event.interpret({ line: ' --- ' }, session), {});
-    deq(event.interpret({ line: ' ------ ' }, session), {});
-    deq(event.interpret({ line: '"""' }, session), {});
-    deq(event.interpret({ line: ' """ ' }, session), {});
-    deq(event.interpret({ line: ' """""" ' }, session), {});
+    eq(event.interpret({ line: '---' }, session), undefined);
+    eq(event.interpret({ line: ' --- ' }, session), undefined);
+    eq(event.interpret({ line: ' ------ ' }, session), undefined);
+    eq(event.interpret({ line: '"""' }, session), undefined);
+    eq(event.interpret({ line: ' """ ' }, session), undefined);
+    eq(event.interpret({ line: ' """""" ' }, session), undefined);
   });
 });

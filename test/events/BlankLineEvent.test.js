@@ -19,7 +19,7 @@ describe('BlankLineEvent', () => {
   it('should interpret blank lines', () => {
     const event = new BlankLineEvent();
 
-    deq(event.interpret({ line: '' }), {});
-    deq(event.interpret({ line: '   ' }), {});
+    eq(event.interpret({ line: '' }), undefined);
+    eq(event.interpret({ line: '   ' }), undefined);
   });
 });

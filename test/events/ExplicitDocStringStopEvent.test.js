@@ -41,7 +41,7 @@ describe('ExplicitDocstringStopEvent', () => {
     const session = new Session({ docstring: { delimiter: '---' } });
     const event = new ExplicitDocstringStopEvent();
 
-    deq(event.interpret({ line: '---' }, session), {});
+    eq(event.interpret({ line: '---' }, session), undefined);
     deq(session.isProcessingDocstring(), false);
   });
 
@@ -49,7 +49,7 @@ describe('ExplicitDocstringStopEvent', () => {
     const session = new Session({ docstring: { delimiter: '"""' } });
     const event = new ExplicitDocstringStopEvent();
 
-    deq(event.interpret({ line: '"""' }, session), {});
+    eq(event.interpret({ line: '"""' }, session), undefined);
     deq(session.isProcessingDocstring(), false);
   });
 });

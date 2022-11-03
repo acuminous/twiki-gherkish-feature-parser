@@ -33,17 +33,17 @@ describe('ExampleTableEvent', () => {
     const session = new Session();
     const event = new ExampleTableEvent();
 
-    deq(event.interpret({ line: 'Examples:' }, session), {});
-    deq(event.interpret({ line: '  Examples  :  ' }, session), {});
-    deq(event.interpret({ line: 'Examples  :' }, session), {});
+    eq(event.interpret({ line: 'Examples:' }, session), undefined);
+    eq(event.interpret({ line: '  Examples  :  ' }, session), undefined);
+    eq(event.interpret({ line: 'Examples  :' }, session), undefined);
   });
 
   it('should interpret localised examples', () => {
     const session = new Session({ language: Languages.Pirate });
     const event = new ExampleTableEvent();
 
-    deq(event.interpret({ line: 'Wherest:' }, session), {});
-    deq(event.interpret({ line: '  Wherest  :  ' }, session), {});
-    deq(event.interpret({ line: 'Wherest  :' }, session), {});
+    eq(event.interpret({ line: 'Wherest:' }, session), undefined);
+    eq(event.interpret({ line: '  Wherest  :  ' }, session), undefined);
+    eq(event.interpret({ line: 'Wherest  :' }, session), undefined);
   });
 });

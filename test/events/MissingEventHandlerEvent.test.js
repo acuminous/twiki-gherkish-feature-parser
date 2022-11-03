@@ -14,6 +14,6 @@ describe('MissingEventHandlerEvent', () => {
 
   it('should interpret anything', () => {
     const event = new MissingEventHandlerEvent();
-    deq(event.interpret({ line: 'anything' }), {});
+    eq(event.interpret({ line: 'anything' }), undefined);
   });
 });

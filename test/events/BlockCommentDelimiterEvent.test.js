@@ -21,9 +21,9 @@ describe('BlockCommentDelimiterEvent', () => {
   it('should recognise block comments', () => {
     const event = new BlockCommentDelimiterEvent();
 
-    deq(event.interpret({ line: '### Some comment' }), {});
-    deq(event.interpret({ line: ' ### Some comment' }), {});
-    deq(event.interpret({ line: '###' }), {});
-    deq(event.interpret({ line: '#### Some comment' }), {});
+    eq(event.interpret({ line: '### Some comment' }), undefined);
+    eq(event.interpret({ line: ' ### Some comment' }), undefined);
+    eq(event.interpret({ line: '###' }), undefined);
+    eq(event.interpret({ line: '#### Some comment' }), undefined);
   });
 });

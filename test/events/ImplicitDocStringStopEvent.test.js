@@ -53,7 +53,7 @@ describe('ImplicitDocstringStopEvent', () => {
     const session = new Session({ docstring: { indentation: 3 } });
     const event = new ImplicitDocstringStopEvent();
 
-    deq(event.interpret({ line: 'some text', indentation: 0 }, session), {});
+    eq(event.interpret({ line: 'some text', indentation: 0 }, session), undefined);
     eq(session.isProcessingDocstring(), false);
   });
 });

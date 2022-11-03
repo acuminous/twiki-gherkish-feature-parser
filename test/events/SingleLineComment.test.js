@@ -21,9 +21,9 @@ describe('SingleLineCommentEvent', () => {
   it('should interpret single line comments', () => {
     const event = new SingleLineCommentEvent();
 
-    deq(event.interpret({ line: '# Some comment' }), {});
-    deq(event.interpret({ line: ' # Some comment' }), {});
-    deq(event.interpret({ line: '#' }), {});
-    deq(event.interpret({ line: '## Some comment' }), {});
+    eq(event.interpret({ line: '# Some comment' }), undefined);
+    eq(event.interpret({ line: ' # Some comment' }), undefined);
+    eq(event.interpret({ line: '#' }), undefined);
+    eq(event.interpret({ line: '## Some comment' }), undefined);
   });
 });
