@@ -1,12 +1,11 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, Languages } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('ConsumeBlockCommentState', () => {
   let machine;
-  let session;
   const expectedEvents = [
     ' - a block comment delimiter',
     ' - some text',
@@ -14,12 +13,10 @@ describe('ConsumeBlockCommentState', () => {
 
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder();
-
-    machine = new StateMachine({ featureBuilder });
-    machine.toFeatureState();
-    machine.toConsumeBlockCommentState();
-
-    session = { language: Languages.English, indentation: 0 };
+    machine = new StateMachine({ featureBuilder }, true)
+      .toDeclareFeatureState()
+      .checkpoint()
+      .toConsumeBlockCommentState();
   });
 
   describe('An annotation', () => {
@@ -59,7 +56,6 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('An implicit docstring', () => {
     it('should not cause a state transition', () => {
-      session.indentation = 0;
       interpret('   some text');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
@@ -81,7 +77,7 @@ describe('ConsumeBlockCommentState', () => {
   describe('A block comment delimiter', () => {
     it('should cause a transition to the previous state', () => {
       interpret('###');
-      eq(machine.state, 'FeatureState');
+      eq(machine.state, 'DeclareFeatureState');
     });
   });
 
@@ -107,6 +103,6 @@ describe('ConsumeBlockCommentState', () => {
   });
 
   function interpret(line, number = 1) {
-    machine.interpret({ line, number }, session);
+    machine.interpret({ line, number });
   }
 });

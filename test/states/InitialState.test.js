@@ -1,13 +1,11 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureParser, FeatureBuilder, StateMachine, Languages, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('InitialState', () => {
-  let featureBuilder;
   let machine;
-  let session;
   const expectedEvents = [
     ' - a blank line',
     ' - a block comment delimiter',
@@ -17,10 +15,8 @@ describe('InitialState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const parser = new FeatureParser();
-    featureBuilder = new FeatureBuilder();
-    machine = new StateMachine({ parser, featureBuilder });
-    session = { language: Languages.English, indentation: 0 };
+    const featureBuilder = new FeatureBuilder();
+    machine = new StateMachine({ featureBuilder }, true);
   });
 
   describe('An annotation', () => {
@@ -68,16 +64,17 @@ describe('InitialState', () => {
   });
 
   describe('A feature', () => {
-    it('should cause a transition to FeatureState', () => {
+    it('should cause a transition to DeclareFeatureState', () => {
       interpret('Feature: foo');
-      eq(machine.state, 'FeatureState');
+      eq(machine.state, 'DeclareFeatureState');
     });
 
     it('should be caputed without annotations', () => {
       interpret('Feature: Some feature');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.title, 'Some feature');
+      eq(exported.annotations.length, 0);
     });
 
     it('should be captured with annotations', () => {
@@ -85,7 +82,7 @@ describe('InitialState', () => {
       interpret('@two = 2');
       interpret('Feature: First scenario');
 
-      const exported = featureBuilder.build();
+      const exported = machine.build();
       eq(exported.annotations.length, 2);
       deq(exported.annotations[0], { name: 'one', value: '1' });
       deq(exported.annotations[1], { name: 'two', value: '2' });
@@ -119,6 +116,6 @@ describe('InitialState', () => {
   });
 
   function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    machine.interpret({ line, number, indentation }, session);
+    machine.interpret({ line, number, indentation });
   }
 });
