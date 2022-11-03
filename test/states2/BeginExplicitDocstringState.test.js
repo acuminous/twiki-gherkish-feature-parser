@@ -23,7 +23,6 @@ describe('BeginExplicitDocstringState', () => {
       const session = new Session({ docstring: { token: '---', indentation: 0 } });
 
       machine = new StateMachine({ featureBuilder, session }, true)
-        .toInitialState()
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareBackgroundState()

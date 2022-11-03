@@ -22,7 +22,6 @@ describe('CaptureBackgroundDetailsState', () => {
       .createStep({ text: 'First step' });
 
     machine = new StateMachine({ featureBuilder }, true)
-      .toInitialState()
       .toDeclareFeatureState()
       .checkpoint()
       .toDeclareBackgroundState()

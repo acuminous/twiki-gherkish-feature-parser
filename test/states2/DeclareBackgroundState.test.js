@@ -20,7 +20,6 @@ describe('DeclareBackgroundState', () => {
       .createBackground({ title: 'Meh' });
 
     machine = new StateMachine({ featureBuilder }, true)
-      .toInitialState()
       .toDeclareFeatureState()
       .checkpoint()
       .toDeclareBackgroundState();

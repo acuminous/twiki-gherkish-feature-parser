@@ -89,9 +89,9 @@ describe('CaptureExplicitDocstringState', () => {
   });
 
   describe('An explicit docstring delimiter', () => {
-    it('should cause a transition to EndDocstringState', () => {
+    it('should cause a transition to CaptureScenarioDetailsState', () => {
       interpret('---');
-      eq(machine.state, 'EndDocstringState');
+      eq(machine.state, 'CaptureScenarioDetailsState');
     });
   });
 
