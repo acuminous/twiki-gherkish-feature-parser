@@ -14,7 +14,7 @@ describe('DocstringTextEvent', () => {
     eq(event.test({ line: 'some text' }, session), true);
     eq(event.test({ line: ' some text ' }, session), true);
 
-    delete session.docstring;
+    session.endDocstring();
     eq(event.test({ line: ' some text ' }, session), false);
   });
 
