@@ -8,7 +8,6 @@
     this._featureBuilder.createBackground({ ...event.data });
    }
    ```
-1. Remove toPreviousState
 1. Sync FeatureBuilder and state transition naming, e.g. featureBuilder.createFeature => featureBuilder.declareFeature
 1. Find out why ExampleTableHeaderRowEvent stashes the headings in the session
 1. Session should not have to check hasOwnProperty('indentation')
@@ -16,7 +15,6 @@
 1. Decide docstring docString DocString case
 1. Do we remove indentation from steps
 1. Do we need DocStringTextEvent or will a regular TextEvent do? (maybe, depends on whether we remove indentation from steps)
-1. Delete unused featurebuilder methods
 1. Check for annotations: [] in featureBuilder calls
 1. Should feature builder be more explicit about appending or creating things like steps and docstrings?
 1. Rather than update the session, should events record things like token and indentation in the context?
