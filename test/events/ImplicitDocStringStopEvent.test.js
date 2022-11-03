@@ -43,7 +43,7 @@ describe('ImplicitDocstringStopEvent', () => {
   });
 
   it('should not recognise indented text when not processing an explicit docstring', () => {
-    const session = new Session({ docstring: { token: '---' } });
+    const session = new Session({ docstring: { delimiter: '---' } });
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.test({ line: '   some text', indentation: 3 }, session), false);

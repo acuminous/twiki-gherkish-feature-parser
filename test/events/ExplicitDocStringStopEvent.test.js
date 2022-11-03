@@ -8,7 +8,7 @@ const { ExplicitDocstringStopEvent } = Events;
 describe('ExplicitDocstringStopEvent', () => {
 
   it('should test explicit --- docstrings', () => {
-    const session = new Session({ docstring: { token: '---' } });
+    const session = new Session({ docstring: { delimiter: '---' } });
     const event = new ExplicitDocstringStopEvent();
 
     eq(event.test({ line: '---' }, session), true);
@@ -23,7 +23,7 @@ describe('ExplicitDocstringStopEvent', () => {
   });
 
   it('should test explicit """ docstrings', () => {
-    const session = new Session({ docstring: { token: '"""' } });
+    const session = new Session({ docstring: { delimiter: '"""' } });
     const event = new ExplicitDocstringStopEvent();
 
     eq(event.test({ line: '"""' }, session), true);
@@ -38,7 +38,7 @@ describe('ExplicitDocstringStopEvent', () => {
   });
 
   it('should interpret explicit --- docstrings', () => {
-    const session = new Session({ docstring: { token: '---' } });
+    const session = new Session({ docstring: { delimiter: '---' } });
     const event = new ExplicitDocstringStopEvent();
 
     deq(event.interpret({ line: '---' }, session), {});
@@ -46,7 +46,7 @@ describe('ExplicitDocstringStopEvent', () => {
   });
 
   it('should interpret explicit """ docstrings', () => {
-    const session = new Session({ docstring: { token: '"""' } });
+    const session = new Session({ docstring: { delimiter: '"""' } });
     const event = new ExplicitDocstringStopEvent();
 
     deq(event.interpret({ line: '"""' }, session), {});

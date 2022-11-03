@@ -22,7 +22,7 @@ describe('BeginExplicitDocstringState', () => {
         .createBackground({ title: 'Meh' })
         .createStep({ text: 'Meh' });
 
-      const session = new StubSession({ docstring: { token: '---', indentation: 0 } });
+      const session = new StubSession({ docstring: { delimiter: '---', indentation: 0 } });
 
       machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()
@@ -185,7 +185,7 @@ describe('BeginExplicitDocstringState', () => {
         .createScenario({ title: 'Meh' })
         .createStep({ text: 'Meh' });
 
-      const session = new StubSession({ docstring: { token: '---', indentation: 0 } });
+      const session = new StubSession({ docstring: { delimiter: '---', indentation: 0 } });
 
       machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()

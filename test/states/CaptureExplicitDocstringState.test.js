@@ -21,7 +21,7 @@ describe('CaptureExplicitDocstringState', () => {
       .createStep({ text: 'First step' })
       .createDocstring({ text: 'some docstring' });
 
-    const session = new StubSession({ docstring: { token: '---' } });
+    const session = new StubSession({ docstring: { delimiter: '---' } });
 
     machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState()
