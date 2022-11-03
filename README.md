@@ -88,17 +88,17 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BackgroundEvent             | title?      | Background:<br/>Background: Introduction                                                        |
 | BlankLineEvent              |             |                                                                                                 |
 | BlockCommentDelimiterEvent  |             | ###                                                                                             |
-| DocStringTextEvent          | text        | This is a line in a docstring                                                                   |
+| DocstringTextEvent          | text        | This is a line in a docstring                                                                   |
 | EndEvent                    |             | \u0000 _(automatically appended by the feature parser)_                                         |
 | ExampleTableEvent           |             | Where:                                                                                          |
 | ExampleTableHeaderRow       | headings    | \| height \| width \|                                                                           |
 | ExampleTableSeparatorRow    |             | \|--------\|---------\|                                                                         |
 | ExampleTableDataRow         | values      | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
-| ExplicitDocStringBeginEvent |             | ---</br>"""</br>                                                                                |
-| ExplicitDocStringEndEvent   |             | ---</br>"""</br>                                                                                |
+| ExplicitDocstringBeginEvent |             | ---</br>"""</br>                                                                                |
+| ExplicitDocstringEndEvent   |             | ---</br>"""</br>                                                                                |
 | FeatureEvent                | title?      | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
-| ImplicitDocStringBeginEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
-| ImplicitDocStringEndEvent   | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
+| ImplicitDocstringBeginEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
+| ImplicitDocstringEndEvent   | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
 | RuleEvent                   | title?      | Rule:<br/>Rule: Buck Rogers wins                                                                |
 | ScenarioEvent               | title?      | Scenario:<br/>Scenario: Awakening                                                               |
 | SingleLineCommentEvent      |             | # This is a comment                                                                             |
@@ -232,40 +232,40 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | BlockCommentDelimiterEvent  | Transition                          | [ConsumeBlockCommentState](#ConsumeBlockCommentState)                                                  |
 | EndEvent                    | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)                                                        |
 | ExampleTableEvent           | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueScenarioState](#ContinueScenarioState)                                                        |
-| ExplicitDocStringBeginEvent | Transition                          | [BeginExplicitDocStringState](#BeginExplicitDocStringState)                                            |
-| ImplicitDocStringBeginEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [BeginImplicitDocStringState](#BeginImplicitDocStringState)                                            |
+| ExplicitDocstringBeginEvent | Transition                          | [BeginExplicitDocstringState](#BeginExplicitDocstringState)                                            |
+| ImplicitDocstringBeginEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [BeginImplicitDocstringState](#BeginImplicitDocstringState)                                            |
 | RuleEvent                   | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueFeatureState](#ContinueFeatureState)                                                          |
 | ScenarioEvent               | Unwind&nbsp;&amp;&nbsp;Dispatch     | [ContinueBackgroundState](#ContinueBackgroundState) or [ContinueScenarioState](#ContinueScenarioState) |
 | SingleLineComment           | Absorb                              |                                                                                                        |
 | StepEvent                   | Build                               |                                                                                                        |
 
-### BeginExplicitDocStringState
+### BeginExplicitDocstringState
 
 | Event              | Action                              | Destination                                                     |
 | ------------------ | ----------------------------------- | --------------------------------------------------------------- |
-| DocStringTextEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeExplicitDocStringState](#ConsumeExplicitDocStringState) |
+| DocstringTextEvent | Transition&nbsp;&amp;&nbsp;Dispatch | [ConsumeExplicitDocstringState](#ConsumeExplicitDocstringState) |
 
-### ConsumeExplicitDocStringState
+### ConsumeExplicitDocstringState
 
 | Event                     | Action     | Destination                             |
 | ------------------------- | ---------- | --------------------------------------- |
-| DocStringTextEvent        | Build      |                                         |
-| ExplicitDocStringEndEvent | Transition | [EndDocStringState](#EndDocStringState) |
+| DocstringTextEvent        | Build      |                                         |
+| ExplicitDocstringEndEvent | Transition | [EndDocstringState](#EndDocstringState) |
 
-### BeginImplicitDocStringState
+### BeginImplicitDocstringState
 
 | Event                       | Action                           | Destination                                                     |
 | --------------------------- | -------------------------------- | --------------------------------------------------------------- |
-| ImplicitDocStringBeginEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeImplicitDocStringState](#ConsumeImplicitDocStringState) |
+| ImplicitDocstringBeginEvent | Build&nbsp;&amp;&nbsp;Transition | [ConsumeImplicitDocstringState](#ConsumeImplicitDocstringState) |
 
-### ConsumeImplicitDocStringState
+### ConsumeImplicitDocstringState
 
 | Event                     | Action                            | Destination                             |
 | ------------------------- | --------------------------------- | --------------------------------------- |
-| DocStringTextEvent        | Build                             |                                         |
-| ImplicitDocStringEndEvent | Transition&nbsp;&amp;&nbsp;Handle | [EndDocStringState](#EndDocStringState) |
+| DocstringTextEvent        | Build                             |                                         |
+| ImplicitDocstringEndEvent | Transition&nbsp;&amp;&nbsp;Handle | [EndDocstringState](#EndDocstringState) |
 
-### EndDocStringState
+### EndDocstringState
 
 | Event                      | Action                          | Destination                                                                                            |
 | -------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -329,7 +329,7 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 | Event                      | Action | Destination                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | -------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BlockCommentDelimiterEvent | Unwind | [BeginBackgroundState](#BeginBackgroundState), [BeginFeatureState](#BeginFeatureState), [ConsumeAnnotationsState](#ConsumeAnnotationsState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginExampleTableState](#BeginExampleTableState), [BeginScenarioState](#BeginScenarioState), [ContinueFeatureState](#ContinueFeatureState), [ConsumeExampleTableDataState](#ConsumeExampleTableDataState), [ConsumeExampleTableSeparatorState](#ConsumeExampleTableSeparatorState), [ContinueScenarioState](#ContinueScenarioState), [ConsumeStepsState](#ConsumeStepsState), [EndDocStringState](#EndDocStringState) or [EndExampleTableState](#EndExampleTableState) |
+| BlockCommentDelimiterEvent | Unwind | [BeginBackgroundState](#BeginBackgroundState), [BeginFeatureState](#BeginFeatureState), [ConsumeAnnotationsState](#ConsumeAnnotationsState), [ContinueBackgroundState](#ContinueBackgroundState), [BeginExampleTableState](#BeginExampleTableState), [BeginScenarioState](#BeginScenarioState), [ContinueFeatureState](#ContinueFeatureState), [ConsumeExampleTableDataState](#ConsumeExampleTableDataState), [ConsumeExampleTableSeparatorState](#ConsumeExampleTableSeparatorState), [ContinueScenarioState](#ContinueScenarioState), [ConsumeStepsState](#ConsumeStepsState), [EndDocstringState](#EndDocstringState) or [EndExampleTableState](#EndExampleTableState) |
 | TextEvent                  | Absorb |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 ### EndFeatureState

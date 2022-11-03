@@ -3,13 +3,13 @@ import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
 import { Events, Session } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
-const { ExplicitDocStringStopEvent } = Events;
+const { ExplicitDocstringStopEvent } = Events;
 
-describe('ExplicitDocStringStopEvent', () => {
+describe('ExplicitDocstringStopEvent', () => {
 
   it('should test explicit --- docstrings', () => {
     const session = new Session({ docstring: { token: '---' } });
-    const event = new ExplicitDocStringStopEvent();
+    const event = new ExplicitDocstringStopEvent();
 
     eq(event.test({ line: '---' }, session), true);
     eq(event.test({ line: ' --- ' }, session), true);
@@ -24,7 +24,7 @@ describe('ExplicitDocStringStopEvent', () => {
 
   it('should test explicit """ docstrings', () => {
     const session = new Session({ docstring: { token: '"""' } });
-    const event = new ExplicitDocStringStopEvent();
+    const event = new ExplicitDocstringStopEvent();
 
     eq(event.test({ line: '"""' }, session), true);
     eq(event.test({ line: ' """ ' }, session), true);
@@ -39,17 +39,17 @@ describe('ExplicitDocStringStopEvent', () => {
 
   it('should interpret explicit --- docstrings', () => {
     const session = new Session({ docstring: { token: '---' } });
-    const event = new ExplicitDocStringStopEvent();
+    const event = new ExplicitDocstringStopEvent();
 
     deq(event.interpret({ line: '---' }, session), {});
-    deq(session.isProcessingDocString(), false);
+    deq(session.isProcessingDocstring(), false);
   });
 
   it('should interpret explicit """ docstrings', () => {
     const session = new Session({ docstring: { token: '"""' } });
-    const event = new ExplicitDocStringStopEvent();
+    const event = new ExplicitDocstringStopEvent();
 
     deq(event.interpret({ line: '"""' }, session), {});
-    deq(session.isProcessingDocString(), false);
+    deq(session.isProcessingDocstring(), false);
   });
 });
