@@ -6,6 +6,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('CaptureBackgroundStepState', () => {
+  let featureBuilder;
   let machine;
 
   const expectedEvents = [
@@ -20,7 +21,7 @@ describe('CaptureBackgroundStepState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder()
+    featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
       .createBackground({ title: 'Meh' })
       .createStep({ text: 'First step' });
@@ -85,7 +86,7 @@ describe('CaptureBackgroundStepState', () => {
     it('should be captured', () => {
       interpret('   some text');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.background.steps[0].docstring, 'some text');
     });
   });
@@ -118,7 +119,7 @@ describe('CaptureBackgroundStepState', () => {
     it('should be captured without annotations', () => {
       interpret('Scenario: First scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
       eq(exported.scenarios[0].annotations.length, 0);
@@ -129,7 +130,7 @@ describe('CaptureBackgroundStepState', () => {
       interpret('@two = 2');
       interpret('Scenario: First scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       eq(exported.scenarios[0].annotations[0].name, 'one');
@@ -148,7 +149,7 @@ describe('CaptureBackgroundStepState', () => {
     it('should be captured without annotations', () => {
       interpret('Given some text');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.background.steps.length, 2);
       eq(exported.background.steps[1].text, 'Given some text');
       eq(exported.background.steps[1].annotations.length, 0);
@@ -159,7 +160,7 @@ describe('CaptureBackgroundStepState', () => {
       interpret('@two = 2');
       interpret('Given some text');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.background.steps[1].annotations.length, 2);
       eq(exported.background.steps[1].annotations[0].name, 'one');
       eq(exported.background.steps[1].annotations[0].value, '1');
@@ -172,7 +173,7 @@ describe('CaptureBackgroundStepState', () => {
     interpret('Second step');
     interpret('Third step');
 
-    const exported = machine.build();
+    const exported = featureBuilder.build();
     eq(exported.background.steps.length, 3);
     eq(exported.background.steps[0].text, 'First step');
     eq(exported.background.steps[1].text, 'Second step');

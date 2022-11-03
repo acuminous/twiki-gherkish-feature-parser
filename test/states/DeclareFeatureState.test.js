@@ -6,6 +6,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('DeclareFeatureState', () => {
+  let featureBuilder;
   let machine;
   const expectedEvents = [
     ' - a background',
@@ -18,7 +19,7 @@ describe('DeclareFeatureState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder()
+    featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' });
 
     const session = new StubSession();
@@ -52,7 +53,7 @@ describe('DeclareFeatureState', () => {
       interpret('@two=2');
       interpret('Background: First background');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.background.annotations.length, 2);
       eq(exported.background.annotations[0].name, 'one');
       eq(exported.background.annotations[0].value, '1');
@@ -115,7 +116,7 @@ describe('DeclareFeatureState', () => {
     it('should be captured without annotations', () => {
       interpret('Scenario: First scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].title, 'First scenario');
       eq(exported.annotations.length, 0);
@@ -126,7 +127,7 @@ describe('DeclareFeatureState', () => {
       interpret('@two=2');
       interpret('Scenario: First scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 1);
       eq(exported.scenarios[0].annotations.length, 2);
       deq(exported.scenarios[0].annotations[0], { name: 'one', value: '1' });
@@ -145,7 +146,7 @@ describe('DeclareFeatureState', () => {
       interpret('some more text');
       interpret('   some indented text');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.description, 'some text\nsome more text\n   some indented text');
     });
   });

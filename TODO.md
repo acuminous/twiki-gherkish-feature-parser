@@ -15,7 +15,6 @@
 1. Decide docstring docString DocString case
 1. Do we remove indentation from steps
 1. Do we need DocStringTextEvent or will a regular TextEvent do? (maybe, depends on whether we remove indentation from steps)
-1. Check for annotations: [] in featureBuilder calls
 1. Should feature builder be more explicit about appending or creating things like steps and docstrings?
 1. Rather than update the session, should events record things like token and indentation in the context?
 1. Add ExampleTable events to each states anticipated events list
@@ -23,8 +22,5 @@
    - I need to have an AnnotationState which will not support example table, i.e.
      @foo=bar
      Where:
-1. machine should not have responsibility for building features (machine.build)
-1. FeatureBuilder.build should not need a ternary
 1. Explicit session management functions for docstrings
-1. A completely blank line should not be matched by an ImplicitDocstringEndEvent (will be annoying because editors truncate lines)
-1. Do not exposte state name from machine
+1. Do not expose state name from machine

@@ -6,6 +6,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('DeclareBackgroundState', () => {
+  let featureBuilder;
   let machine;
   const expectedEvents = [
     ' - a blank line',
@@ -16,7 +17,7 @@ describe('DeclareBackgroundState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder()
+    featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
       .createBackground({ title: 'Meh' });
 
@@ -107,7 +108,7 @@ describe('DeclareBackgroundState', () => {
     it('should be captured without annotations', () => {
       interpret('First step');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.background.steps.length, 1);
       eq(exported.background.steps[0].text, 'First step');
       eq(exported.background.steps[0].annotations.length, 0);
@@ -118,7 +119,7 @@ describe('DeclareBackgroundState', () => {
       interpret('@two=2');
       interpret('First step');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.background.steps[0].annotations.length, 2);
       deq(exported.background.steps[0].annotations[0], { name: 'one', value: '1' });
       deq(exported.background.steps[0].annotations[1], { name: 'two', value: '2' });

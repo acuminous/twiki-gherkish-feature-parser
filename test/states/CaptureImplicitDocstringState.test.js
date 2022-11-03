@@ -7,6 +7,7 @@ import * as utils from '../../lib/utils.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('CaptureImplicitDocstringState', () => {
+  let featureBuilder;
   let machine;
 
   describe('After a background step', () => {
@@ -21,7 +22,7 @@ describe('CaptureImplicitDocstringState', () => {
     ].join('\n');
 
     beforeEach(() => {
-      const featureBuilder = new FeatureBuilder()
+      featureBuilder = new FeatureBuilder()
         .createFeature({ title: 'Meh' })
         .createBackground({ title: 'Meh' })
         .createStep({ text: 'First step' });
@@ -47,7 +48,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   @foo = bar');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, '@foo = bar');
       });
     });
@@ -68,7 +69,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   Background: foo');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, 'Background: foo');
       });
     });
@@ -88,7 +89,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('      ');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, '   ');
       });
     });
@@ -109,7 +110,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   Where:');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, 'Where:');
       });
     });
@@ -129,7 +130,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   ---');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, '---');
       });
     });
@@ -149,7 +150,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   some more text');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, 'some more text');
       });
     });
@@ -176,7 +177,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   ###');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, '###');
       });
     });
@@ -197,7 +198,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   # A comment');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, '# A comment');
       });
     });
@@ -218,7 +219,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   Scenario: foo');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.background.steps[0].docstring, 'Scenario: foo');
       });
     });
@@ -245,7 +246,7 @@ describe('CaptureImplicitDocstringState', () => {
     ].join('\n');
 
     beforeEach(() => {
-      const featureBuilder = new FeatureBuilder()
+      featureBuilder = new FeatureBuilder()
         .createFeature({ title: 'Meh' })
         .createScenario({ title: 'Meh' })
         .createStep({ text: 'First step' });
@@ -271,7 +272,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   @foo = bar');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, '@foo = bar');
       });
     });
@@ -292,7 +293,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   Background: foo');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, 'Background: foo');
       });
     });
@@ -312,7 +313,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('      ');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, '   ');
       });
     });
@@ -333,7 +334,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   Where:');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, 'Where:');
       });
     });
@@ -367,7 +368,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   some more text');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, 'some more text');
       });
     });
@@ -395,7 +396,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   ###');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, '###');
       });
     });
@@ -416,7 +417,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   # A comment');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, '# A comment');
       });
     });
@@ -437,7 +438,7 @@ describe('CaptureImplicitDocstringState', () => {
       it('should be captured', () => {
         interpret('   Scenario: foo');
 
-        const exported = machine.build();
+        const exported = featureBuilder.build();
         eq(exported.scenarios[0].steps[0].docstring, 'Scenario: foo');
       });
     });

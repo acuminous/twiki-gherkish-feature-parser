@@ -6,6 +6,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('ConsumeBlockCommentState', () => {
+  let featureBuilder;
   let machine;
   const expectedEvents = [
     ' - a block comment delimiter',
@@ -13,7 +14,7 @@ describe('ConsumeBlockCommentState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder();
+    featureBuilder = new FeatureBuilder();
     const session = new StubSession();
 
     machine = new StateMachine({ featureBuilder, session })

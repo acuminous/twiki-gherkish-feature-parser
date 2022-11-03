@@ -7,6 +7,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('CaptureExplicitDocstringState', () => {
+  let featureBuilder;
   let machine;
   const expectedEvents = [
     ' - a docstring line',
@@ -14,7 +15,7 @@ describe('CaptureExplicitDocstringState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder()
+    featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
       .createScenario({ title: 'Meh' })
       .createStep({ text: 'First step' })
@@ -42,7 +43,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('@foo = bar');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', '@foo = bar'].join(os.EOL));
     });
   });
@@ -56,7 +57,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('Background: foo');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Background: foo'].join(os.EOL));
     });
   });
@@ -70,7 +71,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', ''].join(os.EOL));
     });
   });
@@ -84,7 +85,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('Where:');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Where:'].join(os.EOL));
     });
   });
@@ -105,7 +106,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('   some more text');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', '   some more text'].join(os.EOL));
     });
   });
@@ -125,7 +126,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('Feature: foo');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Feature: foo'].join(os.EOL));
     });
   });
@@ -139,7 +140,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('###');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', '###'].join(os.EOL));
     });
   });
@@ -153,7 +154,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('# A comment');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', '# A comment'].join(os.EOL));
     });
   });
@@ -167,7 +168,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('Scenario: foo');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Scenario: foo'].join(os.EOL));
     });
   });
@@ -181,7 +182,7 @@ describe('CaptureExplicitDocstringState', () => {
     it('should be captured', () => {
       interpret('some more text');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
     });
   });

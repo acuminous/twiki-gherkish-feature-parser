@@ -6,6 +6,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('InitialState', () => {
+  let featureBuilder;
   let machine;
   const expectedEvents = [
     ' - a blank line',
@@ -16,7 +17,7 @@ describe('InitialState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder();
+    featureBuilder = new FeatureBuilder();
     const session = new StubSession();
     machine = new StateMachine({ featureBuilder, session });
   });
@@ -74,7 +75,7 @@ describe('InitialState', () => {
     it('should be caputed without annotations', () => {
       interpret('Feature: Some feature');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.title, 'Some feature');
       eq(exported.annotations.length, 0);
     });
@@ -84,7 +85,7 @@ describe('InitialState', () => {
       interpret('@two = 2');
       interpret('Feature: First scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.annotations.length, 2);
       deq(exported.annotations[0], { name: 'one', value: '1' });
       deq(exported.annotations[1], { name: 'two', value: '2' });

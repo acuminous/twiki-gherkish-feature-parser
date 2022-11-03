@@ -6,6 +6,7 @@ import StubSession from '../stubs/StubSession.js';
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('CaptureScenarioDetailsState', () => {
+  let featureBuilder;
   let machine;
   const expectedEvents = [
     ' - a blank line',
@@ -19,7 +20,7 @@ describe('CaptureScenarioDetailsState', () => {
   ].join('\n');
 
   beforeEach(() => {
-    const featureBuilder = new FeatureBuilder()
+    featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
       .createScenario({ title: 'First scenario' })
       .createStep({ text: 'First step' });
@@ -108,7 +109,7 @@ describe('CaptureScenarioDetailsState', () => {
     it('should be captured without annotations', () => {
       interpret('Scenario: Second scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 2);
       eq(exported.scenarios[1].title, 'Second scenario');
       eq(exported.scenarios[1].annotations.length, 0);
@@ -119,7 +120,7 @@ describe('CaptureScenarioDetailsState', () => {
       interpret('@two = 2');
       interpret('Scenario: Second scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 2);
       eq(exported.scenarios[1].annotations.length, 2);
       eq(exported.scenarios[1].annotations[0].name, 'one');
@@ -133,7 +134,7 @@ describe('CaptureScenarioDetailsState', () => {
       interpret('Some text');
       interpret('Scenario: Third scenario');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios.length, 3);
       eq(exported.scenarios[0].title, 'First scenario');
       eq(exported.scenarios[1].title, 'Second scenario');
@@ -151,7 +152,7 @@ describe('CaptureScenarioDetailsState', () => {
     it('should be captured without annotations', () => {
       interpret('Second step');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps.length, 2);
       eq(exported.scenarios[0].steps[1].text, 'Second step');
       eq(exported.scenarios[0].steps[1].annotations.length, 0);
@@ -162,7 +163,7 @@ describe('CaptureScenarioDetailsState', () => {
       interpret('@two=2');
       interpret('Second step');
 
-      const exported = machine.build();
+      const exported = featureBuilder.build();
       eq(exported.scenarios[0].steps[1].annotations.length, 2);
       deq(exported.scenarios[0].steps[1].annotations[0], { name: 'one', value: '1' });
       deq(exported.scenarios[0].steps[1].annotations[1], { name: 'two', value: '2' });
