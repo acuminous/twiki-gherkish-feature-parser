@@ -15,6 +15,7 @@ describe('AfterScenarioStepDocStringState', () => {
     ' - a single line comment',
     ' - a step',
     ' - an annotation',
+    ' - the end of the feature',
   ].join('\n');
 
   beforeEach(() => {
