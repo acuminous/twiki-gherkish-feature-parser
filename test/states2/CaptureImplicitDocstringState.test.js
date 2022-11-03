@@ -33,7 +33,7 @@ describe('CaptureImplicitDocstringState', () => {
         .toDeclareBackgroundState()
         .toCaptureBackgroundDetailsState()
         .checkpoint()
-        .toCaptureStepState()
+        .toCaptureBackgroundStepState()
         .toCaptureImplicitDocstringState();
     });
 
@@ -257,7 +257,7 @@ describe('CaptureImplicitDocstringState', () => {
         .toDeclareScenarioState()
         .toCaptureScenarioDetailsState()
         .checkpoint()
-        .toCaptureStepState()
+        .toCaptureScenarioStepState()
         .toCaptureImplicitDocstringState();
     });
 
@@ -372,9 +372,9 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
     describe('An outdented line of text', () => {
-      it('should cause a transition to CaptureStepState', () => {
+      it('should cause a transition to CaptureScenarioStepState', () => {
         interpret('some text');
-        eq(machine.state, 'CaptureStepState');
+        eq(machine.state, 'CaptureScenarioStepState');
       });
     });
 

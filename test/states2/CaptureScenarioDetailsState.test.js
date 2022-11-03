@@ -139,10 +139,10 @@ describe('CaptureScenarioDetailsState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a transition to CaptureStepState', () => {
+    it('should cause a transition to CaptureScenarioStepState', () => {
       interpret('Second step');
 
-      eq(machine.state, 'CaptureStepState');
+      eq(machine.state, 'CaptureScenarioStepState');
     });
 
     it('should be captured without annotations', () => {

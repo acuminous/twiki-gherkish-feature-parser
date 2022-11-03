@@ -8,7 +8,7 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 describe('BeginExplicitDocstringState', () => {
   let machine;
 
-  describe('Background Steps', () => {
+  describe('After a background step', () => {
 
     const expectedEvents = [
       ' - a docstring line',
@@ -29,7 +29,7 @@ describe('BeginExplicitDocstringState', () => {
         .toDeclareBackgroundState()
         .toCaptureBackgroundDetailsState()
         .checkpoint()
-        .toCaptureStepState()
+        .toCaptureBackgroundStepState()
         .toBeginExplicitDocstringState();
     });
 
@@ -173,7 +173,7 @@ describe('BeginExplicitDocstringState', () => {
     });
   });
 
-  describe('Scenario Steps', () => {
+  describe('After a scenario step', () => {
     const expectedEvents = [
       ' - a docstring line',
     ].join('\n');
@@ -187,12 +187,12 @@ describe('BeginExplicitDocstringState', () => {
       const session = new Session({ docstring: { token: '---', indentation: 0 } });
 
       machine = new StateMachine({ featureBuilder, session }, true)
-        .toInitialState()
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareScenarioState()
+        .toCaptureScenarioDetailsState()
         .checkpoint()
-        .toCaptureStepState()
+        .toCaptureScenarioStepState()
         .toBeginExplicitDocstringState();
     });
 

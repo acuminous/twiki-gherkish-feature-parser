@@ -99,7 +99,7 @@ describe('DeclareScenarioState', () => {
     it('should cause a transition to CaptureStepState', () => {
       interpret('First step');
 
-      eq(machine.state, 'CaptureStepState');
+      eq(machine.state, 'CaptureScenarioStepState');
     });
 
     it('should be captured without annotations', () => {

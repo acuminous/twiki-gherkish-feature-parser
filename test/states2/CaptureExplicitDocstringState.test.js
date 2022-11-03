@@ -15,7 +15,7 @@ describe('CaptureExplicitDocstringState', () => {
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
-      .createBackground({ title: 'Meh' })
+      .createScenario({ title: 'Meh' })
       .createStep({ text: 'First step' })
       .createDocstring({ text: 'some text' });
 
@@ -24,11 +24,11 @@ describe('CaptureExplicitDocstringState', () => {
     machine = new StateMachine({ featureBuilder, session }, true)
       .toDeclareFeatureState()
       .checkpoint()
-      .toDeclareBackgroundState()
-      .toCaptureBackgroundDetailsState()
+      .toDeclareScenarioState()
+      .toCaptureScenarioDetailsState()
       .checkpoint()
-      .toCaptureStepState()
-      .checkpoint()
+      .toCaptureScenarioStepState()
+      .toBeginExplicitDocstringState()
       .toCaptureExplicitDocstringState();
   });
 
@@ -42,7 +42,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('@foo = bar');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', '@foo = bar'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', '@foo = bar'].join(os.EOL));
     });
   });
 
@@ -56,7 +56,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Background: foo');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', 'Background: foo'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Background: foo'].join(os.EOL));
     });
   });
 
@@ -70,7 +70,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', ''].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', ''].join(os.EOL));
     });
   });
 
@@ -84,7 +84,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Where:');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', 'Where:'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Where:'].join(os.EOL));
     });
   });
 
@@ -105,7 +105,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('   some more text');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', '   some more text'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', '   some more text'].join(os.EOL));
     });
   });
 
@@ -125,7 +125,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Feature: foo');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', 'Feature: foo'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Feature: foo'].join(os.EOL));
     });
   });
 
@@ -139,7 +139,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('###');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', '###'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', '###'].join(os.EOL));
     });
   });
 
@@ -153,7 +153,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('# A comment');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', '# A comment'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', '# A comment'].join(os.EOL));
     });
   });
 
@@ -167,7 +167,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Scenario: foo');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', 'Scenario: foo'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Scenario: foo'].join(os.EOL));
     });
   });
 
@@ -181,7 +181,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('some more text');
 
       const exported = machine.build();
-      eq(exported.background.steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
     });
   });
 
