@@ -19,7 +19,7 @@ describe('CaptureExplicitDocstringState', () => {
       .createFeature({ title: 'Meh' })
       .createScenario({ title: 'Meh' })
       .createStep({ text: 'First step' })
-      .createDocstring({ text: 'some text' });
+      .createDocstring({ text: 'some docstring' });
 
     const session = new StubSession({ docstring: { token: '---' } });
 
@@ -34,7 +34,7 @@ describe('CaptureExplicitDocstringState', () => {
       .toCaptureExplicitDocstringState();
   });
 
-  describe('An annotation', () => {
+  describe('Annotations', () => {
     it('should not cause a state transition', () => {
       interpret('@foo = bar');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -44,11 +44,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('@foo = bar');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', '@foo = bar'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', '@foo = bar'].join(os.EOL));
     });
   });
 
-  describe('A background', () => {
+  describe('Backgrounds', () => {
     it('should not cause a state transition', () => {
       interpret('Background: foo');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -58,11 +58,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Background: foo');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Background: foo'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', 'Background: foo'].join(os.EOL));
     });
   });
 
-  describe('A blank line', () => {
+  describe('Blank lines', () => {
     it('should not cause a state transition', () => {
       interpret('');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -72,11 +72,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', ''].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', ''].join(os.EOL));
     });
   });
 
-  describe('An example table', () => {
+  describe('Example tables', () => {
     it('should not cause a state transition', () => {
       interpret('Where:');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -86,38 +86,38 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Where:');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Where:'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', 'Where:'].join(os.EOL));
     });
   });
 
-  describe('An explicit docstring delimiter', () => {
+  describe('Explicit docstring delimiters', () => {
     it('should cause a transition to CaptureScenarioDetailsState', () => {
       interpret('---');
       eq(machine.state, 'CaptureScenarioDetailsState');
     });
   });
 
-  describe('An indented line of text', () => {
+  describe('Implicit docstring delimiters', () => {
     it('should not cause a state transition', () => {
-      interpret('   some more text');
+      interpret('   some more docstring');
       eq(machine.state, 'CaptureExplicitDocstringState');
     });
 
     it('should be captured', () => {
-      interpret('   some more text');
+      interpret('   some more docstring');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', '   some more text'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', '   some more docstring'].join(os.EOL));
     });
   });
 
-  describe('The end of the feature', () => {
+  describe('End of file', () => {
     it('should be unexpected', () => {
       throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A feature', () => {
+  describe('Features', () => {
     it('should not cause a state transition', () => {
       interpret('Feature: foo');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -127,11 +127,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Feature: foo');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Feature: foo'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', 'Feature: foo'].join(os.EOL));
     });
   });
 
-  describe('A block comment delimiter', () => {
+  describe('Block comment delimiters', () => {
     it('should not cause a state transition', () => {
       interpret('###');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -141,11 +141,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('###');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', '###'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', '###'].join(os.EOL));
     });
   });
 
-  describe('A single line comment', () => {
+  describe('Single line comments', () => {
     it('should not cause a state transition', () => {
       interpret('# A comment');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -155,11 +155,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('# A comment');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', '# A comment'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', '# A comment'].join(os.EOL));
     });
   });
 
-  describe('A scenario', () => {
+  describe('Scenarios', () => {
     it('should not cause a state transition', () => {
       interpret('Scenario: foo');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -169,11 +169,11 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('Scenario: foo');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'Scenario: foo'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', 'Scenario: foo'].join(os.EOL));
     });
   });
 
-  describe('A line of text', () => {
+  describe('Lines of text', () => {
     it('should not cause a state transition', () => {
       interpret('some more text');
       eq(machine.state, 'CaptureExplicitDocstringState');
@@ -183,7 +183,7 @@ describe('CaptureExplicitDocstringState', () => {
       interpret('some more text');
 
       const exported = featureBuilder.build();
-      eq(exported.scenarios[0].steps[0].docstring, ['some text', 'some more text'].join(os.EOL));
+      eq(exported.scenarios[0].steps[0].docstring, ['some docstring', 'some more text'].join(os.EOL));
     });
   });
 

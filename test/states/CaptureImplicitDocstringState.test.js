@@ -162,7 +162,7 @@ describe('CaptureImplicitDocstringState', () => {
       });
     });
 
-    describe('The end of the feature', () => {
+    describe('End of file', () => {
       it('should be unexpected', () => {
         throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
@@ -380,7 +380,7 @@ describe('CaptureImplicitDocstringState', () => {
       });
     });
 
-    describe('The end of the feature', () => {
+    describe('End of file', () => {
       it('should cause a transition to FinalState', () => {
         interpret('\u0000');
         eq(machine.state, 'FinalState');

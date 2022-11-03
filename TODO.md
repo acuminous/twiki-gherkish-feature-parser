@@ -1,13 +1,4 @@
-1. Docstring being unindented immediately - error or not?
-1. Docstrings being terminated immediately - error or not?
-1. Consider dispatching events to state.on(session, event) method, and having this delegate to specific onSomeEvent handlers
 1. Consider renaming tests from 'An annotation' => 'Annotations'
-1. Consider moving featureBuilder code into onEnter() method of event handler, e.g.
-   ```
-   onEnter(session, event) {
-    this._featureBuilder.createBackground({ ...event.data });
-   }
-   ```
 1. Sync FeatureBuilder and state transition naming, e.g. featureBuilder.createFeature => featureBuilder.declareFeature
 1. Find out why ExampleTableHeaderRowEvent stashes the headings in the session
 1. Session should not have to check hasOwnProperty('indentation')

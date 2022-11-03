@@ -29,77 +29,77 @@ describe('DeclareBackgroundState', () => {
       .toDeclareBackgroundState();
   });
 
-  describe('An annotation', () => {
+  describe('Annotations', () => {
     it('should not cause a state transition', () => {
       interpret('@foo=bar');
       eq(machine.state, 'DeclareBackgroundState');
     });
   });
 
-  describe('A background', () => {
+  describe('Backgrounds', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A blank line', () => {
+  describe('Blank lines', () => {
     it('should not cause a state transition', () => {
       interpret('');
       eq(machine.state, 'DeclareBackgroundState');
     });
   });
 
-  describe('A block comment delimiter', () => {
+  describe('Block comment delimiters', () => {
     it('should cause a transition to BlockCommentState', () => {
       interpret('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('An example table', () => {
+  describe('Example tables', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('An explicit docstring delimiter', () => {
+  describe('Explicit docstring delimiters', () => {
     it('should be unexpected', () => {
       throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('An implicit docstring', () => {
+  describe('Implicit docstring delimiters', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('   some text'), { message: `I did not expect the start of an implicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('   some docstring'), { message: `I did not expect the start of an implicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('The end of the feature', () => {
+  describe('End of file', () => {
     it('should be unexpected', () => {
       throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A feature', () => {
+  describe('Features', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A single line comment', () => {
+  describe('Single line comments', () => {
     it('should not cause a state transition', () => {
       interpret('# Some comment');
       eq(machine.state, 'DeclareBackgroundState');
     });
   });
 
-  describe('A scenario', () => {
+  describe('Scenarios', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Scenario: First scenario'), { message: `I did not expect a scenario at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A line of text', () => {
+  describe('Lines of text', () => {
     it('should cause a transition to CaptureBackgroundStepState', () => {
       interpret('First step');
       eq(machine.state, 'CaptureBackgroundStepState');

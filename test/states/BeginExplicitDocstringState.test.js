@@ -34,7 +34,7 @@ describe('BeginExplicitDocstringState', () => {
         .toBeginExplicitDocstringState();
     });
 
-    describe('An annotation', () => {
+    describe('Annotations', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('@foo = bar');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -48,7 +48,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A background', () => {
+    describe('Backgrounds', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Background: foo');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -62,7 +62,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A blank line', () => {
+    describe('Blank lines', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('   ');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -76,7 +76,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('An example table', () => {
+    describe('Example tables', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Where:');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -90,19 +90,19 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('An explicit docstring delimiter', () => {
+    describe('Explicit docstring delimiters', () => {
       it('should be unexpected', () => {
         throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
-    describe('The end of the feature', () => {
+    describe('End of file', () => {
       it('should be unexpected', () => {
         throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
-    describe('A feature', () => {
+    describe('Features', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Feature: foo');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -116,7 +116,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A block comment delimiter', () => {
+    describe('Block comment delimiters', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('###');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -130,7 +130,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A single line comment', () => {
+    describe('Single line comments', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('# A comment');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -144,7 +144,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A scenario', () => {
+    describe('Scenarios', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Scenario: foo');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -158,7 +158,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A line of text', () => {
+    describe('Lines of text', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('   some text');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -197,7 +197,7 @@ describe('BeginExplicitDocstringState', () => {
         .toBeginExplicitDocstringState();
     });
 
-    describe('An annotation', () => {
+    describe('Annotations', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('@foo = bar');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -211,7 +211,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A background', () => {
+    describe('Backgrounds', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Background: foo');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -225,7 +225,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A blank line', () => {
+    describe('Blank lines', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('   ');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -239,7 +239,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('An example table', () => {
+    describe('Example tables', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Where:');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -253,19 +253,19 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('An explicit docstring delimiter', () => {
+    describe('Explicit docstring delimiters', () => {
       it('should be unexpected', () => {
         throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
-    describe('The end of the feature', () => {
+    describe('End of file', () => {
       it('should be unexpected', () => {
         throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
-    describe('A feature', () => {
+    describe('Features', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Feature: foo');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -279,7 +279,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A block comment delimiter', () => {
+    describe('Block comment delimiters', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('###');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -293,7 +293,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A single line comment', () => {
+    describe('Single line comments', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('# A comment');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -307,7 +307,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A scenario', () => {
+    describe('Scenarios', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('Scenario: foo');
         eq(machine.state, 'CaptureExplicitDocstringState');
@@ -321,7 +321,7 @@ describe('BeginExplicitDocstringState', () => {
       });
     });
 
-    describe('A line of text', () => {
+    describe('Lines of text', () => {
       it('should cause a transition to CaptureExplicitDocstringState', () => {
         interpret('   some text');
         eq(machine.state, 'CaptureExplicitDocstringState');

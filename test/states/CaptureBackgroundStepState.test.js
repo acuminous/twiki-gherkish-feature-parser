@@ -37,20 +37,20 @@ describe('CaptureBackgroundStepState', () => {
       .toCaptureBackgroundStepState();
   });
 
-  describe('An annotation', () => {
+  describe('Annotations', () => {
     it('should not cause a state transition', () => {
       interpret('@foo=bar');
       eq(machine.state, 'CaptureBackgroundStepState');
     });
   });
 
-  describe('A background', () => {
+  describe('Backgrounds', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A blank line', () => {
+  describe('Blank lines', () => {
     it('should not cause a state transition', () => {
       interpret('');
       eq(machine.state, 'CaptureBackgroundStepState');
@@ -64,13 +64,13 @@ describe('CaptureBackgroundStepState', () => {
     });
   });
 
-  describe('An example table', () => {
+  describe('Example tables', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('An explicit docstring delimiter', () => {
+  describe('Explicit docstring delimiters', () => {
     it('should cause a transition to BeginExplicitDocstringState', () => {
       interpret('---');
       eq(machine.state, 'BeginExplicitDocstringState');
@@ -91,26 +91,26 @@ describe('CaptureBackgroundStepState', () => {
     });
   });
 
-  describe('The end of the feature', () => {
+  describe('End of file', () => {
     it('should be unexpected', () => {
       throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A feature', () => {
+  describe('Features', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A single line comment', () => {
+  describe('Single line comments', () => {
     it('should not cause a state transition', () => {
       interpret('# foo');
       eq(machine.state, 'CaptureBackgroundStepState');
     });
   });
 
-  describe('A scenario', () => {
+  describe('Scenarios', () => {
     it('should cause a transition to DeclareScenarioState', () => {
       interpret('Scenario: foo');
       eq(machine.state, 'DeclareScenarioState');
@@ -140,7 +140,7 @@ describe('CaptureBackgroundStepState', () => {
     });
   });
 
-  describe('A line of text', () => {
+  describe('Lines of text', () => {
     it('should cause a transition to CaptureBackgroundStepState', () => {
       interpret('Given some text');
       eq(machine.state, 'CaptureBackgroundStepState');

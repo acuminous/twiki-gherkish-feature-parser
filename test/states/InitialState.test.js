@@ -22,51 +22,51 @@ describe('InitialState', () => {
     machine = new StateMachine({ featureBuilder, session });
   });
 
-  describe('An annotation', () => {
+  describe('Annotations', () => {
     it('should not cause a state transition', () => {
       interpret('@foo=bar');
       eq(machine.state, 'InitialState');
     });
   });
 
-  describe('A background', () => {
+  describe('Backgrounds', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A blank line', () => {
+  describe('Blank lines', () => {
     it('should not cause a state transition', () => {
       interpret('');
       eq(machine.state, 'InitialState');
     });
   });
 
-  describe('An explicit docstring delimiter', () => {
+  describe('Explicit docstring delimiters', () => {
     it('should be unexpected', () => {
       throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('An implicit docstring', () => {
+  describe('Implicit docstring delimiters', () => {
     it('should be unexpected', () => {
       throws(() => interpret('   some text'), { message: `I did not expect some text at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('The end of the feature', () => {
+  describe('End of file', () => {
     it('should be unexpected', () => {
       throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('An example table', () => {
+  describe('Example tables', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A feature', () => {
+  describe('Features', () => {
     it('should cause a transition to DeclareFeatureState', () => {
       interpret('Feature: foo');
       eq(machine.state, 'DeclareFeatureState');
@@ -92,27 +92,27 @@ describe('InitialState', () => {
     });
   });
 
-  describe('A block comment delimiter', () => {
+  describe('Block comment delimiters', () => {
     it('should cause a transition to BlockCommentState', () => {
       interpret('###');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A single line comment', () => {
+  describe('Single line comments', () => {
     it('should not cause a state transition', () => {
       interpret('# foo');
       eq(machine.state, 'InitialState');
     });
   });
 
-  describe('A scenario', () => {
+  describe('Scenarios', () => {
     it('should be unexpected', () => {
       throws(() => interpret('Scenario: foo'), { message: `I did not expect a scenario at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A line of text', () => {
+  describe('Lines of text', () => {
     it('should be unexpected', () => {
       throws(() => interpret('some text'), { message: `I did not expect some text at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });

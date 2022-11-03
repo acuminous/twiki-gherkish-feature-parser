@@ -23,83 +23,83 @@ describe('ConsumeBlockCommentState', () => {
       .toConsumeBlockCommentState();
   });
 
-  describe('An annotation', () => {
+  describe('Annotations', () => {
     it('should not cause a state transition', () => {
       interpret('@foo = bar');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A background', () => {
+  describe('Backgrounds', () => {
     it('should not cause a state transition', () => {
       interpret('Background: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A blank line', () => {
+  describe('Blank lines', () => {
     it('should not cause a state transition', () => {
       interpret('');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('An example table', () => {
+  describe('Example tables', () => {
     it('should not cause a state transition', () => {
       interpret('Where:');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('An explicit docstring delimiter', () => {
+  describe('Explicit docstring delimiters', () => {
     it('should not cause a state transition', () => {
       interpret('---');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('An implicit docstring', () => {
+  describe('Implicit docstring delimiters', () => {
     it('should not cause a state transition', () => {
-      interpret('   some text');
+      interpret('   some docstring');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('The end of the feature', () => {
+  describe('End of file', () => {
     it('should be unexpected', () => {
       throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
-  describe('A feature', () => {
+  describe('Features', () => {
     it('should not cause a state transition', () => {
       interpret('Feature: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A block comment delimiter', () => {
+  describe('Block comment delimiters', () => {
     it('should cause a transition to the previous state', () => {
       interpret('###');
       eq(machine.state, 'DeclareFeatureState');
     });
   });
 
-  describe('A single line comment', () => {
+  describe('Single line comments', () => {
     it('should not cause a state transition', () => {
       interpret('# Single comment');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A scenario', () => {
+  describe('Scenarios', () => {
     it('should not cause a state transition', () => {
       interpret('Scenario: foo');
       eq(machine.state, 'ConsumeBlockCommentState');
     });
   });
 
-  describe('A line of text', () => {
+  describe('Lines of text', () => {
     it('should not cause a state transition', () => {
       interpret('Given some text');
       eq(machine.state, 'ConsumeBlockCommentState');
