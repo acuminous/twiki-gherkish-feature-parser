@@ -1,8 +1,5 @@
 1. Find out why ExampleTableHeaderRowEvent stashes the headings in the session
 1. Session should not have to check hasOwnProperty('indentation')
-1. the end of an indented docstring => the end of an implicit docstring
-1. Decide docstring docString Docstring case
-1. Do we remove indentation from steps
 1. Do we need DocstringTextEvent or will a regular TextEvent do? (maybe, depends on whether we remove indentation from steps)
 1. Should feature builder be more explicit about appending or creating things like steps and docstrings?
 1. Rather than update the session, should events record things like token and indentation in the context?
