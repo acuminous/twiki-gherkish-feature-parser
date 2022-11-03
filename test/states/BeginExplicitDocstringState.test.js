@@ -186,7 +186,7 @@ describe('BeginExplicitDocstringState', () => {
 
       const session = new StubSession({ docstring: { token: '---', indentation: 0 } });
 
-      machine = new StateMachine({ featureBuilder, session }, true)
+      machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareScenarioState()
