@@ -21,6 +21,13 @@ describe('ImplicitDocStringStopEvent', () => {
     eq(event.test({ line: '\u0000' }, session), true);
   });
 
+  it('should recognise a completely blank line', () => {
+    const session = new Session({ docstring: { indentation: 3 } });
+    const event = new ImplicitDocStringStopEvent();
+
+    eq(event.test({ line: '', indentation: 0 }, session), true);
+  });
+
   it('should not recognise indented text', () => {
     const session = new Session({ docstring: { indentation: 3 } });
     const event = new ImplicitDocStringStopEvent();

@@ -15,8 +15,6 @@ describe('CaptureScenarioDetailsState', () => {
     ' - an annotation',
     ' - an example table',
     ' - the end of the feature',
-    ' - the start of an explicit docstring',
-    ' - the start of an implicit docstring',
   ].join('\n');
 
   beforeEach(() => {
@@ -67,35 +65,14 @@ describe('CaptureScenarioDetailsState', () => {
   });
 
   describe('An explicit docstring delimiter', () => {
-    it('should cause a transition to BeginExplicitDocstringState', () => {
-      interpret('---');
-      eq(machine.state, 'BeginExplicitDocstringState');
-    });
-
-    it('should create a checkpoint', () => {
-      interpret('---');
-      machine.toPreviousCheckpoint();
-      eq(machine.state, 'CaptureScenarioDetailsState');
+    it('should be unexpected', () => {
+      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An implicit docstring', () => {
-    it('should cause a transition to CaptureImplicitDocstringState', () => {
-      interpret('   some text');
-      eq(machine.state, 'CaptureImplicitDocstringState');
-    });
-
-    it('should be captured', () => {
-      interpret('   some text');
-
-      const exported = machine.build();
-      eq(exported.scenarios[0].steps[0].docstring, 'some text');
-    });
-
-    it('should create a checkpoint', () => {
-      interpret('   some text');
-      machine.toPreviousCheckpoint();
-      eq(machine.state, 'CaptureScenarioDetailsState');
+    it('should be unexpected', () => {
+      throws(() => interpret('   some text'), { message: `I did not expect the start of an implicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

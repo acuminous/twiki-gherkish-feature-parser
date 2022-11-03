@@ -54,7 +54,7 @@ describe('CreateBackgroundStepImplicitDocStringState', () => {
   });
 
   describe('A blank line outdated to the original depth', () => {
-    it('should cause a transition to AfterBackgroundStepDocStringState', () => {
+    it('should cause a state transition', () => {
       interpret('');
       eq(machine.state, 'AfterBackgroundStepDocStringState');
     });

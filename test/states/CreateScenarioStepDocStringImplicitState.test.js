@@ -53,7 +53,7 @@ describe('CreateScenarioStepImplicitDocStringState', () => {
   });
 
   describe('A blank line outdated to the original depth', () => {
-    it('should cause a transition to AfterScenarioStepDocStringState', () => {
+    it('should cause a state transition to AfterScenarioStepDocStringState', () => {
       interpret('');
       eq(machine.state, 'AfterScenarioStepDocStringState');
     });

@@ -1,4 +1,3 @@
-1. What happens to comments in docstrings?
 1. Docstring being unindented immediately - error or not?
 1. Docstrings being terminated immediately - error or not?
 1. Consider dispatching events to state.on(session, event) method, and having this delegate to specific onSomeEvent handlers
@@ -28,3 +27,7 @@
      Where:
 1. machine should not have responsibility for building features (machine.build)
 1. FeatureBuilder.build should not need a ternary
+1. Explicit session management functions for docstrings
+1. A completely blank line should not be matched by an ImplicitDocstringEndEvent (will be annoying because editors truncate lines)
+1. Do not exposte state name from machine
+1. Put in stock metadata so we dont see undefined:1

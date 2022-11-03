@@ -7,7 +7,7 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 describe('CaptureStepState', () => {
   let machine;
 
-  describe('Background Steps', () => {
+  describe('After a background step', () => {
 
     const expectedEvents = [
       ' - a blank line',
@@ -16,8 +16,6 @@ describe('CaptureStepState', () => {
       ' - a single line comment',
       ' - a step',
       ' - an annotation',
-      ' - the start of an explicit docstring',
-      ' - the start of an implicit docstring',
     ].join('\n');
 
     beforeEach(() => {
@@ -73,12 +71,6 @@ describe('CaptureStepState', () => {
         interpret('---');
         eq(machine.state, 'BeginExplicitDocstringState');
       });
-
-      it('should create a checkpoint', () => {
-        interpret('---');
-        machine.toPreviousCheckpoint();
-        eq(machine.state, 'CaptureStepState');
-      });
     });
 
     describe('An implicit docstring', () => {
@@ -92,12 +84,6 @@ describe('CaptureStepState', () => {
 
         const exported = machine.build();
         eq(exported.background.steps[0].docstring, 'some text');
-      });
-
-      it('should create a checkpoint', () => {
-        interpret('   some text');
-        machine.toPreviousCheckpoint();
-        eq(machine.state, 'CaptureStepState');
       });
     });
 
@@ -191,7 +177,7 @@ describe('CaptureStepState', () => {
     });
   });
 
-  describe('Scenario Steps', () => {
+  describe('After a scenario Step', () => {
 
     const expectedEvents = [
       ' - a blank line',
@@ -202,8 +188,6 @@ describe('CaptureStepState', () => {
       ' - an annotation',
       ' - an example table',
       ' - the end of the feature',
-      ' - the start of an explicit docstring',
-      ' - the start of an implicit docstring',
     ].join('\n');
 
     beforeEach(() => {
@@ -260,12 +244,6 @@ describe('CaptureStepState', () => {
         interpret('---');
         eq(machine.state, 'BeginExplicitDocstringState');
       });
-
-      it('should create a checkpoint', () => {
-        interpret('---');
-        machine.toPreviousCheckpoint();
-        eq(machine.state, 'CaptureStepState');
-      });
     });
 
     describe('An implicit docstring', () => {
@@ -279,12 +257,6 @@ describe('CaptureStepState', () => {
 
         const exported = machine.build();
         eq(exported.scenarios[0].steps[0].docstring, 'some text');
-      });
-
-      it('should create a checkpoint', () => {
-        interpret('   some text');
-        machine.toPreviousCheckpoint();
-        eq(machine.state, 'CaptureStepState');
       });
     });
 
