@@ -124,9 +124,9 @@ describe('CaptureBackgroundDetailsState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a transition to CaptureStepState', () => {
+    it('should cause a transition to CaptureBackgroundStepState', () => {
       interpret('Second step');
-      eq(machine.state, 'CaptureStepState');
+      eq(machine.state, 'CaptureBackgroundStepState');
     });
 
     it('should be captured without annotations', () => {

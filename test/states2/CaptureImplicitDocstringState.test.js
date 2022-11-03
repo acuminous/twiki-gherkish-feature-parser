@@ -154,9 +154,9 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
     describe('An outdented line of text', () => {
-      it('should cause a transition to CaptureStepState', () => {
+      it('should cause a transition to CaptureBackgroundStepState', () => {
         interpret('some text');
-        eq(machine.state, 'CaptureStepState');
+        eq(machine.state, 'CaptureBackgroundStepState');
       });
     });
 
