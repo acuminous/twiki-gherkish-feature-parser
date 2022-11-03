@@ -96,7 +96,7 @@ describe('DeclareScenarioState', () => {
   });
 
   describe('A line of text', () => {
-    it('should cause a transition to CaptureStepState', () => {
+    it('should cause a transition to CaptureScenarioStepState', () => {
       interpret('First step');
 
       eq(machine.state, 'CaptureScenarioStepState');
