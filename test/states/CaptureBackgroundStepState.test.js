@@ -1,6 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
+import StubSession from '../stubs/StubSession.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -24,7 +25,9 @@ describe('CaptureBackgroundStepState', () => {
       .createBackground({ title: 'Meh' })
       .createStep({ text: 'First step' });
 
-    machine = new StateMachine({ featureBuilder }, true)
+    const session = new StubSession();
+
+    machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState()
       .checkpoint()
       .toDeclareBackgroundState()
@@ -42,7 +45,7 @@ describe('CaptureBackgroundStepState', () => {
 
   describe('A background', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -62,7 +65,7 @@ describe('CaptureBackgroundStepState', () => {
 
   describe('An example table', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -89,13 +92,13 @@ describe('CaptureBackgroundStepState', () => {
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A feature', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

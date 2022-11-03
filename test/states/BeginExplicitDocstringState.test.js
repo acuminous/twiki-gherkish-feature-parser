@@ -1,7 +1,8 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, Session, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
+import StubSession from '../stubs/StubSession.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -20,9 +21,9 @@ describe('BeginExplicitDocstringState', () => {
         .createBackground({ title: 'Meh' })
         .createStep({ text: 'Meh' });
 
-      const session = new Session({ docstring: { token: '---', indentation: 0 } });
+      const session = new StubSession({ docstring: { token: '---', indentation: 0 } });
 
-      machine = new StateMachine({ featureBuilder, session }, true)
+      machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareBackgroundState()
@@ -90,13 +91,13 @@ describe('BeginExplicitDocstringState', () => {
 
     describe('An explicit docstring delimiter', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
     describe('The end of the feature', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
@@ -183,7 +184,7 @@ describe('BeginExplicitDocstringState', () => {
         .createScenario({ title: 'Meh' })
         .createStep({ text: 'Meh' });
 
-      const session = new Session({ docstring: { token: '---', indentation: 0 } });
+      const session = new StubSession({ docstring: { token: '---', indentation: 0 } });
 
       machine = new StateMachine({ featureBuilder, session }, true)
         .toDeclareFeatureState()
@@ -253,13 +254,13 @@ describe('BeginExplicitDocstringState', () => {
 
     describe('An explicit docstring delimiter', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('---'), { message: `I did not expect the end of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
     describe('The end of the feature', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 

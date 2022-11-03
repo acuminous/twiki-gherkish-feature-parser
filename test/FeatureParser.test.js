@@ -65,7 +65,7 @@ function assertParserError(folder, filename, options) {
   const parser = new FeatureParser(options);
   const metadata = {
     source: {
-      uri: 'invalid.feature',
+      uri: 'invalid-feature.js',
     },
   };
   throws(() => {

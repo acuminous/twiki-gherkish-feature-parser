@@ -30,4 +30,3 @@
 1. Explicit session management functions for docstrings
 1. A completely blank line should not be matched by an ImplicitDocstringEndEvent (will be annoying because editors truncate lines)
 1. Do not exposte state name from machine
-1. Put in stock metadata so we dont see undefined:1

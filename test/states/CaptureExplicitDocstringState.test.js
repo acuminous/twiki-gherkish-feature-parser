@@ -1,7 +1,8 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import os from 'node:os';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, Session } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine } from '../../lib/index.js';
+import StubSession from '../stubs/StubSession.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -19,9 +20,9 @@ describe('CaptureExplicitDocstringState', () => {
       .createStep({ text: 'First step' })
       .createDocstring({ text: 'some text' });
 
-    const session = new Session({ docstring: { token: '---' } });
+    const session = new StubSession({ docstring: { token: '---' } });
 
-    machine = new StateMachine({ featureBuilder, session }, true)
+    machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState()
       .checkpoint()
       .toDeclareScenarioState()
@@ -111,7 +112,7 @@ describe('CaptureExplicitDocstringState', () => {
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

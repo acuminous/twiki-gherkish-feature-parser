@@ -1,4 +1,4 @@
-I did not expect the end of the feature at invalid.feature:10
+I did not expect the end of the feature at invalid-feature.js:10
 Instead, I expected one of:
  - a block comment delimiter
  - some text

@@ -1,6 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, Session } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine } from '../../lib/index.js';
+import StubSession from '../stubs/StubSession.js';
 import * as utils from '../../lib/utils.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -25,9 +26,9 @@ describe('CaptureImplicitDocstringState', () => {
         .createBackground({ title: 'Meh' })
         .createStep({ text: 'First step' });
 
-      const session = new Session({ indentation: 0, docstring: { indentation: 3 } });
+      const session = new StubSession({ indentation: 0, docstring: { indentation: 3 } });
 
-      machine = new StateMachine({ featureBuilder, session }, true)
+      machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareBackgroundState()
@@ -74,7 +75,7 @@ describe('CaptureImplicitDocstringState', () => {
 
     describe('An outdented background', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
@@ -115,7 +116,7 @@ describe('CaptureImplicitDocstringState', () => {
 
     describe('An outdented example table', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
@@ -135,7 +136,7 @@ describe('CaptureImplicitDocstringState', () => {
 
     describe('An outdented explicit docstring delimiter', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
@@ -162,7 +163,7 @@ describe('CaptureImplicitDocstringState', () => {
 
     describe('The end of the feature', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
@@ -249,9 +250,9 @@ describe('CaptureImplicitDocstringState', () => {
         .createScenario({ title: 'Meh' })
         .createStep({ text: 'First step' });
 
-      const session = new Session({ indentation: 0, docstring: { indentation: 3 } });
+      const session = new StubSession({ indentation: 0, docstring: { indentation: 3 } });
 
-      machine = new StateMachine({ featureBuilder, session }, true)
+      machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()
         .checkpoint()
         .toDeclareScenarioState()
@@ -298,7 +299,7 @@ describe('CaptureImplicitDocstringState', () => {
 
     describe('An outdented background', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 
@@ -353,7 +354,7 @@ describe('CaptureImplicitDocstringState', () => {
 
     describe('An outdented explicit docstring delimiter', () => {
       it('should be unexpected', () => {
-        throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+        throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
       });
     });
 

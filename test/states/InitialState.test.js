@@ -1,6 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
+import StubSession from '../stubs/StubSession.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -16,7 +17,8 @@ describe('InitialState', () => {
 
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder();
-    machine = new StateMachine({ featureBuilder }, true);
+    const session = new StubSession();
+    machine = new StateMachine({ featureBuilder, session });
   });
 
   describe('An annotation', () => {
@@ -28,7 +30,7 @@ describe('InitialState', () => {
 
   describe('A background', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('Background: foo'), { message: `I did not expect a background at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -41,25 +43,25 @@ describe('InitialState', () => {
 
   describe('An explicit docstring delimiter', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An implicit docstring', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('   some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('   some text'), { message: `I did not expect some text at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('An example table', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('Where:'), { message: `I did not expect an example table at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
@@ -105,13 +107,13 @@ describe('InitialState', () => {
 
   describe('A scenario', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('Scenario: foo'), { message: `I did not expect a scenario at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('Scenario: foo'), { message: `I did not expect a scenario at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
   describe('A line of text', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('some text'), { message: `I did not expect some text at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('some text'), { message: `I did not expect some text at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 

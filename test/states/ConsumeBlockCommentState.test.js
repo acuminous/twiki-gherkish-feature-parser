@@ -1,6 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
 import { FeatureBuilder, StateMachine } from '../../lib/index.js';
+import StubSession from '../stubs/StubSession.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -13,7 +14,9 @@ describe('ConsumeBlockCommentState', () => {
 
   beforeEach(() => {
     const featureBuilder = new FeatureBuilder();
-    machine = new StateMachine({ featureBuilder }, true)
+    const session = new StubSession();
+
+    machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState()
       .checkpoint()
       .toConsumeBlockCommentState();
@@ -63,7 +66,7 @@ describe('ConsumeBlockCommentState', () => {
 
   describe('The end of the feature', () => {
     it('should be unexpected', () => {
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at undefined:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
     });
   });
 
