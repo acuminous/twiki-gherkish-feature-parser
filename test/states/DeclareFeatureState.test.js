@@ -43,7 +43,7 @@ describe('DeclareFeatureState', () => {
     it('should create a checkpoint', () => {
       interpret('Background: foo');
 
-      machine.toPreviousCheckpoint();
+      machine.unwind();
       eq(machine.state, 'DeclareFeatureState');
     });
 
