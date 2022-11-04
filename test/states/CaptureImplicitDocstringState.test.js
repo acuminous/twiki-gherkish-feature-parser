@@ -54,9 +54,9 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
     describe('An outdented annotation', () => {
-      it('should cause a state transition to CaptureBackgroundDetailsState', () => {
+      it('should cause a state transition to CaptureAnnotationState', () => {
         interpret('@foo = bar');
-        eq(machine.state, 'CaptureBackgroundDetailsState');
+        eq(machine.state, 'CaptureAnnotationState');
       });
     });
 
@@ -278,9 +278,9 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
     describe('An outdented annotation', () => {
-      it('should cause a state transition to CaptureScenarioDetailsState', () => {
+      it('should cause a state transition to CaptureAnnotationState', () => {
         interpret('@foo = bar');
-        eq(machine.state, 'CaptureScenarioDetailsState');
+        eq(machine.state, 'CaptureAnnotationState');
       });
     });
 

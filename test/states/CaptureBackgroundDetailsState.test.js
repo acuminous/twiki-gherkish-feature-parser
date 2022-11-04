@@ -35,7 +35,7 @@ describe('CaptureBackgroundDetailsState', () => {
   describe('Annotations', () => {
     it('should not cause a state transition', () => {
       interpret('@foo=bar');
-      eq(machine.state, 'CaptureBackgroundDetailsState');
+      eq(machine.state, 'CaptureAnnotationState');
     });
   });
 

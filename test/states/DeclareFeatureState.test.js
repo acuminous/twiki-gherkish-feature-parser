@@ -29,9 +29,9 @@ describe('DeclareFeatureState', () => {
   });
 
   describe('Annotations', () => {
-    it('should not cause a state transition', () => {
+    it('should cause a transition to CaptureAnnotationState', () => {
       interpret('@foo=bar');
-      eq(machine.state, 'DeclareFeatureState');
+      eq(machine.state, 'CaptureAnnotationState');
     });
   });
 
