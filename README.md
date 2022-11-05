@@ -12,7 +12,7 @@ import { FeatureParser } from "@twiki-bdd/gherkish-feature-parser";
 import * as fs from "node:fs";
 
 const featureFilePath = "./buck-rogers-season-one.feature";
-const featureFile = fs.readFileSync(featureFilePath);
+const featureFile = fs.readFileSync(featureFilePath, 'utf-8');
 const parser = new FeatureParser();
 const metadata = {
   source: {
@@ -33,7 +33,7 @@ import { FeatureParser, Languages } from "@twiki-bdd/gherkish-feature-parser";
 import * as fs from "node:fs";
 
 const featureFilePath = "./buck-rogers-season-one.feature";
-const featureFile = fs.readFileSync(featureFilePath);
+const featureFile = fs.readFileSync(featureFilePath, 'utf-8');
 const parser = new FeatureParser({ language: Languages.English });
 const metadata = {
   source: {
