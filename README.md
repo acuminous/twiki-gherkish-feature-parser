@@ -95,12 +95,12 @@ For example, the state machine starts off in InitialState. If the first line of 
 | ExampleTableHeaderRow       | headings    | \| height \| width \|                                                                           |
 | ExampleTableSeparatorRow    |             | \|--------\|---------\|                                                                         |
 | ExampleTableDataRow         | values      | \|&nbsp;&nbsp;10cm&nbsp;&nbsp;\|&nbsp;&nbsp;20cm&nbsp;&nbsp;\|                                  |
-| ExplicitDocstringBeginEvent |             | ---</br>"""</br>                                                                                |
-| ExplicitDocstringEndEvent   |             | ---</br>"""</br>                                                                                |
+| ExplicitDocstringStartEvent |             | ---</br>"""</br>                                                                                |
+| ExplicitDocstringStopEvent  |             | ---</br>"""</br>                                                                                |
 | FeatureEvent                | title?      | Feature:<br/>Feature: Buck Rogers - Season One                                                  |
-| ImplicitDocstringBeginEvent | text        | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
-| ImplicitDocstringEndEvent   | text        | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
-| RuleEvent                   | title?      | Rule:<br/>Rule: Buck Rogers wins                                                                |
+| ImplicitDocstringStartEvent |             | &nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring |
+| ImplicitDocstringStopEvent  |             | This&nbsp;is&nbsp;the&nbsp;start&nbsp;of&nbsp;an&nbsp;indented&nbsp;docstring                   |
+| RuleEvent                   | title?      | Rule:<br/>Rule: Buck Rogers always wins                                                         |
 | ScenarioEvent               | title?      | Scenario:<br/>Scenario: Awakening                                                               |
 | SingleLineCommentEvent      |             | # This is a comment                                                                             |
 | StepEvent                   | text        | This is a step                                                                                  |
