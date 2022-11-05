@@ -105,3 +105,50 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 | SingleLineCommentEvent      |             | # This is a comment                                                                             |
 | StepEvent                   | text        | This is a step                                                                                  |
 | TextEvent                   | text        | This is some text                                                                               |
+
+## State Transitions
+
+### Top Level
+
+```
+ ┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
+ │                                           │                │                                           │
+ │          CaptureAnnotationState           │─ ─ ─ ─ ─ ─ ─ ─▶│               InitialState                │
+ │                                           │                │                                           │
+ │[annotation, background, blank line, block │                │  [annotation, blank line, block comment   │
+ │comment delimiter, feature, rule, scenario,│                │            delimiter, feature]            │
+ │     single line comment, step, text]      │  [annotation]  │                                           │
+ │                                           │◀───────────────│                                           │
+ └───────────────────────────────────────────┘                └───────────────────────────────────────────┘
+    ▲                                     │                                         ◈
+    │                                                                               │
+    │ [annotation]                        │                                         │ [feature]
+    │                                                                               │
+    │                                     ▼                                         ▽
+ ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+ │                                                                                                                                                                    │
+ │                                                                                                                                                                    │
+ │                                                                        DeclareFeatureState                                                                         │
+ │                                                                                                                                                                    │
+ │                              [annotation, background, blank line, block comment delimiter, rule, scenario, single line comment, text]                              │
+ │                                                                                                                                                                    │
+ │                                                                                                                                                                    │
+ └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ▲                         ◈                                                     ◈                          ▲                          ◈
+                              │                                                     │                          │                          │
+    │                         │[background]                                         │ [rule]                                              │ [scenario]
+                              │                                                     │                          │                          │
+    │                         ▽                                                     ▽                                                     ▼
+        ╔═══════════════════════════════════════════╗         ╔═══════════════════════════════════════════╗    │    ╔═══════════════════════════════════════════╗
+    │   ║                                           ║         ║                                           ║         ║                                           ║
+        ║                                           ║         ║                                           ║    │    ║                                           ║
+    │   ║                                           ║         ║                                           ║         ║                                           ║
+        ║            Capture Background             ║         ║               Capture Rules               ║    │    ║             Capture Scenario              ║
+    │   ║                                           ║         ║                                           ║         ║                                           ║
+        ║                                           ║         ║                                           ║    │    ║                                           ║
+    │   ║                                           ║         ║                                           ║         ║                                           ║
+        ╚═══════════════════════════════════════════╝         ╚═══════════════════════════════════════════╝    │    ╚═══════════════════════════════════════════╝
+    │                         │                                                                                                           │
+                                [rule, scenario]                                                               │                            [rule, scenario]
+    └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                                 ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+```
