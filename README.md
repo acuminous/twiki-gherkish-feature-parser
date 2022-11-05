@@ -37,6 +37,20 @@ npm install @twiki-bdd/gherkish-feature-parser
 | -------- | ------------------------------------ |
 | language | A language from the Languages module |
 
+## Supported Languages
+
+- Chinese / 中国人
+- Dutch / Nederlands
+- English
+- French / Français
+- German / Deutsch
+- Norweigian / Norsk
+- Polish / Polski
+- Portugeuse / Polski
+- Russian / Русский
+- Spanish / Español
+- Ukrainian / Yкраїнська
+
 ## Gherkin Compatability
 
 | Syntax                       | Supported                                      |
