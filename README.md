@@ -29,15 +29,6 @@ const feature = parser.parse(featureFile, metadata);
 npm install @twiki-bdd/gherkish-feature-parser
 ```
 
-## Development
-
-```
-git clone git@github.com:acuminous/twiki-gherkish-feature-parser.git
-cd twiki-gherkish-feature-parser
-npm install
-npm test
-```
-
 ## Parser Options
 
 | Option   | Notes                                |
@@ -63,6 +54,15 @@ npm test
 | Step tags/annotations        | Yes                                            |
 | Given / When / Then keywords | No - twiki does not special case step keywords |
 | Docstring                    | Yes, use """ or ---                            |
+
+## Development
+
+```
+git clone git@github.com:acuminous/twiki-gherkish-feature-parser.git
+cd twiki-gherkish-feature-parser
+npm install
+npm test
+```
 
 ## State Machine
 
