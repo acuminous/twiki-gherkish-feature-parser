@@ -178,8 +178,8 @@ For example, the state machine starts off in InitialState. If the first line of 
 
 <pre>
                                                                                    │                          ▲
-                                                                                   │
-                                                                                   │ background               │
+                                                                                   │ background
+                                                                                   │                          │
                                                                                    │
                                                                                    ▽                          │
 ┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
@@ -188,24 +188,26 @@ For example, the state machine starts off in InitialState. If the first line of 
 │                                           │                │                                           │    │
 │[annotation, background, blank line, block │                │  [annotation, blank line, block comment   │
 │comment delimiter, feature, rule, scenario,│                │   delimiter, single line comment, step]   │    │
-│     single line comment, step, text]      │                │                                           │
+│     single line comment, step, text]      │   [annotation] │                                           │
 │                                           │◀───────────────│                                           │    │
 └───────────────────────────────────────────┘                └───────────────────────────────────────────┘
    ▲                                     │                                         │                          │
-   │                                                                               │
-   │                                     │                                         │ [step]                   │
-   │                                                                               │                            [rule, scenario]
+   │                                                                               │ [step]
+   │                                     │                                         │                          │
+   │ [annotation]                                                                  │                           [rule, scenario]
    │                                     ▼                                         ▼                          │
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                                                                                                 │
 │                                          CaptureBackgroundDetailsState                                          │
 │                                                                                                                 │
-│          [annotation, blank line, block comme[annotation], rule, scenario, single line comment, step]           │
+│          [annotation, blank line, block comment delimiter, rule, scenario, single line comment, step]           │
+│                                                                                                                 │
 │                                                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
    △                         ▲                           ◈                                                    ●
-   │                                                     │
                              │                           │ [step]                                             │
+   │                                                     │
+                             │                           │                                                    │
    │                                                     │
                              │                           ▼                                                    │
    │                               ┌───────────────────────────────────────────┐
@@ -215,19 +217,15 @@ For example, the state machine starts off in InitialState. If the first line of 
    │                          ─ ─ ─│  [annotation, blank line, block comment   │
             [rule, scenario, step] │   delimiter, single line comment, step]   │                              │
    │                               │                                           │
-                                   │                                           │                              │
-   │                               └───────────────────────────────────────────┘
-                                                         │ [explicit docstring start,                         │
-   │                                                     │ implicit docstring stop]
+                                   └───────────────────────────────────────────┘                              │
+   │                                                     │ [explicit docstring start,
+                                                         │ implicit docstring stop]                           │
+   │                                                     │
                                                          │                                                    │
    │                                                     ▼
-                                   ┌───────────────────────────────────────────┐                              │
-   │                               │                                           │
-                                   │             Capture Docstring             │                              │
-   │                               │                                           │
-    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─│  [annotation, blank line, block comment   │─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
-          [explicit docstring end] │   delimiter, single line comment, step]   │ [implicit docstring end]
-                                   │                                           │
-                                   │                                           │
-                                   └───────────────────────────────────────────┘
+                                   ╔═══════════════════════════════════════════╗                              │
+   │                               ║                                           ║
+    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─║             Capture Docstring             ║─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+          [explicit docstring end] ║                                           ║ [implicit docstring end]
+                                   ╚═══════════════════════════════════════════╝
 </pre>
