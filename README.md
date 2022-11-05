@@ -13,7 +13,8 @@ import * as fs from "node:fs";
 
 const featureFilePath = "./buck-rogers-season-one.feature";
 const featureFile = fs.readFileSync(featureFilePath, 'utf-8');
-const parser = new FeatureParser();
+const options = {};
+const parser = new FeatureParser(options);
 const metadata = {
   source: {
     uri: featureFilePath,
@@ -27,21 +28,6 @@ const feature = parser.parse(featureFile, metadata);
 | Option   | Notes                                |
 | -------- | ------------------------------------ |
 | language | A language from the Languages module |
-
-```js
-import { FeatureParser, Languages } from "@twiki-bdd/gherkish-feature-parser";
-import * as fs from "node:fs";
-
-const featureFilePath = "./buck-rogers-season-one.feature";
-const featureFile = fs.readFileSync(featureFilePath, 'utf-8');
-const parser = new FeatureParser({ language: Languages.English });
-const metadata = {
-  source: {
-    uri: featureFilePath,
-  },
-};
-const feature = parser.parse(file, metadata);
-```
 
 ## Gherkin Compatability
 
