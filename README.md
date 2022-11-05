@@ -5,6 +5,8 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/6837424f9e1fc6a634bf/test_coverage)](https://codeclimate.com/github/acuminous/twiki-gherkish-feature-parser/test_coverage)
 [![Tested with zUnit](https://img.shields.io/badge/Tested%20with-zUnit-brightgreen)](https://www.npmjs.com/package/zunit)
 
+A [Gherkin](https://cucumber.io/docs/gherkin/) like feature parser
+
 ## TL;DR
 
 ```js
@@ -66,20 +68,18 @@ npm test
 
 ## State Machine
 
-The parser uses a state machine which transitions between states in response to certain events. The event are determined by asking the current state whether it can handle a line of text from the feature specification. The state maintains a list of potential events, which it asks to handle the line of text. The first event that supports the line of text will parse the text and dispatch the event data to the current state. If no event accepts the line of text, then a MissingEventHandler event is dispatched instead.
-
-When handling an event, the state may do one or more of the following
+The parser uses a state machine which transitions between states (e.g. InitialState, DeclareFeatureState) in response to specific events (e.g. Annotation, Feature, etc). When encoutering an event, the state may do one or more of the following...
 
 - Use the event data to **build** an internal representation of the feature
 - Ask the state machine to **transition** to a new state
 - Ask the state machine to **unwind** to a previously checkpointed state
 - Ask the state machine to **dispatch** the event again (after transitioning or unwinding)
 - Ask the state machine to **interpret** the original line of text again (after transitioning or unwinding)
-- **Absorb** the event
+- **Ignore** the event, i.e. do nothing
 - Report an unexpected event
 - Report a missing event handler
 
-For example, the state machine starts off in the [Initial State](#InitialState). If the first line of text in the feature specifciation is `@skip` then this will be intercepted by the [InitialState's](#InitialState) AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data: `{ name: "skip", value: true }`. The event data will be dispatched to the [InitialState's](#InitialState) annotation event handler, which will ask the state machine to move to the [#ConsumeAnnotationsState](#ConsumeAnnotationsState) before redispatching the event data to the [#ConsumeAnnotationsState's](#ConsumeAnnotationsState) annotation event handler. The [#ConsumeAnnotationsState's](#ConsumeAnnotationsState) annotation event handler will ask the FeatureBuilder to stash the annotation data until such time as a feature is created.
+For example, the state machine starts off in InitialState. If the first line of text in the feature specifciation is `@skip` then this will be translated into an AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data: `{ name: "skip", value: true }`. The event and data will be dispatched to the InitialState's annotation event handler, which will ask the state machine to transition to the CaptureAnnotationsState and redispatch the event. The CaptureAnnotationsState's annotation event handler will stash the event data using until such time as a feature is created.
 
 ## Events
 
@@ -108,9 +108,37 @@ For example, the state machine starts off in the [Initial State](#InitialState).
 
 ## State Transitions
 
+### Legend
+
+<pre>
+┌───────────────────────────────────────────┐
+│                                           │
+│               InitialState                │
+│                                           │
+│              [valid events]               │
+│                                           │
+└───────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════╗
+║                                           ║
+║            A substate machine             ║
+║                                           ║
+╚═══════════════════════════════════════════╝
+</pre>
+
+| Notation           | Example   | Meaning                                           |
+| ------------------ | --------- | ------------------------------------------------- |
+| A solid line       | ───────── | A state transition                                |
+| A dashed line      | ─ ─ ─ ─ ─ | Unwind to the previous checkpoint                 |
+| A solid diamond    | ◈         | Checkpoint the current state before tranistioning |
+| A solid arrow head | ▶         | Redispatch the event                              |
+| A solid arrow head | ▷         | Do not redispatch the event                       |
+| A solid arrow head | ▷         | Do not redispatch the event                       |
+| A solid circle     | ◍         | Reinterpret the source text                       |
+
 ### Top Level
 
-```
+<pre>
  ┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
  │                                           │                │                                           │
  │          CaptureAnnotationState           │─ ─ ─ ─ ─ ─ ─ ─▶│               InitialState                │
@@ -127,11 +155,9 @@ For example, the state machine starts off in the [Initial State](#InitialState).
     │                                     ▼                                         ▽
  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
  │                                                                                                                                                                    │
- │                                                                                                                                                                    │
  │                                                                        DeclareFeatureState                                                                         │
  │                                                                                                                                                                    │
  │                              [annotation, background, blank line, block comment delimiter, rule, scenario, single line comment, text]                              │
- │                                                                                                                                                                    │
  │                                                                                                                                                                    │
  └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
     ▲                         ◈                                                     ◈                          ▲                          ◈
@@ -141,14 +167,14 @@ For example, the state machine starts off in the [Initial State](#InitialState).
     │                         ▽                                                     ▽                                                     ▼
         ╔═══════════════════════════════════════════╗         ╔═══════════════════════════════════════════╗    │    ╔═══════════════════════════════════════════╗
     │   ║                                           ║         ║                                           ║         ║                                           ║
-        ║                                           ║         ║                                           ║    │    ║                                           ║
-    │   ║                                           ║         ║                                           ║         ║                                           ║
         ║            Capture Background             ║         ║               Capture Rules               ║    │    ║             Capture Scenario              ║
-    │   ║                                           ║         ║                                           ║         ║                                           ║
-        ║                                           ║         ║                                           ║    │    ║                                           ║
     │   ║                                           ║         ║                                           ║         ║                                           ║
         ╚═══════════════════════════════════════════╝         ╚═══════════════════════════════════════════╝    │    ╚═══════════════════════════════════════════╝
     │                         │                                                                                                           │
                                 [rule, scenario]                                                               │                            [rule, scenario]
     └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                                 ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+</pre>
+
+```
+
 ```
