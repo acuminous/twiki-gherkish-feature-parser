@@ -12,7 +12,7 @@ import { FeatureParser } from "@twiki-bdd/gherkish-feature-parser";
 import * as fs from "node:fs";
 
 const featureFilePath = "./buck-rogers-season-one.feature";
-const featureFile = fs.readFileSync(featureFilePath, 'utf-8');
+const featureFile = fs.readFileSync(featureFilePath, "utf-8");
 const options = {};
 const parser = new FeatureParser(options);
 const metadata = {
@@ -21,6 +21,21 @@ const metadata = {
   },
 };
 const feature = parser.parse(featureFile, metadata);
+```
+
+## Installation
+
+```
+npm install @twiki-bdd/gherkish-feature-parser
+```
+
+## Development
+
+```
+git clone git@github.com:acuminous/twiki-gherkish-feature-parser.git
+cd twiki-gherkish-feature-parser
+npm install
+npm test
 ```
 
 ## Parser Options
