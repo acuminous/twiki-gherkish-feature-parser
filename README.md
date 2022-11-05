@@ -177,55 +177,57 @@ For example, the state machine starts off in InitialState. If the first line of 
 ### Capture Background
 
 <pre>
-                                                                                   │                          ▲
-                                                                                   │ background
-                                                                                   │                          │
-                                                                                   │
-                                                                                   ▽                          │
-┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
-│                                           │                │                                           │    │
-│          CaptureAnnotationState           │─ ─ ─ ─ ─ ─ ─ ─▶│             DeclareBackground             │
-│                                           │                │                                           │    │
-│[annotation, background, blank line, block │                │  [annotation, blank line, block comment   │
-│comment delimiter, feature, rule, scenario,│                │   delimiter, single line comment, step]   │    │
-│     single line comment, step, text]      │   [annotation] │                                           │
-│                                           │◀───────────────│                                           │    │
-└───────────────────────────────────────────┘                └───────────────────────────────────────────┘
-   ▲                                     │                                         │                          │
-   │                                                                               │ [step]
-   │                                     │                                         │                          │
-   │ [annotation]                                                                  │                           [rule, scenario]
-   │                                     ▼                                         ▼                          │
-┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                                                                                                 │
-│                                          CaptureBackgroundDetailsState                                          │
-│                                                                                                                 │
-│          [annotation, blank line, block comment delimiter, rule, scenario, single line comment, step]           │
-│                                                                                                                 │
-│                                                                                                                 │
-└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-   △                         ▲                           ◈                                                    ●
-                                                         │ [step]                                             │
-   │                         │                           │
-                                                         │                                                    │
-   │                         │                           ▼
-                                   ┌───────────────────────────────────────────┐                              │
-   │                         │     │           CaptureBackgroundStep           │
-                                   │                                           │                              │
-   │                         │     │  [annotation, blank line, block comment   │
-                              ─ ─ ─│   delimiter, explicit docstring start,    │                              │
-   │        [rule, scenario, step] │ implicit docstring start, rule, scenario, │
-                                   │        single line comment, step]         │                              │
-   │                               └───────────────────────────────────────────┘
-                                                         │                                                    │
-   │                                                     │ [explicit docstring start,
-                                                         │ implicit docstring stop]                           │
-   │                                                     │
-                                                         │                                                    │
-   │                                                     ▼
-                                   ╔═══════════════════════════════════════════╗                              │
-   │                               ║                                           ║
-    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─║             Capture Docstring             ║─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
-          [explicit docstring end] ║                                           ║ [implicit docstring end]
-                                   ╚═══════════════════════════════════════════╝
+                                                                                             │                          ▲
+                                                                                             │ background
+                                                                                             │                          │
+                                                                                             │
+                                                                                             ▽                          │
+          ┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
+          │                                           │                │                                           │    │
+   ┌ ─ ─ ─│          CaptureAnnotationState           │─ ─ ─ ─ ─ ─ ─ ─▶│             DeclareBackground             │
+          │                                           │                │                                           │    │
+   │      │[annotation, background, blank line, block │                │  [annotation, blank line, block comment   │
+          │comment delimiter, feature, rule, scenario,│                │   delimiter, single line comment, step]   │    │
+   │      │     single line comment, step, text]      │   [annotation] │                                           │
+       ┌─▶│                                           │◀───────────────│                                           │    │
+   │   │  └───────────────────────────────────────────┘                └───────────────────────────────────────────┘
+       │     ▲                                     │                                         │                          │
+   │   │     │                                                                               │ [step]
+       │     │                                     │                                         │                          │
+   │   │     │ [annotation]                                                                  │                           [rule, scenario]
+       │     │                                     ▼                                         ▼                          │
+   │   │  ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+       │  │                                                                                                                 │
+   │   │  │                                          CaptureBackgroundDetailsState                                          │
+       │  │                                                                                                                 │
+   │   │  │          [annotation, blank line, block comment delimiter, rule, scenario, single line comment, step]           │
+       │  │                                                                                                                 │
+   │   │  │                                                                                                                 │
+       │  └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+   │   │                                        ▲                  ◈                                               △    ●
+       │                                        │                  │ [step]                                        │
+   │   │                                          [rule,           │                                                    │
+       │                                        │ scenario,        │                                               │
+   │   │                                          step]            ▼                                                    │
+       │                                     ┌──┴────────────────────────────────────────┐                         │
+   │   └─────────────────────────────────────│           CaptureBackgroundStep           │                              │
+                                 [annotation]│                                           │                         │
+   │                                         │  [annotation, blank line, block comment   │                              │
+                                             │   delimiter, explicit docstring start,    │                         │
+   │                                         │ implicit docstring start, rule, scenario, │                              │
+    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ▶│        single line comment, step]         │                         │
+                                             └───────────────────────────────────────────┘                              │
+                                                                   │                                               │
+                                                                   │ [explicit docstring start,                         │
+                                                                   │ implicit docstring stop]                      │
+                                                                   │                                                    │
+                                                                   │                                               │
+                                                                   ▼                                                    │
+                                             ╔═══════════════════════════════════════════╗                         │
+                                             ║                                           ║─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─     │
+                                             ║                                           ║ [explicit docstring end]
+                                             ║             Capture Docstring             ║                              │
+                                             ║                                           ║
+                                             ║                                           ║─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+                                             ╚═══════════════════════════════════════════╝ [implicit docstring end]
 </pre>
