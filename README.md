@@ -133,7 +133,6 @@ For example, the state machine starts off in InitialState. If the first line of 
 | A solid diamond    | ◈         | Checkpoint the current state before tranistioning |
 | A solid arrow head | ▶         | Redispatch the event                              |
 | A solid arrow head | ▷         | Do not redispatch the event                       |
-| A solid arrow head | ▷         | Do not redispatch the event                       |
 | A solid circle     | ◍         | Reinterpret the source text                       |
 
 ### Top Level
