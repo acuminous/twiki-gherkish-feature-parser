@@ -199,7 +199,6 @@ For example, the state machine starts off in InitialState. If the first line of 
                            │[background]
                            │
                            │
-                           │
                            ▽
      ┌───────────────────────────────────────────┐
      │        Declare Feature Background         │
@@ -240,7 +239,6 @@ For example, the state machine starts off in InitialState. If the first line of 
 
 <pre>
                            │[rule]
-                           │
                            │
                            │
                            ▽
@@ -295,7 +293,6 @@ For example, the state machine starts off in InitialState. If the first line of 
 
 <pre>
                                             │ [scenario]
-                                            │
                                             │
                                             │
                                             ▽
