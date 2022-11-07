@@ -177,7 +177,7 @@ For example, the state machine starts off in InitialState. If the first line of 
 ╔════════════════════╗             ╔════════════════════╗              ╔════════════════════╗
 ║                    ║             ║                    ║[scenario]    ║                    ║
 ║      Capture       ║ [rule]      ║      Capture       ║─────────────▷║      Capture       ║
-║ Feature Background ║────────────▷║  Rule Background   ║              ║      Scenario      ║
+║ Feature Background ║────────────▷║        Rule        ║              ║      Scenario      ║
 ║                    ║             ║                    ║        [rule]║                    ║
 ║                    ║             ║                    ║◁─────────────║                    ║
 ╚════════════════════╝             ╚════════════════════╝              ╚════════════════════╝
