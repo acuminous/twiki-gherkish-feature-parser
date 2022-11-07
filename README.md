@@ -149,99 +149,288 @@ For example, the state machine starts off in InitialState. If the first line of 
 | A hollow arrow head | `▷`       | Do not redispatch the event                       |
 | A solid circle      | `◍`       | Reinterpret the source text                       |
 
-### Top Level
+### Capture Feature
 
 <pre>
- ┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
- │                                           │                │                                           │
- │          CaptureAnnotationState           │─ ─ ─ ─ ─ ─ ─ ─▶│               InitialState                │
- │                                           │                │                                           │
- │[annotation, background, blank line, block │                │  [annotation, blank line, block comment   │
- │comment delimiter, feature, rule, scenario,│                │            delimiter, feature]            │
- │     single line comment, step, text]      │  [annotation]  │                                           │
- │                                           │◀───────────────│                                           │
- └───────────────────────────────────────────┘                └───────────────────────────────────────────┘
-    ▲                                     │                                         ◈
-    │                                                                               │
-    │ [annotation]                        │                                         │ [feature]
-    │                                                                               │
-    │                                     ▼                                         ▽
- ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
- │                                                                                                                                                                    │
- │                                                                        DeclareFeatureState                                                                         │
- │                                                                                                                                                                    │
- │                              [annotation, background, blank line, block comment delimiter, rule, scenario, single line comment, text]                              │
- │                                                                                                                                                                    │
- └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-    ▲                         ◈                                                     ◈                          ▲                          ◈
-                              │                                                     │                          │                          │
-    │                         │[background]                                         │ [rule]                                              │ [scenario]
-                              │                                                     │                          │                          │
-    │                         ▽                                                     ▽                                                     ▼
-        ╔═══════════════════════════════════════════╗         ╔═══════════════════════════════════════════╗    │    ╔═══════════════════════════════════════════╗
-    │   ║                                           ║         ║                                           ║         ║                                           ║
-        ║            Capture Background             ║         ║               Capture Rules               ║    │    ║             Capture Scenario              ║
-    │   ║                                           ║         ║                                           ║         ║                                           ║
-        ╚═══════════════════════════════════════════╝         ╚═══════════════════════════════════════════╝    │    ╚═══════════════════════════════════════════╝
-    │                         │                                                                                                           │
-                                [rule, scenario]                                                               │                            [rule, scenario]
-    └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘                                                                                 ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+                        ┌───────────────────────────────────────────┐
+                        │                  Initial                  │
+                        │                                           │
+                        │  [annotation, blank line, block comment   │
+                        │ delimiter, feature, single line comment]  │
+                        │                                           │
+                        └───────────────────────────────────────────┘
+                                              │[feature]
+                                              │
+                                              │
+                                              ▽
+┌───────────────────────────────────────────────────────────────────────────────────────────┐
+│                                      Declare Feature                                      │
+│                                                                                           │
+│ [annotation, background, blank line, block comment delimiter, rule, scenario, single line │
+│                                      comment, text]                                       │
+│                                                                                           │
+└───────────────────────────────────────────────────────────────────────────────────────────┘
+           │[background]                      │[rule]                             │[scenario]
+           │                                  │                                   │
+           │                                  │                                   │
+           ▽                                  ▽                                   ▽
+╔════════════════════╗             ╔════════════════════╗              ╔════════════════════╗
+║                    ║             ║                    ║[scenario]    ║                    ║
+║      Capture       ║ [rule]      ║      Capture       ║─────────────▷║      Capture       ║
+║ Feature Background ║────────────▷║  Rule Background   ║              ║      Scenario      ║
+║                    ║             ║                    ║        [rule]║                    ║
+║                    ║             ║                    ║◁─────────────║                    ║
+╚════════════════════╝             ╚════════════════════╝              ╚════════════════════╝
+       [scenario]                                                           △     │[end]
+           │                                                                │     │
+           └────────────────────────────────────────────────────────────────┘     │
+                                                                                  │
+                                                                                  ▽
+                                                                        ┌───────────────────┐
+                                                                        │                   │
+                                                                        │       Final       │
+                                                                        │                   │
+                                                                        └───────────────────┘
 </pre>
 
-### Capture Background
+### Capture Feature Background
 
 <pre>
-                                                                                             │                          ▲
-                                                                                             │ background
-                                                                                             │                          │
-                                                                                             │
-                                                                                             ▽                          │
-          ┌───────────────────────────────────────────┐                ┌───────────────────────────────────────────┐
-          │                                           │                │                                           │    │
-   ┌ ─ ─ ─│          CaptureAnnotationState           │─ ─ ─ ─ ─ ─ ─ ─▶│             DeclareBackground             │
-          │                                           │                │                                           │    │
-   │      │[annotation, background, blank line, block │                │  [annotation, blank line, block comment   │
-          │comment delimiter, feature, rule, scenario,│                │   delimiter, single line comment, step]   │    │
-   │      │     single line comment, step, text]      │   [annotation] │                                           │
-       ┌─▶│                                           │◀───────────────│                                           │    │
-   │   │  └───────────────────────────────────────────┘                └───────────────────────────────────────────┘
-       │     ▲                                     │                                         │                          │
-   │   │     │                                                                               │ [step]
-       │     │                                     │                                         │                          │
-   │   │     │ [annotation]                                                                  │                           [rule, scenario]
-       │     │                                     ▼                                         ▼                          │
-   │   │  ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-       │  │                                                                                                                 │
-   │   │  │                                          CaptureBackgroundDetailsState                                          │
-       │  │                                                                                                                 │
-   │   │  │          [annotation, blank line, block comment delimiter, rule, scenario, single line comment, step]           │
-       │  │                                                                                                                 │
-   │   │  │                                                                                                                 │
-       │  └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-   │   │                                        ▲                  ◈                                               △    ●
-       │                                        │                  │ [step]                                        │
-   │   │                                          [rule,           │                                                    │
-       │                                        │ scenario,        │                                               │
-   │   │                                          step]            ▼                                                    │
-       │                                     ┌──┴────────────────────────────────────────┐                         │
-   │   └─────────────────────────────────────│           CaptureBackgroundStep           │                              │
-                                 [annotation]│                                           │                         │
-   │                                         │  [annotation, blank line, block comment   │                              │
-                                             │   delimiter, explicit docstring start,    │                         │
-   │                                         │ implicit docstring start, rule, scenario, │                              │
-    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ▶│        single line comment, step]         │                         │
-                                             └───────────────────────────────────────────┘                              │
-                                                                   │                                               │
-                                                                   │ [explicit docstring start,                         │
-                                                                   │ implicit docstring stop]                      │
-                                                                   │                                                    │
-                                                                   │                                               │
-                                                                   ▼                                                    │
-                                             ╔═══════════════════════════════════════════╗                         │
-                                             ║                                           ║─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─     │
-                                             ║                                           ║ [explicit docstring end]
-                                             ║             Capture Docstring             ║                              │
-                                             ║                                           ║
-                                             ║                                           ║─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
-                                             ╚═══════════════════════════════════════════╝ [implicit docstring end]
+                           │[background]
+                           │
+                           │
+                           │
+                           ▽
+     ┌───────────────────────────────────────────┐
+     │        Declare Feature Background         │
+     │                                           │
+     │  [annotation, blank line, block comment   │
+     │   delimiter, single line comment, step]   │
+     │                                           │
+     └───────────────────────────────────────────┘
+                           │[step]
+                           │
+                           │
+                           ▼
+     ┌───────────────────────────────────────────┐
+     │      Capture Feature Background Step      │[rule]
+     │                                           │─────────────────────▷
+     │  [annotation, blank line, block comment   │
+┌ ─ ▶│   delimiter, explicit docstring start,    │
+     │   implicit docstring start, single line   │[scenario]
+│    │      comment, rule, scenario, step]       │─────────────────────▷
+     │                                           │
+│    └───────────────────────────────────────────┘
+         ◈[explicit docstring start]         ◈[implicit docstring start]
+│        │                                   │
+         │                                   │
+│        │                                   │
+         ▼                                   ▼
+│    ╔═══════════════════════════════════════════╗
+     ║                                           ║
+│    ║             Capture Docstring             ║
+     ║                                           ║
+│    ╚═══════════════════════════════════════════╝
+                           │[annotation, end, example
+│                           table, rule, scenario, step]
+ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+</pre>
+
+### Capture Rule
+
+<pre>
+                           │[rule]
+                           │
+                           │
+                           │
+                           ▽
+     ┌───────────────────────────────────────────┐
+     │               Declare Rule                │
+     │                                           │
+     │[annotation, background, blank line, block │[scenario]
+     │ comment delimiter, scenario, single line  │─────────────────────▷
+     │              comment, text]               │
+     │                                           │
+     └───────────────────────────────────────────┘
+                           │[background]
+                           │
+                           │
+                           ▼
+     ┌───────────────────────────────────────────┐
+     │          Declare Rule Background          │
+     │                                           │
+     │  [annotation, blank line, block comment   │
+     │   delimiter, single line comment, step]   │
+     │                                           │
+     └───────────────────────────────────────────┘
+                           │[step]
+                           │
+                           │
+                           ▼
+     ┌───────────────────────────────────────────┐
+     │       Capture Rule Background Step        │
+     │                                           │
+     │  [annotation, blank line, block comment   │[scenario]
+┌ ─ ▶│   delimiter, explicit docstring start,    │─────────────────────▷
+     │   implicit docstring start, single line   │
+│    │         comment, scenario, step]          │
+     │                                           │
+│    └───────────────────────────────────────────┘
+         ◈[explicit docstring start]         ◈[implicit docstring start]
+│        │                                   │
+         │                                   │
+│        │                                   │
+         ▼                                   ▼
+│    ╔═══════════════════════════════════════════╗
+     ║                                           ║
+│    ║             Capture Docstring             ║
+     ║                                           ║
+│    ╚═══════════════════════════════════════════╝
+                           │[annotation, end, example
+│                           table, rule, scenario, step]
+ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+</pre>
+
+### Capture Scenario
+
+<pre>
+                                            │ [scenario]
+                                            │
+                                            │
+                                            │
+                                            ▽
+                      ┌───────────────────────────────────────────┐
+                      │             Declare Scenario              │
+                      │                                           │
+                      │  [annotation, blank line, block comment   │
+                      │   delimiter, single line comment, step]   │
+                      │                                           │
+                      └───────────────────────────────────────────┘
+                                            │[step]
+                                            │
+                                            │
+                                            ▼
+     ┌────────────────────────────────────────────────────────────────────────────┐
+     │                                                                            │[rule, scenario, end]
+     │                           Capture Scenario Step                            │─────────────────────▷
+     │                                                                            │
+     │   [annotation, blank line, block comment delimiter, end, example table,    │
+┌ ─ ▶│  explicit docstring start, implicit docstring start, single line comment,  │◀ ─ ─ ─ ─ ─ ─ ┐
+     │                           rule, scenario, step]                            │
+│    │                                                                            │              │
+     │                                                                            │
+│    └────────────────────────────────────────────────────────────────────────────┘              │
+           ◈[explicit             ◈[implicit                    ◈[example table]
+│          │docstring             │docstring                    │                                │
+           │start]                │start]                       │
+│          │                      │                             │                                │
+           ▼                      ▼                             ▼
+│    ╔═══════════════════════════════════╗    ╔═══════════════════════════════════╗              │
+     ║                                   ║    ║                                   ║
+│    ║         Capture Docstring         ║    ║       Capture Example Table       ║              │
+     ║                                   ║    ║                                   ║
+│    ╚═══════════════════════════════════╝    ╚═══════════════════════════════════╝              │
+                       │[annotation, end,                       │[annotation, blank line, block
+│                       example table, rule,                     comment delimiter, end, rule,   │
+                       │scenario, step]                         │scenario, single line comment]
+└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─                                          ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+</pre>
+
+### Capture Docstring
+
+<pre>
+▲                         ◈                                                  ◈
+│                         │[explicit                                         │[implicit
+                          │docstring                                         │docstring
+│                         │start]                                            │start]
+                          ▽                                                  │
+│   ┌───────────────────────────────────────────┐                            │
+    │                                           │                            │
+│   │         Begin Explicit Docstring          │                            │
+    │                                           │                            │
+│   │                  [text]                   │                            │
+    │                                           │                            │
+│   └───────────────────────────────────────────┘                            │
+                          │[text]                                            │
+│                         │                                                  │
+                          │                                                  │
+│                         ▼                                                  ●
+    ┌───────────────────────────────────────────┐      ┌───────────────────────────────────────────┐
+│   │        Capture Explicit Docstring         │      │        Capture Implicit Docstring         │
+    │                                           │      │                                           │
+│   │  [annotation, blank line, block comment   │      │  [annotation, blank line, block comment   │
+    │   delimiter, single line comment, rule,   │      │   delimiter, single line comment, rule,   │
+│   │              scenario, step]              │      │              scenario, step]              │
+    │                                           │      │                                           │
+│   └───────────────────────────────────────────┘      └───────────────────────────────────────────┘
+                          │[explicit docstring end]                          │[implicit docstring end]
+│                         │                                                  │
+                          │                                                  │
+│                         ▽                                                  ●
+    ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
+│   │                                                                                              │
+    │                                        End Docstring                                         │
+│   │                                                                                              │
+    │                    [annotation, end, example table, rule, scenario, step]                    │
+│   │                                                                                              │
+    └──────────────────────────────────────────────────────────────────────────────────────────────┘
+│                                                   │[annotation, end, example
+                                                     table, rule, scenario, step]
+│                                                   │
+ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+</pre>
+
+### Capture Example Table
+
+<pre>
+▲                         ◈
+                          │[example table]
+│                         │
+                          │
+│                         ▽
+    ┌───────────────────────────────────────────┐
+│   │                                           │
+    │           Declare Example Table           │
+│   │                                           │
+    │        [example table header row]         │
+│   │                                           │
+    └───────────────────────────────────────────┘
+│                         │[example table header]
+                          │
+│                         │
+                          ▽
+│   ┌───────────────────────────────────────────┐
+    │                                           │
+│   │       Capture Example Table Header        │
+    │                                           │
+│   │       [example table separator row]       │
+    │                                           │
+│   └───────────────────────────────────────────┘
+                          │[explicit table separator]
+│                         │
+                          │
+│                         ▽
+    ┌───────────────────────────────────────────┐
+│   │                                           │
+    │         Begin Example Table Data          │
+│   │                                           │
+    │         [example table data row]          │
+│   │                                           │
+    └───────────────────────────────────────────┘
+│                         │[example table data row]
+                          │
+│                         │
+                          ▽
+│   ┌───────────────────────────────────────────┐
+    │        Capture Example Table Data         │
+│   │                                           │
+    │  [annotation, blank line, block comment   │
+│   │  delimiter, example table data row, end,  │
+    │   rule, scenario, single line comment]    │
+│   │                                           │
+    └───────────────────────────────────────────┘
+│                         │[annotation, blank line, block
+                           comment delimiter, end, rule,
+│                         │scenario, single line comment]
+ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
 </pre>
