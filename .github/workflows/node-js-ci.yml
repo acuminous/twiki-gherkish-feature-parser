@@ -27,6 +27,18 @@ jobs:
       - name: Tests
         run: npm test
 
+  sonarcloud:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   code-climate:
     needs: build
     runs-on: ubuntu-latest
@@ -34,7 +46,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: "16.x"
       - name: Cache Dependencies
         uses: actions/cache@v3
         id: cache
