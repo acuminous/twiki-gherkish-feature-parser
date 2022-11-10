@@ -1,157 +1,99 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
 import StubSession from '../stubs/StubSession.js';
+import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('DeclareFeatureState', () => {
-  let featureBuilder;
-  let machine;
-  const expectedEvents = [
-    ' - a background',
-    ' - a blank line',
-    ' - a block comment delimiter',
-    ' - a scenario',
-    ' - a single line comment',
-    ' - an annotation',
-    ' - some text',
-  ].join('\n');
 
-  beforeEach(() => {
-    featureBuilder = new FeatureBuilder()
+  const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
+    const featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' });
 
     const session = new StubSession();
 
-    machine = new StateMachine({ featureBuilder, session })
+    const machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState();
+
+    testBuilder.featureBuilder = featureBuilder;
+    testBuilder.machine = machine;
+    testBuilder.expectedEvents = [
+      Events.AnnotationEvent,
+      Events.BackgroundEvent,
+      Events.BlankLineEvent,
+      Events.BlockCommentDelimiterEvent,
+      Events.ScenarioEvent,
+      Events.SingleLineCommentEvent,
+      Events.TextEvent,
+    ];
   });
 
-  describe('Annotations', () => {
-    it('should cause a transition to CaptureAnnotationState', () => {
-      interpret('@foo=bar');
-      eq(machine.state, 'CaptureAnnotationState');
-    });
-  });
-
-  describe('Backgrounds', () => {
-    it('should cause a transition to DeclareBackgroundState', () => {
-      interpret('Background: foo');
-      eq(machine.state, 'DeclareBackgroundState');
+  testBuilder.interpreting('@foo=bar')
+    .shouldTransitionTo(States.CaptureAnnotationState)
+    .shouldStashAnnotation((annotations) => {
+      eq(annotations.length, 1);
+      eq(annotations[0].name, 'foo');
+      eq(annotations[0].value, 'bar');
     });
 
-    it('should create a checkpoint', () => {
-      interpret('Background: foo');
-
-      machine.unwind();
-      eq(machine.state, 'DeclareFeatureState');
+  testBuilder.interpreting('Background:')
+    .shouldTransitionTo(States.DeclareBackgroundState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.background.title, '');
     });
 
-    it('should capture backgrounds with annotations', () => {
-      interpret('@one=1');
-      interpret('@two=2');
-      interpret('Background: First background');
-
-      const exported = featureBuilder.build();
-      eq(exported.background.annotations.length, 2);
-      eq(exported.background.annotations[0].name, 'one');
-      eq(exported.background.annotations[0].value, '1');
-      eq(exported.background.annotations[1].name, 'two');
-      eq(exported.background.annotations[1].value, '2');
-    });
-  });
-
-  describe('Blank lines', () => {
-    it('should not cause a state transition', () => {
-      interpret('');
-      eq(machine.state, 'DeclareFeatureState');
-    });
-  });
-
-  describe('Block comment delimiters', () => {
-    it('should cause a transition to BlockCommentState', () => {
-      interpret('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
-    });
-  });
-
-  describe('Example tables', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Explicit docstring delimiters', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('End of file', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Features', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Feature: foo'), { message: `I did not expect a feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Single line comments', () => {
-    it('should not cause a state transition', () => {
-      interpret('# Some comment');
-      eq(machine.state, 'DeclareFeatureState');
-    });
-  });
-
-  describe('Scenarios', () => {
-    it('should cause a transition to DeclareScenarioState', () => {
-      interpret('Scenario: First scenario');
-      eq(machine.state, 'DeclareScenarioState');
+  testBuilder.interpreting('Background: A background')
+    .shouldTransitionTo(States.DeclareBackgroundState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.background.title, 'A background');
     });
 
-    it('should be captured without annotations', () => {
-      interpret('Scenario: First scenario');
+  testBuilder.interpreting('')
+    .shouldNotTransition();
 
-      const exported = featureBuilder.build();
-      eq(exported.scenarios.length, 1);
-      eq(exported.scenarios[0].title, 'First scenario');
-      eq(exported.annotations.length, 0);
+  testBuilder.interpreting('Where:')
+    .shouldBeUnexpected('an example table');
+
+  testBuilder.interpreting('---')
+    .shouldBeUnexpected('the start of an explicit docstring');
+
+  testBuilder.interpreting('\u0000')
+    .shouldBeUnexpected('the end of the feature');
+
+  testBuilder.interpreting('Feature:')
+    .shouldBeUnexpected('a feature');
+
+  testBuilder.interpreting('Scenario:')
+    .shouldTransitionTo(States.DeclareScenarioState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.scenarios.length, 1);
+      eq(feature.scenarios[0].title, '');
     });
 
-    it('should be captured with annotations', () => {
-      interpret('@one=1');
-      interpret('@two=2');
-      interpret('Scenario: First scenario');
-
-      const exported = featureBuilder.build();
-      eq(exported.scenarios.length, 1);
-      eq(exported.scenarios[0].annotations.length, 2);
-      deq(exported.scenarios[0].annotations[0], { name: 'one', value: '1' });
-      deq(exported.scenarios[0].annotations[1], { name: 'two', value: '2' });
-    });
-  });
-
-  describe('Lines of text', () => {
-    it('should not cause a state transition', () => {
-      interpret('some text');
-      eq(machine.state, 'DeclareFeatureState');
+  testBuilder.interpreting('Scenario: A scenario')
+    .shouldTransitionTo(States.DeclareScenarioState)
+    .shouldCapture('A scenario', (feature) => {
+      eq(feature.scenarios.length, 1);
+      eq(feature.scenarios[0].title, 'A scenario');
     });
 
-    it('should be captured in the feature description', () => {
-      interpret('some text');
-      interpret('some more text');
-      interpret('   some indented text');
+  testBuilder.interpreting('# some comment')
+    .shouldNotTransition();
 
-      const exported = featureBuilder.build();
-      eq(exported.description, 'some text\nsome more text\n   some indented text');
+  testBuilder.interpreting('###')
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
+
+  testBuilder.interpreting('some text')
+    .shouldNotTransition()
+    .shouldCapture('description', (feature) => {
+      eq(feature.description, 'some text');
     });
-  });
 
-  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    machine.interpret({ line, number, indentation });
-  }
+  testBuilder.interpreting('   some text')
+    .shouldNotTransition()
+    .shouldCapture('description', (feature) => {
+      eq(feature.description, '   some text');
+    });
 });

@@ -1,124 +1,76 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
 import StubSession from '../stubs/StubSession.js';
+import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('InitialState', () => {
-  let featureBuilder;
-  let machine;
-  const expectedEvents = [
-    ' - a blank line',
-    ' - a block comment delimiter',
-    ' - a feature',
-    ' - a single line comment',
-    ' - an annotation',
-  ].join('\n');
 
-  beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
+  const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
+    const featureBuilder = new FeatureBuilder();
     const session = new StubSession();
-    machine = new StateMachine({ featureBuilder, session });
+    const machine = new StateMachine({ featureBuilder, session });
+
+    testBuilder.featureBuilder = featureBuilder;
+    testBuilder.machine = machine;
+    testBuilder.expectedEvents = [
+      Events.AnnotationEvent,
+      Events.BlockCommentDelimiterEvent,
+      Events.BlankLineEvent,
+      Events.FeatureEvent,
+      Events.SingleLineCommentEvent,
+    ];
   });
 
-  describe('Annotations', () => {
-    it('should cause a transition to CaptureAnnotationState', () => {
-      interpret('@foo=bar');
-      eq(machine.state, 'CaptureAnnotationState');
-    });
-  });
-
-  describe('Backgrounds', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Blank lines', () => {
-    it('should not cause a state transition', () => {
-      interpret('');
-      eq(machine.state, 'InitialState');
-    });
-  });
-
-  describe('Explicit docstring delimiters', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Implicit docstring delimiters', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('   some text'), { message: `I did not expect some text at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('End of file', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Example tables', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
-
-  describe('Features', () => {
-    it('should cause a transition to DeclareFeatureState', () => {
-      interpret('Feature: foo');
-      eq(machine.state, 'DeclareFeatureState');
+  testBuilder.interpreting('@foo=bar')
+    .shouldTransitionTo(States.CaptureAnnotationState)
+    .shouldStashAnnotation((annotations) => {
+      eq(annotations.length, 1);
+      eq(annotations[0].name, 'foo');
+      eq(annotations[0].value, 'bar');
     });
 
-    it('should be caputed without annotations', () => {
-      interpret('Feature: Some feature');
+  testBuilder.interpreting('Background:')
+    .shouldBeUnexpected('a background');
 
-      const exported = featureBuilder.build();
-      eq(exported.title, 'Some feature');
-      eq(exported.annotations.length, 0);
+  testBuilder.interpreting('')
+    .shouldNotTransition();
+
+  testBuilder.interpreting('\u0000')
+    .shouldBeUnexpected('the end of the feature');
+
+  testBuilder.interpreting('Where:')
+    .shouldBeUnexpected('an example table');
+
+  testBuilder.interpreting('---')
+    .shouldBeUnexpected('the start of an explicit docstring');
+
+  testBuilder.interpreting('Feature:')
+    .shouldTransitionTo(States.DeclareFeatureState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.title, '');
     });
 
-    it('should be captured with annotations', () => {
-      interpret('@one = 1');
-      interpret('@two = 2');
-      interpret('Feature: First scenario');
-
-      const exported = featureBuilder.build();
-      eq(exported.annotations.length, 2);
-      deq(exported.annotations[0], { name: 'one', value: '1' });
-      deq(exported.annotations[1], { name: 'two', value: '2' });
+  testBuilder.interpreting('Feature: A feature')
+    .shouldTransitionTo(States.DeclareFeatureState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.title, 'A feature');
     });
-  });
 
-  describe('Block comment delimiters', () => {
-    it('should cause a transition to BlockCommentState', () => {
-      interpret('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
-    });
-  });
+  testBuilder.interpreting('Scenario:')
+    .shouldBeUnexpected('a scenario');
 
-  describe('Single line comments', () => {
-    it('should not cause a state transition', () => {
-      interpret('# foo');
-      eq(machine.state, 'InitialState');
-    });
-  });
+  testBuilder.interpreting('# some comment')
+    .shouldNotTransition();
 
-  describe('Scenarios', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('Scenario: foo'), { message: `I did not expect a scenario at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
+  testBuilder.interpreting('###')
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
 
-  describe('Lines of text', () => {
-    it('should be unexpected', () => {
-      throws(() => interpret('some text'), { message: `I did not expect some text at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-    });
-  });
+  testBuilder.interpreting('some text')
+    .shouldBeUnexpected('some text');
 
-  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    machine.interpret({ line, number, indentation });
-  }
+  testBuilder.interpreting('   some text')
+    .shouldBeUnexpected('some text');
 });
