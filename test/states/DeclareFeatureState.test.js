@@ -36,7 +36,8 @@ describe('DeclareFeatureState', () => {
       eq(annotations.length, 1);
       eq(annotations[0].name, 'foo');
       eq(annotations[0].value, 'bar');
-    });
+    })
+    .shouldCheckpoint();
 
   testBuilder.interpreting('Background:')
     .shouldTransitionTo(States.DeclareBackgroundState)
@@ -83,7 +84,8 @@ describe('DeclareFeatureState', () => {
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState);
+    .shouldTransitionTo(States.ConsumeBlockCommentState)
+    .shouldCheckpoint();
 
   testBuilder.interpreting('some text')
     .shouldNotTransition()

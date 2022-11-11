@@ -66,7 +66,8 @@ describe('InitialState', () => {
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState);
+    .shouldTransitionTo(States.ConsumeBlockCommentState)
+    .shouldCheckpoint();
 
   testBuilder.interpreting('some text')
     .shouldBeUnexpected('some text');

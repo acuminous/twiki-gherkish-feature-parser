@@ -6,23 +6,8 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 
 export default class StateMachineTestBuilder {
 
-  before(fn) {
-    before(fn);
-    return this;
-  }
-
   beforeEach(fn) {
     beforeEach(fn);
-    return this;
-  }
-
-  after(fn) {
-    after(fn);
-    return this;
-  }
-
-  afterEach(fn) {
-    afterEach(fn);
     return this;
   }
 
@@ -89,7 +74,16 @@ export default class StateMachineTestBuilder {
       expectations(context);
     });
     return this;
+  }
 
+  shouldCheckpoint() {
+    const source = this._source;
+    it(`${this._printableLine(source)} should create a checkpoint`, () => {
+      const previousState = this.machine.state;
+      this.machine.interpret(source);
+      this.machine.unwind();
+      eq(previousState, this.machine.state);
+    });
   }
 
   _printableLine(source) {
