@@ -9,11 +9,8 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 describe('CaptureAnnotationState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
-    const featureBuilder = new FeatureBuilder()
-      .createFeature({ title: 'Meh' });
-
+    const featureBuilder = new FeatureBuilder();
     const session = new StubSession();
-
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()
       .checkpoint()
