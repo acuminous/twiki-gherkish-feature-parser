@@ -321,7 +321,7 @@ For example, the state machine starts off in InitialState. If the first line of 
 │          │docstring             │docstring                    │                                │
            │start]                │start]                       │
 │          │                      │                             │                                │
-           ▼                      ▼                             ▼
+           ▼                      ▼                             ▽
 │    ╔═══════════════════════════════════╗    ╔═══════════════════════════════════╗              │
      ║                                   ║    ║                                   ║
 │    ║         Capture Docstring         ║    ║       Capture Example Table       ║              │
