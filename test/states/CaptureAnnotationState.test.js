@@ -1,126 +1,108 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, utils } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
 import StubSession from '../stubs/StubSession.js';
+import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('CaptureAnnotationState', () => {
-  let featureBuilder;
-  let machine;
 
-  const expectedEvents = [
-    ' - a background',
-    ' - a blank line',
-    ' - a block comment delimiter',
-    ' - a feature',
-    ' - a scenario',
-    ' - a single line comment',
-    ' - a step',
-    ' - an annotation',
-  ].join('\n');
+  const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
+    const featureBuilder = new FeatureBuilder()
+      .createFeature({ title: 'Meh' });
 
-  beforeEach(() => {
-    featureBuilder = new FeatureBuilder();
     const session = new StubSession();
-    machine = new StateMachine({ featureBuilder, session });
+
+    const machine = new StateMachine({ featureBuilder, session })
+      .toStubState()
+      .checkpoint()
+      .toCaptureAnnotationState();
+
+    testBuilder.featureBuilder = featureBuilder;
+    testBuilder.machine = machine;
+    testBuilder.expectedEvents = [
+      Events.AnnotationEvent,
+      Events.BackgroundEvent,
+      Events.BlankLineEvent,
+      Events.BlockCommentDelimiterEvent,
+      Events.FeatureEvent,
+      Events.ScenarioEvent,
+      Events.SingleLineCommentEvent,
+      Events.StepEvent,
+    ];
   });
 
-  describe('Annotations', () => {
-    it('should not cause a state transition', () => {
-      interpret('@foo=bar');
-      eq(machine.state, 'CaptureAnnotationState');
+  testBuilder.interpreting('@foo=bar')
+    .shouldTransitionTo(States.CaptureAnnotationState)
+    .shouldStashAnnotation((annotations) => {
+      eq(annotations.length, 1);
+      eq(annotations[0].name, 'foo');
+      eq(annotations[0].value, 'bar');
     });
-  });
 
-  describe('Backgrounds', () => {
-    it('should unwind and dispatch', () => {
-      featureBuilder.createFeature({ title: 'Meh' });
-      machine.toDeclareFeatureState().checkpoint().toCaptureAnnotationState();
-      interpret('Background: Meh');
-      eq(machine.state, 'DeclareBackgroundState');
+  testBuilder.interpreting('Background:')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.BackgroundEvent, (context) => {
+      eq(context.data.title, '');
     });
-  });
 
-  describe('Blank lines', () => {
-    it('should not cause a state transition', () => {
-      machine.checkpoint().toCaptureAnnotationState();
-      interpret('');
-      eq(machine.state, 'CaptureAnnotationState');
+  testBuilder.interpreting('Background: A background')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.BackgroundEvent, (context) => {
+      eq(context.data.title, 'A background');
     });
-  });
 
-  describe('Block comment delimiters', () => {
-    it('should cause a transition to BlockCommentState', () => {
-      machine.checkpoint().toCaptureAnnotationState();
-      interpret('###');
-      eq(machine.state, 'ConsumeBlockCommentState');
+  testBuilder.interpreting('')
+    .shouldNotTransition();
+
+  testBuilder.interpreting('Where:')
+    .shouldBeUnexpected('an example table');
+
+  testBuilder.interpreting('---')
+    .shouldBeUnexpected('the start of an explicit docstring');
+
+  testBuilder.interpreting('\u0000')
+    .shouldBeUnexpected('the end of the feature');
+
+  testBuilder.interpreting('Feature:')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.FeatureEvent, (context) => {
+      eq(context.data.title, '');
     });
-  });
 
-  describe('Example tables', () => {
-    it('should be unexpected', () => {
-      machine.toCaptureAnnotationState();
-      throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  testBuilder.interpreting('Feature: A feature')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.FeatureEvent, (context) => {
+      eq(context.data.title, 'A feature');
     });
-  });
 
-  describe('Explicit docstring delimiters', () => {
-    it('should be unexpected', () => {
-      machine.toCaptureAnnotationState();
-      throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  testBuilder.interpreting('Scenario:')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.ScenarioEvent, (context) => {
+      eq(context.data.title, '');
     });
-  });
 
-  describe('Implicit docstring delimiters', () => {
-    it('should be unexpected', () => {
-      machine.toCaptureAnnotationState();
-      throws(() => interpret('   some docstring'), { message: `I did not expect the start of an implicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  testBuilder.interpreting('Scenario: A scenario')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.ScenarioEvent, (context) => {
+      eq(context.data.title, 'A scenario');
     });
-  });
 
-  describe('End of file', () => {
-    it('should be unexpected', () => {
-      machine.toCaptureAnnotationState();
-      throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
+  testBuilder.interpreting('# some comment')
+    .shouldNotTransition();
+
+  testBuilder.interpreting('###')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.BlockCommentDelimiterEvent);
+
+  testBuilder.interpreting('some text')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.StepEvent, (context) => {
+      eq(context.data.text, 'some text');
     });
-  });
 
-  describe('Features', () => {
-    it('should unwind and dispatch', () => {
-      machine.checkpoint().toCaptureAnnotationState();
-      interpret('Feature: Meh');
-      eq(machine.state, 'DeclareFeatureState');
-    });
-  });
+  testBuilder.interpreting('   some text')
+    .shouldBeUnexpected('the start of an implicit docstring');
 
-  describe('Single line comments', () => {
-    it('should not cause a state transition', () => {
-      machine.checkpoint().toCaptureAnnotationState();
-      interpret('#');
-      eq(machine.state, 'CaptureAnnotationState');
-    });
-  });
-
-  describe('Scenarios', () => {
-    it('should unwind and dispatch', () => {
-      featureBuilder.createFeature({ title: 'Meh' }).createScenario({ title: 'Meh' });
-      machine.toDeclareFeatureState().checkpoint().toCaptureAnnotationState();
-      interpret('Scenario: Meh');
-      eq(machine.state, 'DeclareScenarioState');
-    });
-  });
-
-  describe('Lines of text', () => {
-    it('should unwind and dispatch', () => {
-      featureBuilder.createFeature({ title: 'Meh' }).createScenario({ title: 'Meh' });
-      machine.toCaptureScenarioStepState().checkpoint().toCaptureAnnotationState();
-      interpret('some text');
-      eq(machine.state, 'CaptureScenarioStepState');
-    });
-  });
-
-  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    machine.interpret({ line, number, indentation });
-  }
 });

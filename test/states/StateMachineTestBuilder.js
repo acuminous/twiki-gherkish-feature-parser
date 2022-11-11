@@ -1,4 +1,4 @@
-import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
+import { strictEqual as eq, deepStrictEqual as deq, throws, ok } from 'node:assert';
 import zunit from 'zunit';
 import { utils } from '../../lib/index.js';
 
@@ -62,7 +62,7 @@ export default class StateMachineTestBuilder {
     return this;
   }
 
-  shouldCapture(what, expectations) {
+  shouldCapture(what, expectations = () => {}) {
     const source = this._source;
     it(`${this._printableLine(source)} should capture ${what}`, () => {
       this.machine.interpret(source);
@@ -71,7 +71,7 @@ export default class StateMachineTestBuilder {
     return this;
   }
 
-  shouldStashAnnotation(expectations) {
+  shouldStashAnnotation(expectations = () => {}) {
     const source = this._source;
     it(`${this._printableLine(source)} should stash an annotation`, () => {
       this.machine.interpret(source);
@@ -80,14 +80,16 @@ export default class StateMachineTestBuilder {
     return this;
   }
 
-  shouldCreateACheckpoint() {
+  shouldDispatch(Clazz, expectations = () => {}) {
     const source = this._source;
-    it(`${this._printableLine(source)} should create a checkpoint`, () => {
-      const currentState = this.machine.state;
-      this.machine.interpret(source).unwind();
-      eq(this.machine.state, currentState);
+    it(`${this._printableLine(source)} should dispatch ${new Clazz().description} event`, () => {
+      this.machine.interpret(source);
+      const { event, context } = this.machine.history[this.machine.history.length - 1];
+      ok(event instanceof Clazz);
+      expectations(context);
     });
     return this;
+
   }
 
   _printableLine(source) {
