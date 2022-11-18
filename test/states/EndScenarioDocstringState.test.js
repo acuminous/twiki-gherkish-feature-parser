@@ -29,6 +29,7 @@ describe('EndScenarioDocstringState', () => {
       Events.BlockCommentDelimiterEvent,
       Events.EndEvent,
       Events.ExampleTableEvent,
+      Events.RuleEvent,
       Events.ScenarioEvent,
       Events.SingleLineCommentEvent,
       Events.StepEvent,
@@ -65,6 +66,18 @@ describe('EndScenarioDocstringState', () => {
 
   testBuilder.interpreting('Feature: A feature')
     .shouldBeUnexpected('a feature');
+
+  testBuilder.interpreting('Rule:')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.RuleEvent, (context) => {
+      eq(context.data.title, '');
+    });
+
+  testBuilder.interpreting('Rule: A rule')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.RuleEvent, (context) => {
+      eq(context.data.title, 'A rule');
+    });
 
   testBuilder.interpreting('Scenario:')
     .shouldTransitionTo(States.StubState)
