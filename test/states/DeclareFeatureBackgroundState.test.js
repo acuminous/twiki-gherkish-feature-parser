@@ -6,7 +6,7 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('DeclareBackgroundState', () => {
+describe('DeclareFeatureBackgroundState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
@@ -16,7 +16,7 @@ describe('DeclareBackgroundState', () => {
     const session = new StubSession();
 
     const machine = new StateMachine({ featureBuilder, session })
-      .toDeclareBackgroundState();
+      .toDeclareFeatureBackgroundState();
 
     testBuilder.featureBuilder = featureBuilder;
     testBuilder.machine = machine;

@@ -32,7 +32,7 @@ describe('CaptureImplicitDocstringState', () => {
       machine = new StateMachine({ featureBuilder, session })
         .toDeclareFeatureState()
         .checkpoint()
-        .toDeclareBackgroundState()
+        .toDeclareFeatureBackgroundState()
         .toCaptureBackgroundDetailsState()
         .checkpoint()
         .toCaptureBackgroundStepState()

@@ -28,7 +28,7 @@ describe('CaptureBackgroundDetailsState', () => {
     machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState()
       .checkpoint()
-      .toDeclareBackgroundState()
+      .toDeclareFeatureBackgroundState()
       .toCaptureBackgroundDetailsState();
   });
 

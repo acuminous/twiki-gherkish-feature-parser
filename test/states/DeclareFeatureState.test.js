@@ -40,13 +40,13 @@ describe('DeclareFeatureState', () => {
     .shouldCheckpoint();
 
   testBuilder.interpreting('Background:')
-    .shouldTransitionTo(States.DeclareBackgroundState)
+    .shouldTransitionTo(States.DeclareFeatureBackgroundState)
     .shouldCapture('title', (feature) => {
       eq(feature.background.title, '');
     });
 
   testBuilder.interpreting('Background: A background')
-    .shouldTransitionTo(States.DeclareBackgroundState)
+    .shouldTransitionTo(States.DeclareFeatureBackgroundState)
     .shouldCapture('title', (feature) => {
       eq(feature.background.title, 'A background');
     });
