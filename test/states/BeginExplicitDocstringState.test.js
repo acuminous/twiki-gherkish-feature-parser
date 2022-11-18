@@ -30,7 +30,7 @@ describe('BeginExplicitDocstringState', () => {
         .toDeclareFeatureBackgroundState()
         .toCaptureBackgroundDetailsState()
         .checkpoint()
-        .toCaptureBackgroundStepState()
+        .toCaptureFeatureBackgroundStepState()
         .toBeginExplicitDocstringState();
     });
 

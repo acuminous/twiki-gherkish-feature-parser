@@ -65,7 +65,7 @@ describe('DeclareFeatureBackgroundState', () => {
     .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('some text')
-    .shouldTransitionTo(States.CaptureBackgroundStepState)
+    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
     .shouldCapture('step', (feature) => {
       eq(feature.background.steps.length, 1);
       eq(feature.background.steps[0].text, 'some text');

@@ -6,7 +6,7 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('CaptureBackgroundStepState', () => {
+describe('CaptureFeatureBackgroundStepState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
@@ -17,7 +17,7 @@ describe('CaptureBackgroundStepState', () => {
     const session = new StubSession();
 
     const machine = new StateMachine({ featureBuilder, session })
-      .toCaptureBackgroundStepState();
+      .toCaptureFeatureBackgroundStepState();
 
     testBuilder.featureBuilder = featureBuilder;
     testBuilder.machine = machine;
@@ -83,7 +83,7 @@ describe('CaptureBackgroundStepState', () => {
     .shouldCheckpoint();
 
   testBuilder.interpreting('some text')
-    .shouldTransitionTo(States.CaptureBackgroundStepState)
+    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
     .shouldCapture('step', (feature) => {
       eq(feature.background.steps.length, 2);
       eq(feature.background.steps[1].text, 'some text');

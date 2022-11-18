@@ -35,7 +35,7 @@ describe('CaptureImplicitDocstringState', () => {
         .toDeclareFeatureBackgroundState()
         .toCaptureBackgroundDetailsState()
         .checkpoint()
-        .toCaptureBackgroundStepState()
+        .toCaptureFeatureBackgroundStepState()
         .toCaptureImplicitDocstringState();
     });
 
@@ -156,9 +156,9 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
     describe('An outdented line of text', () => {
-      it('should cause a transition to CaptureBackgroundStepState', () => {
+      it('should cause a transition to CaptureFeatureBackgroundStepState', () => {
         interpret('some text');
-        eq(machine.state, 'CaptureBackgroundStepState');
+        eq(machine.state, 'CaptureFeatureBackgroundStepState');
       });
     });
 
