@@ -29,6 +29,7 @@ describe('CaptureImplicitDocstringState', () => {
       Events.AnnotationEvent,
       Events.BlankLineEvent,
       Events.BlockCommentDelimiterEvent,
+      Events.RuleEvent,
       Events.ScenarioEvent,
       Events.SingleLineCommentEvent,
       Events.StepEvent,
