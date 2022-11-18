@@ -29,7 +29,6 @@ describe('FeatureParser', () => {
 
   describe('Error handling', () => {
     listFeatures('invalid').forEach(({ title, basename }) => {
-      // const _it = title === 'scenario with empty explicit docstring' ? oit : it;
       it(`should report ${title}`, () => {
         assertParserError('invalid', basename);
       });
