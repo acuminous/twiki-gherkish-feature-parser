@@ -91,6 +91,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
 
   testBuilder.interpreting('   some text')
     .shouldTransitionTo(States.CaptureImplicitDocstringState)
+    .shouldAlias(States.EndFeatureBackgroundDocstringState)
     .shouldCapture('docstring text', (feature) => {
       eq(feature.background.steps[0].docstring, 'some text');
     });

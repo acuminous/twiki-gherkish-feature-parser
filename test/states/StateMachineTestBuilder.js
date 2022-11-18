@@ -71,6 +71,7 @@ export default class StateMachineTestBuilder {
       this.machine.interpret(source);
       ok(this.machine[StateClass.handlerAlias]);
     });
+    return this;
   }
 
   shouldCheckpoint() {
