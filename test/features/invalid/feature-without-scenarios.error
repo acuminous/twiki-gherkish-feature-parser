@@ -3,6 +3,7 @@ Instead, I expected one of:
  - a background
  - a blank line
  - a block comment delimiter
+ - a rule
  - a scenario
  - a single line comment
  - an annotation

@@ -24,6 +24,7 @@ describe('DeclareFeatureState', () => {
       Events.BackgroundEvent,
       Events.BlankLineEvent,
       Events.BlockCommentDelimiterEvent,
+      Events.RuleEvent,
       Events.ScenarioEvent,
       Events.SingleLineCommentEvent,
       Events.TextEvent,
@@ -65,6 +66,20 @@ describe('DeclareFeatureState', () => {
 
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
+
+  testBuilder.interpreting('Rule:')
+    .shouldTransitionTo(States.DeclareRuleState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.rules.length, 1);
+      eq(feature.rules[0].title, '');
+    });
+
+  testBuilder.interpreting('Rule: A rule')
+    .shouldTransitionTo(States.DeclareRuleState)
+    .shouldCapture('A rule', (feature) => {
+      eq(feature.rules.length, 1);
+      eq(feature.rules[0].title, 'A rule');
+    });
 
   testBuilder.interpreting('Scenario:')
     .shouldTransitionTo(States.DeclareScenarioState)

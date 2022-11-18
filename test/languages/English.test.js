@@ -9,6 +9,7 @@ describe('English', () => {
   it('should map keywords', () => {
     deq(English.translate('feature'), /^\s*(?:feature)\s*:\s*(.*)/i);
     deq(English.translate('background'), /^\s*(?:background)\s*:\s*(.*)/i);
+    deq(English.translate('rule'), /^\s*(?:rule)\s*:\s*(.*)/i);
     deq(English.translate('scenario'), /^\s*(?:scenario)\s*:\s*(.*)/i);
     deq(English.translate('examples'), /^\s*(?:examples|where)\s*:\s*(.*)/i);
   });

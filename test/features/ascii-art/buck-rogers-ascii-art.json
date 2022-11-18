@@ -19,6 +19,7 @@
       }
     ]
   },
+  "rules": [],
   "scenarios": [
     {
       "title": "Twiki",

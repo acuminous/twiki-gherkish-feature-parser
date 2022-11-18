@@ -9,6 +9,7 @@ describe('Pirate', () => {
   it('should map keywords', () => {
     deq(Pirate.translate('feature'), /^\s*(?:tale|yarn)\s*:\s*(.*)/i);
     deq(Pirate.translate('background'), /^\s*(?:lore)\s*:\s*(.*)/i);
+    deq(Pirate.translate('rule'), /^\s*(?:guideline)\s*:\s*(.*)/i);
     deq(Pirate.translate('scenario'), /^\s*(?:adventure|sortie)\s*:\s*(.*)/i);
     deq(Pirate.translate('examples'), /^\s*(?:wherest)\s*:\s*(.*)/i);
   });
