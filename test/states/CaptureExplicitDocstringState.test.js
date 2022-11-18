@@ -24,8 +24,8 @@ describe('CaptureExplicitDocstringState', () => {
     testBuilder.featureBuilder = featureBuilder;
     testBuilder.machine = machine;
     testBuilder.expectedEvents = [
-      Events.DocstringTextEvent,
       Events.ExplicitDocstringStopEvent,
+      Events.DocstringTextEvent,
     ];
   });
 

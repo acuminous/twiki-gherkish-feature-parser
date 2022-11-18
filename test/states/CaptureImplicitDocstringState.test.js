@@ -1,457 +1,156 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
 import StubSession from '../stubs/StubSession.js';
-import * as utils from '../../lib/utils.js';
+import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
 describe('CaptureImplicitDocstringState', () => {
-  let featureBuilder;
-  let machine;
 
-  describe('After a background step', () => {
+  const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
+    const featureBuilder = new FeatureBuilder()
+      .createFeature({ title: 'Meh' })
+      .createBackground({ title: 'Meh' })
+      .createStep({ text: 'Meh' });
 
-    const expectedEvents = [
-      ' - a blank line',
-      ' - a block comment delimiter',
-      ' - a scenario',
-      ' - a single line comment',
-      ' - a step',
-      ' - an annotation',
-    ].join('\n');
+    const session = new StubSession()
+      .beginImplicitDocstring(3);
 
-    beforeEach(() => {
-      featureBuilder = new FeatureBuilder()
-        .createFeature({ title: 'Meh' })
-        .createBackground({ title: 'Meh' })
-        .createStep({ text: 'First step' });
+    const machine = new StateMachine({ featureBuilder, session })
+      .toCaptureFeatureBackgroundStepState()
+      .checkpoint()
+      .alias(States.EndFeatureBackgroundDocstringState)
+      .toCaptureImplicitDocstringState();
 
-      const session = new StubSession({ indentation: 0, docstring: { indentation: 3 } });
-
-      machine = new StateMachine({ featureBuilder, session })
-        .toDeclareFeatureState()
-        .checkpoint()
-        .toDeclareFeatureBackgroundState()
-        .toCaptureBackgroundDetailsState()
-        .checkpoint()
-        .toCaptureFeatureBackgroundStepState()
-        .toCaptureImplicitDocstringState();
-    });
-
-    describe('An indented annotation', () => {
-      it('should not cause a state transition', () => {
-        interpret('   @foo = bar');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   @foo = bar');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, '@foo = bar');
-      });
-    });
-
-    describe('An outdented annotation', () => {
-      it('should cause a state transition to CaptureAnnotationState', () => {
-        interpret('@foo = bar');
-        eq(machine.state, 'CaptureAnnotationState');
-      });
-    });
-
-    describe('An indented background', () => {
-      it('should not cause a state transition', () => {
-        interpret('   Background: foo');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   Background: foo');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, 'Background: foo');
-      });
-    });
-
-    describe('An outdented background', () => {
-      it('should be unexpected', () => {
-        throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-      });
-    });
-
-    describe('An indented blank line', () => {
-      it('should not cause a state transition', () => {
-        interpret('      ');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('      ');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, '   ');
-      });
-    });
-
-    describe('An outdented blank line', () => {
-      it('should cause a transition to CaptureBackgroundDetailsState', () => {
-        interpret('');
-        eq(machine.state, 'CaptureBackgroundDetailsState');
-      });
-    });
-
-    describe('An indented example table', () => {
-      it('should not cause a state transition', () => {
-        interpret('   Where:');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   Where:');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, 'Where:');
-      });
-    });
-
-    describe('An outdented example table', () => {
-      it('should be unexpected', () => {
-        throws(() => interpret('Where:'), { message: `I did not expect an example table at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-      });
-    });
-
-    describe('An indented explicit docstring delimiter', () => {
-      it('should not cause a state transition', () => {
-        interpret('   ---');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   ---');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, '---');
-      });
-    });
-
-    describe('An outdented explicit docstring delimiter', () => {
-      it('should be unexpected', () => {
-        throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-      });
-    });
-
-    describe('An indented line of text', () => {
-      it('should not cause a state transition', () => {
-        interpret('   some more text');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   some more text');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, 'some more text');
-      });
-    });
-
-    describe('An outdented line of text', () => {
-      it('should cause a transition to CaptureFeatureBackgroundStepState', () => {
-        interpret('some text');
-        eq(machine.state, 'CaptureFeatureBackgroundStepState');
-      });
-    });
-
-    describe('End of file', () => {
-      it('should be unexpected', () => {
-        throws(() => interpret('\u0000'), { message: `I did not expect the end of the feature at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-      });
-    });
-
-    describe('An indented block comment delimiter', () => {
-      it('should not cause a state transition', () => {
-        interpret('   ###');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   ###');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, '###');
-      });
-    });
-
-    describe('An outdented block comment delimiter', () => {
-      it('should cause a transition to ConsumeBlockCommentState', () => {
-        interpret('###');
-        eq(machine.state, 'ConsumeBlockCommentState');
-      });
-    });
-
-    describe('An indented single line comment', () => {
-      it('should not cause a state transition', () => {
-        interpret('   # A comment');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   # A comment');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, '# A comment');
-      });
-    });
-
-    describe('An outdented single line comment', () => {
-      it('should cause a transition to CaptureBackgroundDetailsState', () => {
-        interpret('# A comment');
-        eq(machine.state, 'CaptureBackgroundDetailsState');
-      });
-    });
-
-    describe('An indented scenario', () => {
-      it('should not cause a state transition', () => {
-        interpret('   Scenario: foo');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   Scenario: foo');
-
-        const exported = featureBuilder.build();
-        eq(exported.background.steps[0].docstring, 'Scenario: foo');
-      });
-    });
-
-    describe('An outdented scenario', () => {
-      it('should cause a transition to DeclareScenarioState', () => {
-        interpret('Scenario: foo');
-        eq(machine.state, 'DeclareScenarioState');
-      });
-    });
+    testBuilder.featureBuilder = featureBuilder;
+    testBuilder.machine = machine;
+    testBuilder.expectedEvents = [
+      Events.AnnotationEvent,
+      Events.BlankLineEvent,
+      Events.BlockCommentDelimiterEvent,
+      Events.ScenarioEvent,
+      Events.SingleLineCommentEvent,
+      Events.StepEvent,
+    ];
   });
 
-  describe('After a scenario step', () => {
-
-    const expectedEvents = [
-      ' - a blank line',
-      ' - a block comment delimiter',
-      ' - a scenario',
-      ' - a single line comment',
-      ' - a step',
-      ' - an annotation',
-      ' - an example table',
-      ' - the end of the feature',
-    ].join('\n');
-
-    beforeEach(() => {
-      featureBuilder = new FeatureBuilder()
-        .createFeature({ title: 'Meh' })
-        .createScenario({ title: 'Meh' })
-        .createStep({ text: 'First step' });
-
-      const session = new StubSession({ indentation: 0, docstring: { indentation: 3 } });
-
-      machine = new StateMachine({ featureBuilder, session })
-        .toDeclareFeatureState()
-        .checkpoint()
-        .toDeclareScenarioState()
-        .toCaptureScenarioDetailsState()
-        .checkpoint()
-        .toCaptureScenarioStepState()
-        .toCaptureImplicitDocstringState();
+  testBuilder.interpreting('   @foo=bar')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, '@foo=bar');
     });
 
-    describe('An indented annotation', () => {
-      it('should not cause a state transition', () => {
-        interpret('   @foo = bar');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   @foo = bar');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, '@foo = bar');
-      });
+  testBuilder.interpreting('@foo=bar')
+    .shouldTransitionTo(States.CaptureAnnotationState)
+    .shouldStashAnnotation((annotations) => {
+      eq(annotations.length, 1);
+      eq(annotations[0].name, 'foo');
+      eq(annotations[0].value, 'bar');
     });
 
-    describe('An outdented annotation', () => {
-      it('should cause a state transition to CaptureAnnotationState', () => {
-        interpret('@foo = bar');
-        eq(machine.state, 'CaptureAnnotationState');
-      });
+  testBuilder.interpreting('   Background:')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'Background:');
     });
 
-    describe('An indented background', () => {
-      it('should not cause a state transition', () => {
-        interpret('   Background: foo');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
+  testBuilder.interpreting('Background:')
+    .shouldBeUnexpected('a background');
 
-      it('should be captured', () => {
-        interpret('   Background: foo');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, 'Background: foo');
-      });
+  testBuilder.interpreting('   ')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, '');
     });
 
-    describe('An outdented background', () => {
-      it('should be unexpected', () => {
-        throws(() => interpret('Background: foo'), { message: `I did not expect a background at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-      });
+  testBuilder.interpreting('')
+    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState);
+
+  testBuilder.interpreting('   Where:')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'Where:');
     });
 
-    describe('An indented blank line', () => {
-      it('should not cause a state transition', () => {
-        interpret('      ');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
+  testBuilder.interpreting('Where:')
+    .shouldBeUnexpected('an example table');
 
-      it('should be captured', () => {
-        interpret('      ');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, '   ');
-      });
+  testBuilder.interpreting('   ---')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, '---');
     });
 
-    describe('An outdented blank line', () => {
-      it('should cause a transition to CaptureScenarioDetailsState', () => {
-        interpret('');
-        eq(machine.state, 'CaptureScenarioDetailsState');
-      });
+  testBuilder.interpreting('---')
+    .shouldBeUnexpected('the start of an explicit docstring');
+
+  testBuilder.interpreting('\u0000')
+    .shouldBeUnexpected('the end of the feature');
+
+  testBuilder.interpreting('   Feature:')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'Feature:');
     });
 
-    describe('An indented example table', () => {
-      it('should not cause a state transition', () => {
-        interpret('   Where:');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
+  testBuilder.interpreting('Feature:')
+    .shouldBeUnexpected('a feature');
 
-      it('should be captured', () => {
-        interpret('   Where:');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, 'Where:');
-      });
+  testBuilder.interpreting('   Scenario:')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'Scenario:');
     });
 
-    describe('An outdented example table', () => {
-      it('should cause a tranistion to DeclareExampleTableState', () => {
-        interpret('Where:');
-        eq(machine.state, 'DeclareExampleTableState');
-      });
+  testBuilder.interpreting('Scenario:')
+    .shouldTransitionTo(States.DeclareScenarioState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.scenarios.length, 1);
+      eq(feature.scenarios[0].title, '');
     });
 
-    describe('An indented explicit docstring delimiter', () => {
-      it('should not cause a state transition', () => {
-        interpret('   some more text');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
+  testBuilder.interpreting('Scenario: A scenario')
+    .shouldTransitionTo(States.DeclareScenarioState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.scenarios.length, 1);
+      eq(feature.scenarios[0].title, 'A scenario');
     });
 
-    describe('An outdented explicit docstring delimiter', () => {
-      it('should be unexpected', () => {
-        throws(() => interpret('---'), { message: `I did not expect the start of an explicit docstring at index.js:1\nInstead, I expected one of:\n${expectedEvents}\n` });
-      });
+  testBuilder.interpreting('   # some comment')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, '# some comment');
     });
 
-    describe('An indented line of text', () => {
-      it('should not cause a state transition', () => {
-        interpret('   some more text');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
+  testBuilder.interpreting('# some comment')
+    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState);
 
-      it('should be captured', () => {
-        interpret('   some more text');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, 'some more text');
-      });
+  testBuilder.interpreting('   ###')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, '###');
     });
 
-    describe('An outdented line of text', () => {
-      it('should cause a transition to CaptureScenarioStepState', () => {
-        interpret('some text');
-        eq(machine.state, 'CaptureScenarioStepState');
-      });
+  testBuilder.interpreting('###')
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
+
+  testBuilder.interpreting('   some text')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'some text');
     });
 
-    describe('End of file', () => {
-      it('should cause a transition to FinalState', () => {
-        interpret('\u0000');
-        eq(machine.state, 'FinalState');
-      });
+  testBuilder.interpreting('some text')
+    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
+    .shouldCapture('step', (feature) => {
+      eq(feature.background.steps.length, 2);
+      eq(feature.background.steps[1].text, 'some text');
     });
 
-    describe('An indented block comment delimiter', () => {
-      it('should not cause a state transition', () => {
-        interpret('   ###');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   ###');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, '###');
-      });
+  testBuilder.interpreting('      some text')
+    .shouldNotTransition()
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, '   some text');
     });
-
-    describe('An outdented block comment delimiter', () => {
-      it('should cause a transition to ConsumeBlockCommentState', () => {
-        interpret('###');
-        eq(machine.state, 'ConsumeBlockCommentState');
-      });
-    });
-
-    describe('An indented single line comment', () => {
-      it('should not cause a state transition', () => {
-        interpret('   # A comment');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   # A comment');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, '# A comment');
-      });
-    });
-
-    describe('An outdented single line comment', () => {
-      it('should cause a transition to CaptureScenarioDetailsState', () => {
-        interpret('# A comment');
-        eq(machine.state, 'CaptureScenarioDetailsState');
-      });
-    });
-
-    describe('An indented scenario', () => {
-      it('should not cause a state transition', () => {
-        interpret('   Scenario: foo');
-        eq(machine.state, 'CaptureImplicitDocstringState');
-      });
-
-      it('should be captured', () => {
-        interpret('   Scenario: foo');
-
-        const exported = featureBuilder.build();
-        eq(exported.scenarios[0].steps[0].docstring, 'Scenario: foo');
-      });
-    });
-
-    describe('An outdented scenario', () => {
-      it('should cause a transition to DeclareScenarioState', () => {
-        interpret('Scenario: foo');
-        eq(machine.state, 'DeclareScenarioState');
-      });
-    });
-  });
-
-  function interpret(line, number = 1, indentation = utils.getIndentation(line)) {
-    machine.interpret({ line, number, indentation });
-  }
 });

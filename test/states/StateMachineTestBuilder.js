@@ -70,7 +70,6 @@ export default class StateMachineTestBuilder {
     it(`${this._printableLine(source)} should alias ${StateClass.name} with ${StateClass.alias}`, () => {
       this.machine.interpret(source);
       ok(this.machine[StateClass.handlerAlias]);
-      eq(this.machine[StateClass.handlerAlias], this.machine[StateClass.handlerName]);
     });
   }
 
