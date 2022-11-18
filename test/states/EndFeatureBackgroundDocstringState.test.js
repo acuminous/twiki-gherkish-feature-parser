@@ -6,7 +6,7 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('CaptureBackgroundStepState', () => {
+describe('EndFeatureBackgroundDocstringState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
@@ -17,7 +17,9 @@ describe('CaptureBackgroundStepState', () => {
     const session = new StubSession();
 
     const machine = new StateMachine({ featureBuilder, session })
-      .toCaptureBackgroundStepState();
+      .toStubState()
+      .checkpoint()
+      .toEndFeatureBackgroundDocstringState();
 
     testBuilder.featureBuilder = featureBuilder;
     testBuilder.machine = machine;
@@ -25,8 +27,6 @@ describe('CaptureBackgroundStepState', () => {
       Events.AnnotationEvent,
       Events.BlankLineEvent,
       Events.BlockCommentDelimiterEvent,
-      Events.ExplicitDocstringStartEvent,
-      Events.ImplicitDocstringStartEvent,
       Events.ScenarioEvent,
       Events.SingleLineCommentEvent,
       Events.StepEvent,
@@ -34,64 +34,62 @@ describe('CaptureBackgroundStepState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
-    .shouldTransitionTo(States.CaptureAnnotationState)
-    .shouldStashAnnotation((annotations) => {
-      eq(annotations.length, 1);
-      eq(annotations[0].name, 'foo');
-      eq(annotations[0].value, 'bar');
-    })
-    .shouldCheckpoint();
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.AnnotationEvent, (context) => {
+      eq(context.data.name, 'foo');
+      eq(context.data.value, 'bar');
+    });
 
   testBuilder.interpreting('Background:')
     .shouldBeUnexpected('a background');
 
+  testBuilder.interpreting('Background: A background')
+    .shouldBeUnexpected('a background');
+
   testBuilder.interpreting('')
-    .shouldNotTransition();
+    .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('Where:')
     .shouldBeUnexpected('an example table');
 
+  testBuilder.interpreting('---')
+    .shouldBeUnexpected('the start of an explicit docstring');
+
   testBuilder.interpreting('\u0000')
     .shouldBeUnexpected('the end of the feature');
-
-  testBuilder.interpreting('---')
-    .shouldTransitionTo(States.BeginExplicitDocstringState)
-    .shouldAlias(States.EndFeatureBackgroundDocstringState);
 
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
 
+  testBuilder.interpreting('Feature: A feature')
+    .shouldBeUnexpected('a feature');
+
   testBuilder.interpreting('Scenario:')
-    .shouldTransitionTo(States.DeclareScenarioState)
-    .shouldCapture('a scenario', (feature) => {
-      eq(feature.scenarios.length, 1);
-      eq(feature.scenarios[0].title, '');
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.ScenarioEvent, (context) => {
+      eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Scenario: A scenario')
-    .shouldTransitionTo(States.DeclareScenarioState)
-    .shouldCapture('a scenario', (feature) => {
-      eq(feature.scenarios.length, 1);
-      eq(feature.scenarios[0].title, 'A scenario');
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.ScenarioEvent, (context) => {
+      eq(context.data.title, 'A scenario');
     });
 
   testBuilder.interpreting('# some comment')
-    .shouldNotTransition();
+    .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState)
-    .shouldCheckpoint();
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.BlockCommentDelimiterEvent);
 
   testBuilder.interpreting('some text')
-    .shouldTransitionTo(States.CaptureBackgroundStepState)
-    .shouldCapture('step', (feature) => {
-      eq(feature.background.steps.length, 2);
-      eq(feature.background.steps[1].text, 'some text');
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.StepEvent, (context) => {
+      eq(context.data.text, 'some text');
     });
 
   testBuilder.interpreting('   some text')
-    .shouldTransitionTo(States.CaptureImplicitDocstringState)
-    .shouldCapture('docstring text', (feature) => {
-      eq(feature.background.steps[0].docstring, 'some text');
-    });
+    .shouldBeUnexpected('the start of an implicit docstring');
+
 });

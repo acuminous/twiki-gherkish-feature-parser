@@ -5,3 +5,5 @@
 1. Remove superflous checkpoints
 1. Stop StateMachineTestBuilder using machine.\_currentState (maybe make ".state" return the actual state rather than name
 1. Consider adding shouldNotCheckpoint
+1. Add code to all exceptions
+1. Create Subclass of Error called Bug

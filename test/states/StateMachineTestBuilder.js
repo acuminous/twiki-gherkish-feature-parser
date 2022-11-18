@@ -39,7 +39,7 @@ export default class StateMachineTestBuilder {
     const source = this._source;
     it(`${this._printableLine(source)} should be unexpected`, () => {
       throws(() => this.machine.interpret(source), (err) => {
-        const eventList = this.expectedEvents.map((Clazz) => ` - ${new Clazz().description}\n`).sort((a, b) => a.localeCompare(b)).join('');
+        const eventList = this.expectedEvents.map((EventClass) => ` - ${new EventClass().description}\n`).sort((a, b) => a.localeCompare(b)).join('');
         eq(err.message, `I did not expect ${what} at index.js:1\nInstead, I expected one of:\n${eventList}`);
         return true;
       });
@@ -65,15 +65,13 @@ export default class StateMachineTestBuilder {
     return this;
   }
 
-  shouldDispatch(Clazz, expectations = () => {}) {
+  shouldAlias(StateClass) {
     const source = this._source;
-    it(`${this._printableLine(source)} should dispatch ${new Clazz().description} event`, () => {
+    it(`${this._printableLine(source)} should alias ${StateClass.name} with ${StateClass.alias}`, () => {
       this.machine.interpret(source);
-      const { event, context } = this.machine.history[this.machine.history.length - 1];
-      ok(event instanceof Clazz);
-      expectations(context);
+      ok(this.machine[StateClass.handlerAlias]);
+      eq(this.machine[StateClass.handlerAlias], this.machine[StateClass.handlerName]);
     });
-    return this;
   }
 
   shouldCheckpoint() {
@@ -84,6 +82,17 @@ export default class StateMachineTestBuilder {
       this.machine.unwind();
       eq(previousState, this.machine.state);
     });
+  }
+
+  shouldDispatch(StateClass, expectations = () => {}) {
+    const source = this._source;
+    it(`${this._printableLine(source)} should dispatch ${new StateClass().description} event`, () => {
+      this.machine.interpret(source);
+      const { event, context } = this.machine.history[this.machine.history.length - 1];
+      ok(event instanceof StateClass);
+      expectations(context);
+    });
+    return this;
   }
 
   _printableLine(source) {
