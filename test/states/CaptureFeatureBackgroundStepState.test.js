@@ -27,6 +27,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
       Events.BlockCommentDelimiterEvent,
       Events.ExplicitDocstringStartEvent,
       Events.ImplicitDocstringStartEvent,
+      Events.RuleEvent,
       Events.ScenarioEvent,
       Events.SingleLineCommentEvent,
       Events.StepEvent,
@@ -60,6 +61,20 @@ describe('CaptureFeatureBackgroundStepState', () => {
 
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
+
+  testBuilder.interpreting('Rule:')
+    .shouldTransitionTo(States.DeclareRuleState)
+    .shouldCapture('a rule', (feature) => {
+      eq(feature.rules.length, 1);
+      eq(feature.rules[0].title, '');
+    });
+
+  testBuilder.interpreting('Rule: A rule')
+    .shouldTransitionTo(States.DeclareRuleState)
+    .shouldCapture('a rule', (feature) => {
+      eq(feature.rules.length, 1);
+      eq(feature.rules[0].title, 'A rule');
+    });
 
   testBuilder.interpreting('Scenario:')
     .shouldTransitionTo(States.DeclareScenarioState)
