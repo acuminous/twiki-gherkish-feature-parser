@@ -10,7 +10,8 @@ describe('DeclareRuleState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
-      .createFeature({ title: 'Meh' });
+      .createFeature({ title: 'Meh' })
+      .createRule({ title: 'Meh' });
 
     const session = new StubSession();
 
@@ -42,13 +43,13 @@ describe('DeclareRuleState', () => {
   testBuilder.interpreting('Background:')
     .shouldTransitionTo(States.DeclareRuleBackgroundState)
     .shouldCapture('title', (feature) => {
-      eq(feature.background.title, '');
+      eq(feature.rules[0].background.title, '');
     });
 
   testBuilder.interpreting('Background: A background')
     .shouldTransitionTo(States.DeclareRuleBackgroundState)
     .shouldCapture('title', (feature) => {
-      eq(feature.background.title, 'A background');
+      eq(feature.rules[0].background.title, 'A background');
     });
 
   testBuilder.interpreting('')
@@ -69,15 +70,15 @@ describe('DeclareRuleState', () => {
   testBuilder.interpreting('Scenario:')
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('title', (feature) => {
-      eq(feature.scenarios.length, 1);
-      eq(feature.scenarios[0].title, '');
+      eq(feature.rules[0].scenarios.length, 1);
+      eq(feature.rules[0].scenarios[0].title, '');
     });
 
   testBuilder.interpreting('Scenario: A scenario')
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('A scenario', (feature) => {
-      eq(feature.scenarios.length, 1);
-      eq(feature.scenarios[0].title, 'A scenario');
+      eq(feature.rules[0].scenarios.length, 1);
+      eq(feature.rules[0].scenarios[0].title, 'A scenario');
     });
 
   testBuilder.interpreting('# some comment')
@@ -90,12 +91,12 @@ describe('DeclareRuleState', () => {
   testBuilder.interpreting('some text')
     .shouldNotTransition()
     .shouldCapture('description', (feature) => {
-      eq(feature.description, 'some text');
+      eq(feature.rules[0].description, 'some text');
     });
 
   testBuilder.interpreting('   some text')
     .shouldNotTransition()
     .shouldCapture('description', (feature) => {
-      eq(feature.description, '   some text');
+      eq(feature.rules[0].description, '   some text');
     });
 });
