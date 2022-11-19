@@ -46,7 +46,7 @@ describe('ExampleTableSeparatorRowEvent', () => {
     throws(() => {
       event.interpret({ line: '|---|---|---|', number: 11 }, session);
     }, (err) => {
-      eq(err.message, 'Expected 1 examples but found 3 at invalid.feature:11');
+      eq(err.message, 'Expected 1 columns but found 3 at invalid.feature:11');
       return true;
     });
   });

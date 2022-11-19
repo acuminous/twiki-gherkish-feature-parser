@@ -29,15 +29,15 @@ describe('ExampleTableDataRowEvent', () => {
     const event = new ExampleTableDataRowEvent();
     const session = new Session().countExampleHeadings(['a']);
 
-    deq(event.interpret({ line: '|a|' }, session), { values: ['a'] });
-    deq(event.interpret({ line: '| a |' }, session), { values: ['a'] });
-    deq(event.interpret({ line: '  |   a   |  ' }, session), { values: ['a'] });
-    deq(event.interpret({ line: '| abc |' }, session), { values: ['abc'] });
-    deq(event.interpret({ line: '| a c |' }, session), { values: ['a c'] });
-    deq(event.interpret({ line: '| \u00A0a\u00A0 |' }, session), { values: ['\u00A0a\u00A0'] });
+    deq(event.interpret({ line: '|a|' }, session), { examples: ['a'] });
+    deq(event.interpret({ line: '| a |' }, session), { examples: ['a'] });
+    deq(event.interpret({ line: '  |   a   |  ' }, session), { examples: ['a'] });
+    deq(event.interpret({ line: '| abc |' }, session), { examples: ['abc'] });
+    deq(event.interpret({ line: '| a c |' }, session), { examples: ['a c'] });
+    deq(event.interpret({ line: '| \u00A0a\u00A0 |' }, session), { examples: ['\u00A0a\u00A0'] });
 
     session.countExampleHeadings(['a', 'b', 'c']);
-    deq(event.interpret({ line: '| a | b | c |' }, session), { values: ['a', 'b', 'c'] });
+    deq(event.interpret({ line: '| a | b | c |' }, session), { examples: ['a', 'b', 'c'] });
   });
 
   it('should report incorrect number of examples', () => {
