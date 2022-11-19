@@ -97,6 +97,6 @@ describe('DeclareRuleState', () => {
   testBuilder.interpreting('   some text')
     .shouldNotTransition()
     .shouldCapture('description', (feature) => {
-      eq(feature.rules[0].description, '   some text');
+      eq(feature.rules[0].description, 'some text');
     });
 });

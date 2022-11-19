@@ -18,7 +18,7 @@ describe('TextEvent', () => {
     const event = new TextEvent();
 
     deq(event.interpret({ line: 'Some text' }), { text: 'Some text' });
-    deq(event.interpret({ line: ' Some text ' }), { text: ' Some text ' });
+    deq(event.interpret({ line: ' Some text ' }), { text: 'Some text' });
   });
 
 });

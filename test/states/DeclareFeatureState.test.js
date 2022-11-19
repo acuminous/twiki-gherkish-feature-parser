@@ -111,6 +111,6 @@ describe('DeclareFeatureState', () => {
   testBuilder.interpreting('   some text')
     .shouldNotTransition()
     .shouldCapture('description', (feature) => {
-      eq(feature.description, '   some text');
+      eq(feature.description, 'some text');
     });
 });
