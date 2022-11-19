@@ -156,12 +156,12 @@
             },
             {
               "annotations": [],
-              "text": "When the shuttle crashes",
+              "text": "When the ${primary transport} crashes",
               "docstring": null
             },
             {
               "annotations": [],
-              "text": "Then they reach the meeting on foot",
+              "text": "Then they reach the meeting by ${alternative transport}",
               "docstring": null
             },
             {
@@ -170,7 +170,15 @@
               "docstring": null
             }
           ],
-          "examples": null
+          "examples": {
+            "headings": ["primary transport", "alternative transport"],
+            "rows": [
+              { "primary transport": "shuttle", "alternative transport": "foot" },
+              { "primary transport": "shuttle", "alternative transport": "rover" },
+              { "primary transport": "fighter", "alternative transport": "jetpac" },
+              { "primary transport": "fighter", "alternative transport": "hoverboard" }
+            ]
+          }
         }
       ]
     }

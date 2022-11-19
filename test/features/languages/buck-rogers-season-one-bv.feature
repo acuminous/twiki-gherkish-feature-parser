@@ -43,8 +43,16 @@ Guideline: Season 2
   Adventure: Journey to Oasis
 
     Given Wilma, an alien ambassador, Buck, Hawk and Dr. Goodfellow are flying to a peace conference on planet R-4
-    When the shuttle crashes
-    Then they reach the meeting on foot
+    When the ${primary transport} crashes
+    Then they reach the meeting by ${alternative transport}
     And avert a war
 
+  Wherest:
+
+    | primary transport | alternative transport |
+    |-------------------|-----------------------|
+    | shuttle           | foot                  |
+    | shuttle           | rover                 |
+    | fighter           | jetpac                |
+    | fighter           | hoverboard            |
 
