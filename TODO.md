@@ -4,3 +4,6 @@
 1. Reporting unexpected events from CaptureAnnotationState is too generic - the expected events are dependent on the previous state
 1. this.\_match(source, session) doesn't take a session
 1. Delimit example tables
+1. Check events for consistency of \_getData(match) vs \_getDelimiter(source, session) etc
+1. Use shouldUnwind and shouldDispatch consistently
+1. Make Event description static so it can be accessed without instanticating from StateMachineTestBuilder

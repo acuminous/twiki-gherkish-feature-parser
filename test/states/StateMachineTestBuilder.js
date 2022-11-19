@@ -104,14 +104,15 @@ export default class StateMachineTestBuilder {
       eq(previousState.name, this.machine.state);
       eq(this.machine._checkpoints.length, numberOfCheckpoints - 1);
     });
+    return this;
   }
 
-  shouldDispatch(StateClass, expectations = () => {}) {
+  shouldDispatch(EventClass, expectations = () => {}) {
     const source = this._source;
-    it(`${this._printableLine(source)} should dispatch ${new StateClass().description} event`, () => {
+    it(`${this._printableLine(source)} should dispatch ${new EventClass().description} event`, () => {
       this.machine.interpret(source);
       const { event, context } = this.machine.history[this.machine.history.length - 1];
-      ok(event instanceof StateClass);
+      ok(event instanceof EventClass);
       expectations(context);
     });
     return this;
