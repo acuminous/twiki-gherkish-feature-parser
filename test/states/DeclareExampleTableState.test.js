@@ -6,12 +6,11 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('DeclareFeatureState', () => {
+describe('DeclareExampleTableState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
       .createFeature({ title: 'Meh' })
-      .createScenario({ title: 'Meh' })
       .createScenario({ title: 'Meh' })
       .createStep({ text: 'First step' });
 
@@ -44,6 +43,16 @@ describe('DeclareFeatureState', () => {
 
   testBuilder.interpreting('Where:')
     .shouldBeUnexpected('an example table');
+
+  testBuilder.interpreting('| a | b | c |')
+    .shouldNotCheckpoint()
+    .shouldTransitionTo(States.CaptureExampleTableHeadingsState)
+    .shouldCapture('example table headings', (feature) => {
+      eq(feature.scenarios[0].examples.headings.length, 3);
+      eq(feature.scenarios[0].examples.headings[0], 'a');
+      eq(feature.scenarios[0].examples.headings[1], 'b');
+      eq(feature.scenarios[0].examples.headings[2], 'c');
+    });
 
   testBuilder.interpreting('---')
     .shouldBeUnexpected('the start of an explicit docstring');
