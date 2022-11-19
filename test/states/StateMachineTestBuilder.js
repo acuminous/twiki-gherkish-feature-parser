@@ -84,6 +84,17 @@ export default class StateMachineTestBuilder {
     });
   }
 
+  shouldUnwind() {
+    const source = this._source;
+    it(`${this._printableLine(source)} should unwind to the previous checkpoint`, () => {
+      const numberOfCheckpoints = this.machine._checkpoints.length;
+      const previousState = this.machine._checkpoints[numberOfCheckpoints - 1];
+      this.machine.interpret(source);
+      eq(previousState.name, this.machine.state);
+      eq(this.machine._checkpoints.length, numberOfCheckpoints - 1);
+    });
+  }
+
   shouldDispatch(StateClass, expectations = () => {}) {
     const source = this._source;
     it(`${this._printableLine(source)} should dispatch ${new StateClass().description} event`, () => {

@@ -59,6 +59,9 @@ describe('InitialState', () => {
       eq(feature.title, 'A feature');
     });
 
+  testBuilder.interpreting('Rule:')
+    .shouldBeUnexpected('a rule');
+
   testBuilder.interpreting('Scenario:')
     .shouldBeUnexpected('a scenario');
 

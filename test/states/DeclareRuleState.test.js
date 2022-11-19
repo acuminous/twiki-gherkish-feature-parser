@@ -67,6 +67,9 @@ describe('DeclareRuleState', () => {
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
 
+  testBuilder.interpreting('Rule:')
+    .shouldBeUnexpected('a rule');
+
   testBuilder.interpreting('Scenario:')
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('title', (feature) => {

@@ -65,6 +65,12 @@ describe('CaptureExplicitDocstringState', () => {
       eq(feature.background.steps[0].docstring, 'Feature:');
     });
 
+  testBuilder.interpreting('Rule:')
+    .shouldTransitionTo(States.CaptureExplicitDocstringState)
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'Rule:');
+    });
+
   testBuilder.interpreting('Scenario:')
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {

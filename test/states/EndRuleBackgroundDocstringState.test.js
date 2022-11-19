@@ -64,6 +64,9 @@ describe('EndRuleBackgroundDocstringState', () => {
   testBuilder.interpreting('Feature: A feature')
     .shouldBeUnexpected('a feature');
 
+  testBuilder.interpreting('Rule:')
+    .shouldBeUnexpected('a rule');
+
   testBuilder.interpreting('Scenario:')
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.ScenarioEvent, (context) => {

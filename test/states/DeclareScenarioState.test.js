@@ -55,6 +55,9 @@ describe('DeclareScenarioState', () => {
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
 
+  testBuilder.interpreting('Rule:')
+    .shouldBeUnexpected('a rule');
+
   testBuilder.interpreting('Scenario:')
     .shouldBeUnexpected('a scenario');
 

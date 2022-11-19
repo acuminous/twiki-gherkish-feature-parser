@@ -98,6 +98,26 @@ describe('CaptureImplicitDocstringState', () => {
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
 
+  testBuilder.interpreting('   Rule:')
+    .shouldTransitionTo(States.CaptureImplicitDocstringState)
+    .shouldCapture('docstring', (feature) => {
+      eq(feature.background.steps[0].docstring, 'Rule:');
+    });
+
+  testBuilder.interpreting('Rule:')
+    .shouldTransitionTo(States.DeclareRuleState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.rules.length, 1);
+      eq(feature.rules[0].title, '');
+    });
+
+  testBuilder.interpreting('Rule: A rule')
+    .shouldTransitionTo(States.DeclareRuleState)
+    .shouldCapture('title', (feature) => {
+      eq(feature.rules.length, 1);
+      eq(feature.rules[0].title, 'A rule');
+    });
+
   testBuilder.interpreting('   Scenario:')
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
