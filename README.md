@@ -420,7 +420,7 @@ For example, the state machine starts off in InitialState. If the first line of 
     │        [example table header row]         │
 │   │                                           │
     └───────────────────────────────────────────┘
-│                         │[example table header]
+│                         │[example table header row]
                           │
 │                         │
                           ▽
@@ -431,13 +431,13 @@ For example, the state machine starts off in InitialState. If the first line of 
 │   │       [example table separator row]       │
     │                                           │
 │   └───────────────────────────────────────────┘
-                          │[explicit table separator]
+                          │[explicit table separator row]
 │                         │
                           │
 │                         ▽
     ┌───────────────────────────────────────────┐
 │   │                                           │
-    │         Begin Example Table Data          │
+    │    Consume Example Table Separator Row    │
 │   │                                           │
     │         [example table data row]          │
 │   │                                           │
