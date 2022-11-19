@@ -199,6 +199,7 @@ For example, the state machine starts off in InitialState. If the first line of 
                            │[background]
                            │
                            │
+                           │
                            ▽
      ┌───────────────────────────────────────────┐
      │        Declare Feature Background         │
@@ -223,22 +224,34 @@ For example, the state machine starts off in InitialState. If the first line of 
          ◈[explicit docstring start]         ◈[implicit docstring start]
 │        │                                   │
          │                                   │
+│        ▽                                   ●
+     ╔═══════════════════════════════════════════╗
+│    ║                                           ║
+     ║             Capture Docstring             ║
+│    ║                                           ║
+     ╚═══════════════════════════════════════════╝
+│        │[explicit docstring end]           │[implicit docstring end]
+         │                                   │
 │        │                                   │
-         ▼                                   ▼
-│    ╔═══════════════════════════════════════════╗
-     ║                                           ║
-│    ║             Capture Docstring             ║
-     ║                                           ║
-│    ╚═══════════════════════════════════════════╝
-                           │[annotation, end, example
-│                           table, rule, scenario, step]
- ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+         ▽                                   ●
+│    ┌───────────────────────────────────────────┐
+     │     End Feature Background Docstring      │
+│    │                                           │
+     │  [annotation, blank line, block comment,  │
+│    │rule, scenario, single line comment, step] │
+     │                                           │
+│    └───────────────────────────────────────────┘
+                           │[annotation, blank line, block
+│                           comment delimiter, single line
+                           │comment, rule, scenario, step]
+└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
 </pre>
 
 ### Capture Rule
 
 <pre>
                            │[rule]
+                           │
                            │
                            │
                            ▽
@@ -269,30 +282,43 @@ For example, the state machine starts off in InitialState. If the first line of 
      │       Capture Rule Background Step        │
      │                                           │
      │  [annotation, blank line, block comment   │[scenario]
-┌ ─ ▶│   delimiter, explicit docstring start,    │─────────────────────▷
-     │   implicit docstring start, single line   │
-│    │         comment, scenario, step]          │
-     │                                           │
-│    └───────────────────────────────────────────┘
-         ◈[explicit docstring start]         ◈[implicit docstring start]
-│        │                                   │
+ ─ ─▶│   delimiter, explicit docstring start,    │─────────────────────▷
+│    │   implicit docstring start, single line   │
+     │         comment, scenario, step]          │
+│    │                                           │
+     └───────────────────────────────────────────┘
+│        ◈[explicit docstring start]         ◈[implicit docstring start]
          │                                   │
 │        │                                   │
-         ▼                                   ▼
-│    ╔═══════════════════════════════════════════╗
-     ║                                           ║
-│    ║             Capture Docstring             ║
-     ║                                           ║
-│    ╚═══════════════════════════════════════════╝
-                           │[annotation, end, example
-│                           table, rule, scenario, step]
- ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+         │                                   │
+│        ▼                                   ▼
+     ╔═══════════════════════════════════════════╗
+│    ║                                           ║
+     ║             Capture Docstring             ║
+│    ║                                           ║
+     ╚═══════════════════════════════════════════╝
+│        │[explicit docstring end]           │[implicit docstring end]
+         │                                   │
+│        │                                   │
+         ▽                                   ●
+│    ┌───────────────────────────────────────────┐
+     │       End Rule Background Docstring       │
+│    │                                           │
+     │  [annotation, blank line, block comment,  │
+│    │   scenario, single line comment, step]    │
+     │                                           │
+│    └───────────────────────────────────────────┘
+                           │[annotation, blank line, block
+│                           comment delimiter, single line
+                           │comment, scenario, step]
+└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
 </pre>
 
 ### Capture Scenario
 
 <pre>
                                             │ [scenario]
+                                            │
                                             │
                                             │
                                             ▽
@@ -312,69 +338,69 @@ For example, the state machine starts off in InitialState. If the first line of 
      │                           Capture Scenario Step                            │─────────────────────▷
      │                                                                            │
      │   [annotation, blank line, block comment delimiter, end, example table,    │
-┌ ─ ▶│  explicit docstring start, implicit docstring start, single line comment,  │◀ ─ ─ ─ ─ ─ ─ ┐
-     │                           rule, scenario, step]                            │
-│    │                                                                            │              │
-     │                                                                            │
-│    └────────────────────────────────────────────────────────────────────────────┘              │
-           ◈[explicit             ◈[implicit                    ◈[example table]
-│          │docstring             │docstring                    │                                │
-           │start]                │start]                       │
-│          │                      │                             │                                │
-           ▼                      ▼                             ▽
-│    ╔═══════════════════════════════════╗    ╔═══════════════════════════════════╗              │
-     ║                                   ║    ║                                   ║
-│    ║         Capture Docstring         ║    ║       Capture Example Table       ║              │
-     ║                                   ║    ║                                   ║
-│    ╚═══════════════════════════════════╝    ╚═══════════════════════════════════╝              │
-                       │[annotation, end,                       │[annotation, blank line, block
-│                       example table, rule,                     comment delimiter, end, rule,   │
-                       │scenario, step]                         │scenario, single line comment]
-└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─                                          ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+ ─ ─▶│  explicit docstring start, implicit docstring start, single line comment,  │◀ ─ ─ ─ ─ ─ ─ ┐
+│    │                           rule, scenario, step]                            │
+     │                                                                            │              │
+│    │                                                                            │
+     └────────────────────────────────────────────────────────────────────────────┘              │
+│          ◈[explicit             ◈[implicit                    ◈[example table]
+           │docstring             │docstring                    │                                │
+│          │start]                │start]                       │
+           │                      │                             │                                │
+│          ▼                      ▼                             ▽
+     ╔═══════════════════════════════════╗    ╔═══════════════════════════════════╗              │
+│    ║                                   ║    ║                                   ║
+     ║         Capture Docstring         ║    ║       Capture Example Table       ║              │
+│    ║                                   ║    ║                                   ║
+     ╚═══════════════════════════════════╝    ╚═══════════════════════════════════╝              │
+│          │[explicit             │[implicit                    │[annotation, blank line, block
+           │docstring             │docstring                     comment delimiter, end, rule,   │
+│          │end]                  │end]                         │scenario, single line comment]
+           ▽                      ●                              ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+│    ┌───────────────────────────────────┐
+     │      End Scenario Docstring       │
+│    │                                   │
+     │  [annotation, blank line, block   │
+│    │  comment, rule, scenario, single  │
+     │        line comment, step]        │
+│    └───────────────────────────────────┘
+                       │[annotation, blank line, block
+│                       comment, rule, scenario, single
+                       │line comment, step]
+└ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
 </pre>
 
 ### Capture Docstring
 
 <pre>
-▲                         ◈                                                  ◈
-│                         │[explicit                                         │[implicit
-                          │docstring                                         │docstring
-│                         │start]                                            │start]
-                          ▽                                                  │
-│   ┌───────────────────────────────────────────┐                            │
-    │                                           │                            │
-│   │         Begin Explicit Docstring          │                            │
-    │                                           │                            │
-│   │                  [text]                   │                            │
-    │                                           │                            │
-│   └───────────────────────────────────────────┘                            │
-                          │[text]                                            │
-│                         │                                                  │
-                          │                                                  │
-│                         ▼                                                  ●
-    ┌───────────────────────────────────────────┐      ┌───────────────────────────────────────────┐
-│   │        Capture Explicit Docstring         │      │        Capture Implicit Docstring         │
-    │                                           │      │                                           │
-│   │  [annotation, blank line, block comment   │      │  [annotation, blank line, block comment   │
-    │   delimiter, single line comment, rule,   │      │   delimiter, single line comment, rule,   │
-│   │              scenario, step]              │      │              scenario, step]              │
-    │                                           │      │                                           │
-│   └───────────────────────────────────────────┘      └───────────────────────────────────────────┘
-                          │[explicit docstring end]                          │[implicit docstring end]
-│                         │                                                  │
-                          │                                                  │
-│                         ▽                                                  ●
-    ┌──────────────────────────────────────────────────────────────────────────────────────────────┐
-│   │                                                                                              │
-    │                                        End Docstring                                         │
-│   │                                                                                              │
-    │                    [annotation, end, example table, rule, scenario, step]                    │
-│   │                                                                                              │
-    └──────────────────────────────────────────────────────────────────────────────────────────────┘
-│                                                   │[annotation, end, example
-                                                     table, rule, scenario, step]
-│                                                   │
- ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+                      ◈                                                  ◈
+                      │[explicit docstring start]                        │[implicit docstring start]
+                      │                                                  │
+                      │                                                  │
+                      ▽                                                  │
+┌───────────────────────────────────────────┐                            │
+│                                           │                            │
+│         Begin Explicit Docstring          │                            │
+│                                           │                            │
+│                  [text]                   │                            │
+│                                           │                            │
+└───────────────────────────────────────────┘                            │
+                      │[text]                                            │
+                      │                                                  │
+                      │                                                  │
+                      ▼                                                  ●
+┌───────────────────────────────────────────┐      ┌───────────────────────────────────────────┐
+│        Capture Explicit Docstring         │      │        Capture Implicit Docstring         │
+│                                           │      │                                           │
+│  [annotation, blank line, block comment   │      │  [annotation, blank line, block comment   │
+│   delimiter, single line comment, rule,   │      │   delimiter, single line comment, rule,   │
+│              scenario, step]              │      │              scenario, step]              │
+│                                           │      │                                           │
+└───────────────────────────────────────────┘      └───────────────────────────────────────────┘
+                      │[explicit docstring end]                          │[implicit docstring end]
+                      │                                                  │
+                      │                                                  │
+                      ▽                                                  ●
 </pre>
 
 ### Capture Example Table
