@@ -14,7 +14,8 @@ describe('DeclareExampleTableState', () => {
       .createScenario({ title: 'Meh' })
       .createStep({ text: 'First step' });
 
-    const session = new StubSession();
+    const session = new StubSession()
+      .countExampleHeadings(['a', 'b', 'c']);
 
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()

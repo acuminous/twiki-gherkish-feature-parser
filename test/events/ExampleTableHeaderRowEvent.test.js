@@ -34,4 +34,15 @@ describe('ExampleTableHeaderRowEvent', () => {
     deq(event.interpret({ line: '| abc |' }, session), { headings: ['abc'] });
     deq(event.interpret({ line: '| a b c |' }, session), { headings: ['a b c'] });
   });
+
+  it('should count the number of headings', () => {
+    const session = new Session();
+    const event = new ExampleTableHeaderRowEvent();
+
+    event.interpret({ line: '| a |' }, session);
+    eq(session.numberOfExampleHeadings, 1);
+
+    event.interpret({ line: '| a | b | c |' }, session);
+    eq(session.numberOfExampleHeadings, 3);
+  });
 });

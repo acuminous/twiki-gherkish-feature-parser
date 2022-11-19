@@ -15,7 +15,8 @@ describe('CaptureExampleTableHeadings', () => {
       .createStep({ text: 'First step' })
       .createExampleTable({ headings: ['a', 'b', 'c'] });
 
-    const session = new StubSession();
+    const session = new StubSession()
+      .countExampleHeadings(['a', 'b', 'c']);
 
     const machine = new StateMachine({ featureBuilder, session })
       .toCaptureExampleTableHeadingsState();
