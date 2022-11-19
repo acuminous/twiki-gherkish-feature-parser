@@ -55,6 +55,9 @@ describe('DeclareExampleTableState', () => {
       eq(feature.scenarios[0].examples.headings[2], 'c');
     });
 
+  testBuilder.interpreting('|---|---|---|')
+    .shouldBeUnexpected('an example table separator row');
+
   testBuilder.interpreting('---')
     .shouldBeUnexpected('the start of an explicit docstring');
 
