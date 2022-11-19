@@ -82,6 +82,17 @@ export default class StateMachineTestBuilder {
       this.machine.unwind();
       eq(previousState, this.machine.state);
     });
+    return this;
+  }
+
+  shouldNotCheckpoint() {
+    const source = this._source;
+    it(`${this._printableLine(source)} should not create a checkpoint`, () => {
+      const previousState = this.machine.state;
+      this.machine.interpret(source);
+      ok(!this.machine._checkpoints.find((checkpoint) => checkpoint.name === previousState));
+    });
+    return this;
   }
 
   shouldUnwind() {

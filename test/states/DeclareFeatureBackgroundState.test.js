@@ -30,6 +30,7 @@ describe('DeclareFeatureBackgroundState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureAnnotationState)
     .shouldStashAnnotation((annotations) => {
       eq(annotations.length, 1);
@@ -41,6 +42,7 @@ describe('DeclareFeatureBackgroundState', () => {
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('Where:')
@@ -65,9 +67,11 @@ describe('DeclareFeatureBackgroundState', () => {
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
     .shouldCapture('step', (feature) => {
       eq(feature.background.steps.length, 1);

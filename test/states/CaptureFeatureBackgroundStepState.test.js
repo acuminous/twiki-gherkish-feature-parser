@@ -35,18 +35,19 @@ describe('CaptureFeatureBackgroundStepState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureAnnotationState)
     .shouldStashAnnotation((annotations) => {
       eq(annotations.length, 1);
       eq(annotations[0].name, 'foo');
       eq(annotations[0].value, 'bar');
-    })
-    .shouldCheckpoint();
+    });
 
   testBuilder.interpreting('Background:')
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('Where:')
@@ -56,6 +57,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
     .shouldBeUnexpected('the end of the feature');
 
   testBuilder.interpreting('---')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.BeginExplicitDocstringState)
     .shouldAlias(States.EndFeatureBackgroundDocstringState);
 
@@ -63,6 +65,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
     .shouldBeUnexpected('a feature');
 
   testBuilder.interpreting('Rule:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareRuleState)
     .shouldCapture('a rule', (feature) => {
       eq(feature.rules.length, 1);
@@ -70,6 +73,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('Rule: A rule')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareRuleState)
     .shouldCapture('a rule', (feature) => {
       eq(feature.rules.length, 1);
@@ -77,6 +81,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('a scenario', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -84,6 +89,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('Scenario: A scenario')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('a scenario', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -91,13 +97,15 @@ describe('CaptureFeatureBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('# some comment')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState)
-    .shouldCheckpoint();
+    .shouldCheckpoint()
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
     .shouldCapture('step', (feature) => {
       eq(feature.background.steps.length, 2);
@@ -105,6 +113,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('   some text')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureImplicitDocstringState)
     .shouldAlias(States.EndFeatureBackgroundDocstringState)
     .shouldCapture('docstring text', (feature) => {

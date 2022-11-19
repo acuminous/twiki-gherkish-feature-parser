@@ -35,6 +35,7 @@ describe('EndFeatureBackgroundDocstringState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.AnnotationEvent, (context) => {
       eq(context.data.name, 'foo');
@@ -48,6 +49,7 @@ describe('EndFeatureBackgroundDocstringState', () => {
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('Where:')
@@ -66,37 +68,44 @@ describe('EndFeatureBackgroundDocstringState', () => {
     .shouldBeUnexpected('a feature');
 
   testBuilder.interpreting('Rule:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.RuleEvent, (context) => {
       eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Rule: A rule')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.RuleEvent, (context) => {
       eq(context.data.title, 'A rule');
     });
 
   testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Scenario: A scenario')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, 'A scenario');
     });
 
   testBuilder.interpreting('# some comment')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('###')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.BlockCommentDelimiterEvent);
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.StepEvent, (context) => {
       eq(context.data.text, 'some text');

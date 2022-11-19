@@ -37,6 +37,7 @@ describe('EndScenarioDocstringState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.AnnotationEvent, (context) => {
       eq(context.data.name, 'foo');
@@ -50,15 +51,18 @@ describe('EndScenarioDocstringState', () => {
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('Where:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('---')
     .shouldBeUnexpected('the start of an explicit docstring');
 
   testBuilder.interpreting('\u0000')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('Feature:')
@@ -68,37 +72,44 @@ describe('EndScenarioDocstringState', () => {
     .shouldBeUnexpected('a feature');
 
   testBuilder.interpreting('Rule:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.RuleEvent, (context) => {
       eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Rule: A rule')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.RuleEvent, (context) => {
       eq(context.data.title, 'A rule');
     });
 
   testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Scenario: A scenario')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, 'A scenario');
     });
 
   testBuilder.interpreting('# some comment')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState);
 
   testBuilder.interpreting('###')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.BlockCommentDelimiterEvent);
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.StepEvent, (context) => {
       eq(context.data.text, 'some text');

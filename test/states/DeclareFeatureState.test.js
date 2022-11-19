@@ -32,27 +32,30 @@ describe('DeclareFeatureState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureAnnotationState)
     .shouldStashAnnotation((annotations) => {
       eq(annotations.length, 1);
       eq(annotations[0].name, 'foo');
       eq(annotations[0].value, 'bar');
-    })
-    .shouldCheckpoint();
+    });
 
   testBuilder.interpreting('Background:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareFeatureBackgroundState)
     .shouldCapture('title', (feature) => {
       eq(feature.background.title, '');
     });
 
   testBuilder.interpreting('Background: A background')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareFeatureBackgroundState)
     .shouldCapture('title', (feature) => {
       eq(feature.background.title, 'A background');
     });
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('Where:')
@@ -68,6 +71,7 @@ describe('DeclareFeatureState', () => {
     .shouldBeUnexpected('a feature');
 
   testBuilder.interpreting('Rule:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareRuleState)
     .shouldCapture('title', (feature) => {
       eq(feature.rules.length, 1);
@@ -75,6 +79,7 @@ describe('DeclareFeatureState', () => {
     });
 
   testBuilder.interpreting('Rule: A rule')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareRuleState)
     .shouldCapture('A rule', (feature) => {
       eq(feature.rules.length, 1);
@@ -82,6 +87,7 @@ describe('DeclareFeatureState', () => {
     });
 
   testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('title', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -89,6 +95,7 @@ describe('DeclareFeatureState', () => {
     });
 
   testBuilder.interpreting('Scenario: A scenario')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('A scenario', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -96,19 +103,22 @@ describe('DeclareFeatureState', () => {
     });
 
   testBuilder.interpreting('# some comment')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState)
-    .shouldCheckpoint();
+    .shouldCheckpoint()
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('description', (feature) => {
       eq(feature.description, 'some text');
     });
 
   testBuilder.interpreting('   some text')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('description', (feature) => {
       eq(feature.description, 'some text');

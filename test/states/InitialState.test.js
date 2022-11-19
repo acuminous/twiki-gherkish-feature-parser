@@ -25,6 +25,7 @@ describe('InitialState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureAnnotationState)
     .shouldStashAnnotation((annotations) => {
       eq(annotations.length, 1);
@@ -36,6 +37,7 @@ describe('InitialState', () => {
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('\u0000')
@@ -48,12 +50,14 @@ describe('InitialState', () => {
     .shouldBeUnexpected('the start of an explicit docstring');
 
   testBuilder.interpreting('Feature:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareFeatureState)
     .shouldCapture('title', (feature) => {
       eq(feature.title, '');
     });
 
   testBuilder.interpreting('Feature: A feature')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareFeatureState)
     .shouldCapture('title', (feature) => {
       eq(feature.title, 'A feature');
@@ -69,8 +73,8 @@ describe('InitialState', () => {
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState)
-    .shouldCheckpoint();
+    .shouldCheckpoint()
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('some text')
     .shouldBeUnexpected('some text');

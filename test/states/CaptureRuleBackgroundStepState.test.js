@@ -34,6 +34,7 @@ describe('CaptureRuleBackgroundStepState', () => {
   });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureAnnotationState)
     .shouldStashAnnotation((annotations) => {
       eq(annotations.length, 1);
@@ -46,6 +47,7 @@ describe('CaptureRuleBackgroundStepState', () => {
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('Where:')
@@ -55,6 +57,7 @@ describe('CaptureRuleBackgroundStepState', () => {
     .shouldBeUnexpected('the end of the feature');
 
   testBuilder.interpreting('---')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.BeginExplicitDocstringState)
     .shouldAlias(States.EndRuleBackgroundDocstringState);
 
@@ -65,6 +68,7 @@ describe('CaptureRuleBackgroundStepState', () => {
     .shouldBeUnexpected('a rule');
 
   testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('a scenario', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -72,6 +76,7 @@ describe('CaptureRuleBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('Scenario: A scenario')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('a scenario', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -79,13 +84,15 @@ describe('CaptureRuleBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('# some comment')
+    .shouldNotCheckpoint()
     .shouldNotTransition();
 
   testBuilder.interpreting('###')
-    .shouldTransitionTo(States.ConsumeBlockCommentState)
-    .shouldCheckpoint();
+    .shouldCheckpoint()
+    .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureRuleBackgroundStepState)
     .shouldCapture('step', (feature) => {
       eq(feature.background.steps.length, 2);
@@ -93,6 +100,7 @@ describe('CaptureRuleBackgroundStepState', () => {
     });
 
   testBuilder.interpreting('   some text')
+    .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureImplicitDocstringState)
     .shouldAlias(States.EndRuleBackgroundDocstringState)
     .shouldCapture('docstring text', (feature) => {

@@ -37,12 +37,14 @@ describe('CaptureImplicitDocstringState', () => {
   });
 
   testBuilder.interpreting('   @foo=bar')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, '@foo=bar');
     });
 
   testBuilder.interpreting('@foo=bar')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureAnnotationState)
     .shouldStashAnnotation((annotations) => {
       eq(annotations.length, 1);
@@ -51,6 +53,7 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
   testBuilder.interpreting('   Background:')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, 'Background:');
@@ -60,15 +63,18 @@ describe('CaptureImplicitDocstringState', () => {
     .shouldBeUnexpected('a background');
 
   testBuilder.interpreting('   ')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, '');
     });
 
   testBuilder.interpreting('')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureFeatureBackgroundStepState);
 
   testBuilder.interpreting('   Where:')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, 'Where:');
@@ -78,6 +84,7 @@ describe('CaptureImplicitDocstringState', () => {
     .shouldBeUnexpected('an example table');
 
   testBuilder.interpreting('   ---')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, '---');
@@ -90,6 +97,7 @@ describe('CaptureImplicitDocstringState', () => {
     .shouldBeUnexpected('the end of the feature');
 
   testBuilder.interpreting('   Feature:')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, 'Feature:');
@@ -99,12 +107,14 @@ describe('CaptureImplicitDocstringState', () => {
     .shouldBeUnexpected('a feature');
 
   testBuilder.interpreting('   Rule:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureImplicitDocstringState)
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, 'Rule:');
     });
 
   testBuilder.interpreting('Rule:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareRuleState)
     .shouldCapture('title', (feature) => {
       eq(feature.rules.length, 1);
@@ -112,6 +122,7 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
   testBuilder.interpreting('Rule: A rule')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareRuleState)
     .shouldCapture('title', (feature) => {
       eq(feature.rules.length, 1);
@@ -119,12 +130,14 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
   testBuilder.interpreting('   Scenario:')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, 'Scenario:');
     });
 
   testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('title', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -132,6 +145,7 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
   testBuilder.interpreting('Scenario: A scenario')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.DeclareScenarioState)
     .shouldCapture('title', (feature) => {
       eq(feature.scenarios.length, 1);
@@ -139,30 +153,36 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
   testBuilder.interpreting('   # some comment')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, '# some comment');
     });
 
   testBuilder.interpreting('# some comment')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureFeatureBackgroundStepState);
 
   testBuilder.interpreting('   ###')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, '###');
     });
 
   testBuilder.interpreting('###')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.ConsumeBlockCommentState);
 
   testBuilder.interpreting('   some text')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, 'some text');
     });
 
   testBuilder.interpreting('some text')
+    .shouldNotCheckpoint()
     .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
     .shouldCapture('step', (feature) => {
       eq(feature.background.steps.length, 2);
@@ -170,6 +190,7 @@ describe('CaptureImplicitDocstringState', () => {
     });
 
   testBuilder.interpreting('      some text')
+    .shouldNotCheckpoint()
     .shouldNotTransition()
     .shouldCapture('docstring', (feature) => {
       eq(feature.background.steps[0].docstring, '   some text');
