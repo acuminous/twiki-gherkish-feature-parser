@@ -1,0 +1,10 @@
+I did not expect a background at invalid-feature.js:13
+Instead, I expected one of:
+ - a blank line
+ - a block comment delimiter
+ - a scenario
+ - a single line comment
+ - a step
+ - an annotation
+ - the start of an explicit docstring
+ - the start of an implicit docstring
