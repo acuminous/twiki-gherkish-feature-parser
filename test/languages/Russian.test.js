@@ -14,6 +14,6 @@ describe('Russian', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Russian.translate('missing'), { message: 'Russian is missing a translation for the "missing" keyword. Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => Russian.translate('missing'), { message: 'Russian is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
   });
 });

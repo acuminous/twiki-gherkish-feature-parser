@@ -14,6 +14,6 @@ describe('Norwegian', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Norwegian.translate('missing'), { message: 'Norwegian is missing a translation for the "missing" keyword. Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => Norwegian.translate('missing'), { message: 'Norwegian is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
   });
 });

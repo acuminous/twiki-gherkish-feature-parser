@@ -14,6 +14,6 @@ describe('French', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => French.translate('missing'), { message: 'French is missing a translation for the "missing" keyword. Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => French.translate('missing'), { message: 'French is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
   });
 });

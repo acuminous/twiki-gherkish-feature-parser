@@ -15,6 +15,6 @@ describe('Pirate', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Pirate.translate('missing'), { message: 'Pirate is missing a translation for the "missing" keyword. Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => Pirate.translate('missing'), { message: 'Pirate is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
   });
 });

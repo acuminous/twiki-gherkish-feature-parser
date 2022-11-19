@@ -14,6 +14,6 @@ describe('Ukrainian', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Ukrainian.translate('missing'), { message: 'Ukrainian is missing a translation for the "missing" keyword. Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => Ukrainian.translate('missing'), { message: 'Ukrainian is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
   });
 });

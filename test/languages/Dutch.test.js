@@ -14,6 +14,6 @@ describe('Dutch', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Dutch.translate('missing'), { message: 'Dutch is missing a translation for the "missing" keyword. Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => Dutch.translate('missing'), { message: 'Dutch is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
   });
 });
