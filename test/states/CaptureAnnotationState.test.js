@@ -24,6 +24,7 @@ describe('CaptureAnnotationState', () => {
       Events.BlankLineEvent,
       Events.BlockCommentDelimiterEvent,
       Events.FeatureEvent,
+      Events.RuleEvent,
       Events.ScenarioEvent,
       Events.SingleLineCommentEvent,
       Events.StepEvent,
@@ -72,6 +73,18 @@ describe('CaptureAnnotationState', () => {
     .shouldTransitionTo(States.StubState)
     .shouldDispatch(Events.FeatureEvent, (context) => {
       eq(context.data.title, 'A feature');
+    });
+
+  testBuilder.interpreting('Rule:')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.RuleEvent, (context) => {
+      eq(context.data.title, '');
+    });
+
+  testBuilder.interpreting('Rule: A rule')
+    .shouldTransitionTo(States.StubState)
+    .shouldDispatch(Events.RuleEvent, (context) => {
+      eq(context.data.title, 'A rule');
     });
 
   testBuilder.interpreting('Scenario:')

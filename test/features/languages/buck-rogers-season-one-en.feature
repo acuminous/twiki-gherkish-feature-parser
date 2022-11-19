@@ -1,24 +1,50 @@
-@only
-@library=Buck Rogers Common
-@library=Buck Rogers Season One
+@genre=Sci-Fi
 Feature: Buck Rogers - Season One
 
-Buck Rogers season one comprising of 24 episodes.
-It was first aired on September 20th, 1979.
-
-@timeout=5000
 Background: Introduction
-  Given the year is 1987
-  And NASA launches the last of America's deep space probes
-  @skip
-  When a freak mishap occurs
-  Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems
-  And returns Buck Rogers to Earth 500 years later
 
-@skip
-Scenario: Awakening
+  In the year 1987, NASA launched the last of its deep space probes, commanded by Captain William “Buck” Rogers
+  During the mission, Buck suddenly encountered strange forces that resulted in his ship being thrown off course and his body being perfectly frozen in suspended animation
 
-  Given the Draconians have planted a homing beacon aboard Buck's shuttle
-  When Buck arrives on Earth
-  Then he must adjust to the 25th century
-  And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them
+@network=NBC
+Rule: Season 1
+
+  Buck Rogers season one comprising of 24 episodes
+
+  @aired=1979-09-20
+  Background: Awakening
+
+    When defense forces intercept Buck on his way to Earth
+    Then he learns of his strange fate
+    And is suspected of being a spy.
+
+  @aired=1979-09-27
+  Scenario: Planet of the Slave Girls
+
+    When Buck and Wilma go to a farm world
+    And investigate poisoning of Earth's food
+    Then they find a slave trade.
+
+@network=NBC
+Rule: Season 2
+
+  Buck Rogers season two comprising of 13 episodes
+
+  @aired=1981-01-15
+  Background: Time of the Hawk
+
+    Given marauding space pirates have murdered Hawk's people
+    Then he swears revenge on the human race
+    When buck captures the birdman Hawk's mate
+    Hawk is lured him out of hiding
+    And forced to fight in open space
+
+  @aired=1981-01-22
+  Scenario: Journey to Oasis
+
+    Given Wilma, an alien ambassador, Buck, Hawk and Dr. Goodfellow are flying to a peace conference on planet R-4
+    When the shuttle crashes
+    Then they reach the meeting on foot
+    And avert a war
+
+

@@ -54,7 +54,12 @@ function assertFeature(folder, filename, options) {
   const expected = readJsonFile(folder, `${filename}.json`);
   const source = readTextFile(folder, `${filename}.feature`);
   const parser = new FeatureParser(options);
-  const actual = parser.parse(source);
+  const metadata = {
+    source: {
+      uri: getFilePath(folder, `${filename}.feature`),
+    },
+  };
+  const actual = parser.parse(source, metadata);
   deq(actual, expected);
 }
 
@@ -78,6 +83,10 @@ function readJsonFile(folder, filename) {
 }
 
 function readTextFile(folder, filename) {
-  const filepath = path.join('test', 'features', folder, filename);
+  const filepath = getFilePath(folder, filename);
   return fs.readFileSync(filepath, 'utf-8');
+}
+
+function getFilePath(folder, filename) {
+  return path.join('test', 'features', folder, filename);
 }

@@ -4,6 +4,7 @@ Instead, I expected one of:
  - a blank line
  - a block comment delimiter
  - a feature
+ - a rule
  - a scenario
  - a single line comment
  - a step

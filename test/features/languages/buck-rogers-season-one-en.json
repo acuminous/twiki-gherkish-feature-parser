@@ -1,95 +1,177 @@
 {
   "annotations": [
     {
-      "name": "only",
-      "value": true
-    },
-    {
-      "name": "library",
-      "value": "Buck Rogers Common"
-    },
-    {
-      "name": "library",
-      "value": "Buck Rogers Season One"
+      "name": "genre",
+      "value": "Sci-Fi"
     }
   ],
   "title": "Buck Rogers - Season One",
-  "description": "Buck Rogers season one comprising of 24 episodes.\nIt was first aired on September 20th, 1979.",
+  "description": null,
   "background": {
+    "annotations": [],
     "title": "Introduction",
     "description": null,
-    "annotations": [
-      {
-        "name": "timeout",
-        "value": "5000"
-      }
-    ],
     "steps": [
       {
         "annotations": [],
-        "text": "Given the year is 1987",
+        "text": "In the year 1987, NASA launched the last of its deep space probes, commanded by Captain William “Buck” Rogers",
         "docstring": null
       },
       {
         "annotations": [],
-        "text": "And NASA launches the last of America's deep space probes",
-        "docstring": null
-      },
-      {
-        "annotations": [
-          {
-            "name": "skip",
-            "value": true
-          }
-        ],
-        "text": "When a freak mishap occurs",
-        "docstring": null
-      },
-      {
-        "annotations": [],
-        "text": "Then Buck Rogers is blown out of his trajectory into an orbit which freezes his life support systems",
-        "docstring": null
-      },
-      {
-        "annotations": [],
-        "text": "And returns Buck Rogers to Earth 500 years later",
+        "text": "During the mission, Buck suddenly encountered strange forces that resulted in his ship being thrown off course and his body being perfectly frozen in suspended animation",
         "docstring": null
       }
     ]
   },
-  "rules": [],
-  "scenarios": [
+  "rules": [
     {
-      "title": "Awakening",
-      "description": null,
       "annotations": [
         {
-          "name": "skip",
-          "value": true
+          "name": "network",
+          "value": "NBC"
         }
       ],
-      "steps": [
+      "title": "Season 1",
+      "description": "  Buck Rogers season one comprising of 24 episodes",
+      "background": {
+        "annotations": [
+          {
+            "name": "aired",
+            "value": "1979-09-20"
+          }
+        ],
+        "title": "Awakening",
+        "description": null,
+        "steps": [
+          {
+            "annotations": [],
+            "text": "When defense forces intercept Buck on his way to Earth",
+            "docstring": null
+          },
+          {
+            "annotations": [],
+            "text": "Then he learns of his strange fate",
+            "docstring": null
+          },
+          {
+            "annotations": [],
+            "text": "And is suspected of being a spy.",
+            "docstring": null
+          }
+        ]
+      },
+      "scenarios": [
         {
-          "annotations": [],
-          "text": "Given the Draconians have planted a homing beacon aboard Buck's shuttle",
-          "docstring": null
-        },
+          "annotations": [
+            {
+              "name": "aired",
+              "value": "1979-09-27"
+            }
+          ],
+          "title": "Planet of the Slave Girls",
+          "description": null,
+          "steps": [
+            {
+              "annotations": [],
+              "text": "When Buck and Wilma go to a farm world",
+              "docstring": null
+            },
+            {
+              "annotations": [],
+              "text": "And investigate poisoning of Earth's food",
+              "docstring": null
+            },
+            {
+              "annotations": [],
+              "text": "Then they find a slave trade.",
+              "docstring": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "annotations": [
         {
-          "annotations": [],
-          "text": "When Buck arrives on Earth",
-          "docstring": null
-        },
+          "name": "network",
+          "value": "NBC"
+        }
+      ],
+      "title": "Season 2",
+      "description": "  Buck Rogers season two comprising of 13 episodes",
+      "background": {
+        "annotations": [
+          {
+            "name": "aired",
+            "value": "1981-01-15"
+          }
+        ],
+        "title": "Time of the Hawk",
+        "description": null,
+        "steps": [
+          {
+            "annotations": [],
+            "text": "Given marauding space pirates have murdered Hawk's people",
+            "docstring": null
+          },
+          {
+            "annotations": [],
+            "text": "Then he swears revenge on the human race",
+            "docstring": null
+          },
+          {
+            "annotations": [],
+            "text": "When buck captures the birdman Hawk's mate",
+            "docstring": null
+          },
+          {
+            "annotations": [],
+            "text": "Hawk is lured him out of hiding",
+            "docstring": null
+          },
+          {
+            "annotations": [],
+            "text": "And forced to fight in open space",
+            "docstring": null
+          }
+        ]
+      },
+      "scenarios": [
         {
-          "annotations": [],
-          "text": "Then he must adjust to the 25th century",
-          "docstring": null
-        },
-        {
-          "annotations": [],
-          "text": "And convince the Earth Defense Directorate that the Draconians are secretly planning to conquer them",
-          "docstring": null
+          "annotations": [
+            {
+              "name": "aired",
+              "value": "1981-01-22"
+            }
+          ],
+          "title": "Journey to Oasis",
+          "description": null,
+          "steps": [
+            {
+              "annotations": [],
+              "text": "Given Wilma, an alien ambassador, Buck, Hawk and Dr. Goodfellow are flying to a peace conference on planet R-4",
+              "docstring": null
+            },
+            {
+              "annotations": [],
+              "text": "When the shuttle crashes",
+              "docstring": null
+            },
+            {
+              "annotations": [],
+              "text": "Then they reach the meeting on foot",
+              "docstring": null
+            },
+            {
+              "annotations": [],
+              "text": "And avert a war",
+              "docstring": null
+            }
+          ]
         }
       ]
     }
-  ]
+  ],
+  "scenarios": []
 }
