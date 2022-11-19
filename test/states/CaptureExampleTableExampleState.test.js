@@ -57,13 +57,13 @@ describe('CaptureExampleTableExample', () => {
   testBuilder.interpreting('Where:')
     .shouldBeUnexpected('an example table');
 
-  testBuilder.interpreting('| a | b | c |')
+  testBuilder.interpreting('| 1 | 2 | 3 |')
     .shouldNotCheckpoint()
     .shouldCapture('examples', (feature) => {
       eq(feature.scenarios[0].examples.rows.length, 1);
-      eq(feature.scenarios[0].examples.rows[0][0], 'a');
-      eq(feature.scenarios[0].examples.rows[0][1], 'b');
-      eq(feature.scenarios[0].examples.rows[0][2], 'c');
+      eq(feature.scenarios[0].examples.rows[0].a, '1');
+      eq(feature.scenarios[0].examples.rows[0].b, '2');
+      eq(feature.scenarios[0].examples.rows[0].c, '3');
     });
 
   testBuilder.interpreting('|---|---|---|')
