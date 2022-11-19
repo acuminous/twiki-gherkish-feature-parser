@@ -85,6 +85,8 @@ npm test
 The parser uses a state machine which transitions between states (e.g. InitialState, DeclareFeatureState) in response to specific events (e.g. Annotation, Feature, etc). When encoutering an event, the state may do one or more of the following...
 
 - Use the event data to **build** an internal representation of the feature
+- Ask the state machine to **checkpoint** the current state
+- Ask the state machine to **alias** the a specific future state, so it can be transitioned to by a shared/common state
 - Ask the state machine to **transition** to a new state
 - Ask the state machine to **unwind** to a previously checkpointed state
 - Ask the state machine to **dispatch** the event again (after transitioning or unwinding)
@@ -93,7 +95,7 @@ The parser uses a state machine which transitions between states (e.g. InitialSt
 - Report an unexpected event
 - Report a missing event handler
 
-For example, the state machine starts off in InitialState. If the first line of text in the feature specifciation is `@skip` then this will be translated into an AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data: `{ name: "skip", value: true }`. The event and data will be dispatched to the InitialState's annotation event handler, which will ask the state machine to transition to the CaptureAnnotationsState and redispatch the event. The CaptureAnnotationsState's annotation event handler will stash the event data using until such time as a feature is created.
+For example, the state machine starts off in InitialState. If the first line of text in the feature specifciation is `@skip` then this will be translated into an AnnotationEvent. The AnnotationEvent will parse the text, resulting in the following event data: `{ name: "skip", value: true }`. The event and data will be dispatched to the InitialState, which will ask the state machine to checkpoint the current state, transition to the CaptureAnnotationState and redispatch the event. The CaptureAnnotationState will stash the event data using until such time as a feature is created. While the state machine continues to receive annoations, the events will continue to be dispatched to and stashed by the CaptureAnnotationState. However, if the `'Feature:'` keyword is encountered, a FeatureEvent will be dispatched causing the CaptureAnnotationState to unwind to the previously checkpointed InitialState. The FeatureEvent will be redispatched, and handled by the InitialState.
 
 ## Events
 
