@@ -18,8 +18,6 @@ describe('DeclareExampleTableState', () => {
       .countExampleHeadings(['a', 'b', 'c']);
 
     const machine = new StateMachine({ featureBuilder, session })
-      .toStubState()
-      .checkpoint()
       .toDeclareExampleTableState();
 
     testBuilder.featureBuilder = featureBuilder;

@@ -40,16 +40,9 @@ describe('CaptureAnnotationState', () => {
       eq(annotations[0].value, 'bar');
     });
 
-  testBuilder.interpreting('Background:')
-    .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
-    .shouldDispatch(Events.BackgroundEvent, (context) => {
-      eq(context.data.title, '');
-    });
-
   testBuilder.interpreting('Background: A background')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.BackgroundEvent, (context) => {
       eq(context.data.title, 'A background');
     });
@@ -67,44 +60,23 @@ describe('CaptureAnnotationState', () => {
   testBuilder.interpreting('\u0000')
     .shouldBeUnexpected('the end of the feature');
 
-  testBuilder.interpreting('Feature:')
-    .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
-    .shouldDispatch(Events.FeatureEvent, (context) => {
-      eq(context.data.title, '');
-    });
-
   testBuilder.interpreting('Feature: A feature')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.FeatureEvent, (context) => {
       eq(context.data.title, 'A feature');
     });
 
-  testBuilder.interpreting('Rule:')
-    .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
-    .shouldDispatch(Events.RuleEvent, (context) => {
-      eq(context.data.title, '');
-    });
-
   testBuilder.interpreting('Rule: A rule')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.RuleEvent, (context) => {
       eq(context.data.title, 'A rule');
     });
 
-  testBuilder.interpreting('Scenario:')
-    .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
-    .shouldDispatch(Events.ScenarioEvent, (context) => {
-      eq(context.data.title, '');
-    });
-
   testBuilder.interpreting('Scenario: A scenario')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, 'A scenario');
     });
@@ -114,12 +86,12 @@ describe('CaptureAnnotationState', () => {
 
   testBuilder.interpreting('###')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.BlockCommentDelimiterEvent);
 
   testBuilder.interpreting('some text')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.StepEvent, (context) => {
       eq(context.data.text, 'some text');
     });

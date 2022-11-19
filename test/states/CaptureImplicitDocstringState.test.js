@@ -18,7 +18,7 @@ describe('CaptureImplicitDocstringState', () => {
       .beginImplicitDocstring(3);
 
     const machine = new StateMachine({ featureBuilder, session })
-      .toCaptureFeatureBackgroundStepState()
+      .toStubState()
       .checkpoint()
       .alias(States.EndFeatureBackgroundDocstringState)
       .toCaptureImplicitDocstringState();
@@ -45,11 +45,10 @@ describe('CaptureImplicitDocstringState', () => {
 
   testBuilder.interpreting('@foo=bar')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.CaptureAnnotationState)
-    .shouldStashAnnotation((annotations) => {
-      eq(annotations.length, 1);
-      eq(annotations[0].name, 'foo');
-      eq(annotations[0].value, 'bar');
+    .shouldUnwind()
+    .shouldDispatch(Events.AnnotationEvent, (context) => {
+      eq(context.data.name, 'foo');
+      eq(context.data.value, 'bar');
     });
 
   testBuilder.interpreting('   Background:')
@@ -71,7 +70,8 @@ describe('CaptureImplicitDocstringState', () => {
 
   testBuilder.interpreting('')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState);
+    .shouldUnwind()
+    .shouldDispatch(Events.BlankLineEvent);
 
   testBuilder.interpreting('   Where:')
     .shouldNotCheckpoint()
@@ -113,20 +113,11 @@ describe('CaptureImplicitDocstringState', () => {
       eq(feature.background.steps[0].docstring, 'Rule:');
     });
 
-  testBuilder.interpreting('Rule:')
-    .shouldNotCheckpoint()
-    .shouldTransitionTo(States.DeclareRuleState)
-    .shouldCapture('title', (feature) => {
-      eq(feature.rules.length, 1);
-      eq(feature.rules[0].title, '');
-    });
-
   testBuilder.interpreting('Rule: A rule')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.DeclareRuleState)
-    .shouldCapture('title', (feature) => {
-      eq(feature.rules.length, 1);
-      eq(feature.rules[0].title, 'A rule');
+    .shouldUnwind()
+    .shouldDispatch(Events.RuleEvent, (context) => {
+      eq(context.data.title, 'A rule');
     });
 
   testBuilder.interpreting('   Scenario:')
@@ -136,20 +127,11 @@ describe('CaptureImplicitDocstringState', () => {
       eq(feature.background.steps[0].docstring, 'Scenario:');
     });
 
-  testBuilder.interpreting('Scenario:')
-    .shouldNotCheckpoint()
-    .shouldTransitionTo(States.DeclareScenarioState)
-    .shouldCapture('title', (feature) => {
-      eq(feature.scenarios.length, 1);
-      eq(feature.scenarios[0].title, '');
-    });
-
   testBuilder.interpreting('Scenario: A scenario')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.DeclareScenarioState)
-    .shouldCapture('title', (feature) => {
-      eq(feature.scenarios.length, 1);
-      eq(feature.scenarios[0].title, 'A scenario');
+    .shouldUnwind()
+    .shouldDispatch(Events.ScenarioEvent, (context) => {
+      eq(context.data.title, 'A scenario');
     });
 
   testBuilder.interpreting('   # some comment')
@@ -161,7 +143,8 @@ describe('CaptureImplicitDocstringState', () => {
 
   testBuilder.interpreting('# some comment')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState);
+    .shouldUnwind()
+    .shouldDispatch(Events.SingleLineCommentEvent);
 
   testBuilder.interpreting('   ###')
     .shouldNotCheckpoint()
@@ -172,7 +155,8 @@ describe('CaptureImplicitDocstringState', () => {
 
   testBuilder.interpreting('###')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.ConsumeBlockCommentState);
+    .shouldUnwind()
+    .shouldDispatch(Events.BlockCommentDelimiterEvent);
 
   testBuilder.interpreting('   some text')
     .shouldNotCheckpoint()
@@ -183,10 +167,9 @@ describe('CaptureImplicitDocstringState', () => {
 
   testBuilder.interpreting('some text')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.CaptureFeatureBackgroundStepState)
-    .shouldCapture('step', (feature) => {
-      eq(feature.background.steps.length, 2);
-      eq(feature.background.steps[1].text, 'some text');
+    .shouldUnwind()
+    .shouldDispatch(Events.StepEvent, (context) => {
+      eq(context.data.text, 'some text');
     });
 
   testBuilder.interpreting('      some text')

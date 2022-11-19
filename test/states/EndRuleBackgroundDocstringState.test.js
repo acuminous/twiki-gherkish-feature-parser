@@ -1,6 +1,6 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
+import { FeatureBuilder, StateMachine, Events } from '../../lib/index.js';
 import StubSession from '../stubs/StubSession.js';
 import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
@@ -35,7 +35,7 @@ describe('EndRuleBackgroundDocstringState', () => {
 
   testBuilder.interpreting('@foo=bar')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.AnnotationEvent, (context) => {
       eq(context.data.name, 'foo');
       eq(context.data.value, 'bar');
@@ -49,7 +49,8 @@ describe('EndRuleBackgroundDocstringState', () => {
 
   testBuilder.interpreting('')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState);
+    .shouldUnwind()
+    .shouldDispatch(Events.BlankLineEvent);
 
   testBuilder.interpreting('Where:')
     .shouldBeUnexpected('an example table');
@@ -71,30 +72,31 @@ describe('EndRuleBackgroundDocstringState', () => {
 
   testBuilder.interpreting('Scenario:')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Scenario: A scenario')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.ScenarioEvent, (context) => {
       eq(context.data.title, 'A scenario');
     });
 
   testBuilder.interpreting('# some comment')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState);
+    .shouldUnwind()
+    .shouldDispatch(Events.SingleLineCommentEvent);
 
   testBuilder.interpreting('###')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.BlockCommentDelimiterEvent);
 
   testBuilder.interpreting('some text')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.StubState)
+    .shouldUnwind()
     .shouldDispatch(Events.StepEvent, (context) => {
       eq(context.data.text, 'some text');
     });
