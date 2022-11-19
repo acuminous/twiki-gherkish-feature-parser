@@ -36,7 +36,8 @@
           "text": "biddie-biddie-biddie!",
           "docstring": null
         }
-      ]
+      ],
+      "examples": null
     },
     {
       "title": "Wilmer",
@@ -53,7 +54,8 @@
           "text": "I'm offering you your life, and you're giving me practical jokes?",
           "docstring": null
         }
-      ]
+      ],
+      "examples": null
     }
   ]
 }

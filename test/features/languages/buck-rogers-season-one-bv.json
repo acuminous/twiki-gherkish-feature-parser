@@ -87,7 +87,8 @@
               "text": "Then they find a slave trade.",
               "docstring": null
             }
-          ]
+          ],
+          "examples": null
         }
       ]
     },
@@ -168,7 +169,8 @@
               "text": "And avert a war",
               "docstring": null
             }
-          ]
+          ],
+          "examples": null
         }
       ]
     }
