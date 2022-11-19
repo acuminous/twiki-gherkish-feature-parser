@@ -32,4 +32,22 @@ describe('ExampleTableSeparatorRowEvent', () => {
     session.countExampleHeadings(['a', 'b', 'c']);
     eq(event.interpret({ line: '|---|-|---|' }, session), undefined);
   });
+
+  it('should report incorrect number of columns', () => {
+    const event = new ExampleTableSeparatorRowEvent();
+    const session = new Session({
+      metadata: {
+        source: {
+          uri: 'invalid.feature',
+        },
+      },
+    }).countExampleHeadings(['a']);
+
+    throws(() => {
+      event.interpret({ line: '|---|---|---|', number: 11 }, session);
+    }, (err) => {
+      eq(err.message, 'Expected 1 examples but found 3 at invalid.feature:11');
+      return true;
+    });
+  });
 });
