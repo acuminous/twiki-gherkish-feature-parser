@@ -50,16 +50,23 @@ describe('CaptureAnnotationState', () => {
 
   testBuilder.interpreting('')
     .shouldNotCheckpoint()
-    .shouldNotTransition();
+    .shouldUnwind()
+    .shouldDispatch(Events.BlankLineEvent);
 
   testBuilder.interpreting('Where:')
-    .shouldBeUnexpected('an example table');
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.ExampleTableEvent);
 
   testBuilder.interpreting('---')
-    .shouldBeUnexpected('the start of an explicit docstring');
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.ExplicitDocstringStartEvent);
 
   testBuilder.interpreting('\u0000')
-    .shouldBeUnexpected('the end of the feature');
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.EndEvent);
 
   testBuilder.interpreting('Feature: A feature')
     .shouldNotCheckpoint()
@@ -83,7 +90,9 @@ describe('CaptureAnnotationState', () => {
     });
 
   testBuilder.interpreting('# some comment')
-    .shouldNotTransition();
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.SingleLineCommentEvent);
 
   testBuilder.interpreting('###')
     .shouldNotCheckpoint()
@@ -98,6 +107,10 @@ describe('CaptureAnnotationState', () => {
     });
 
   testBuilder.interpreting('   some text')
-    .shouldBeUnexpected('the start of an implicit docstring');
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.ImplicitDocstringStartEvent, (context) => {
+      eq(context.data.text, 'some text');
+    });
 
 });

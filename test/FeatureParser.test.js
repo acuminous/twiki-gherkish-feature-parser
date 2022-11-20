@@ -72,9 +72,10 @@ function assertParserError(folder, filename, options) {
       uri: 'invalid-feature.js',
     },
   };
-  throws(() => {
-    parser.parse(source, metadata);
-  }, { message });
+  throws(() => parser.parse(source, metadata), (err) => {
+    eq(err.message, message);
+    return true;
+  });
 }
 
 function readJsonFile(folder, filename) {
