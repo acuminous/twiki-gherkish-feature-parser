@@ -23,18 +23,18 @@ describe('CaptureExampleTableExample', () => {
       .checkpoint()
       .toCaptureExampleTableExampleState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.AnnotationEvent,
-      Events.BlankLineEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.EndEvent,
-      Events.ExampleTableDataRowEvent,
-      Events.RuleEvent,
-      Events.ScenarioEvent,
-      Events.SingleLineCommentEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.AnnotationEvent,
+        Events.BlankLineEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.EndEvent,
+        Events.ExampleTableDataRowEvent,
+        Events.RuleEvent,
+        Events.ScenarioEvent,
+        Events.SingleLineCommentEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

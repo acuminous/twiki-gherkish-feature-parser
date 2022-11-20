@@ -20,11 +20,11 @@ describe('BeginExplicitDocstringState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toBeginExplicitDocstringState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.DocstringTextEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.DocstringTextEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

@@ -16,19 +16,19 @@ describe('CaptureAnnotationState', () => {
       .checkpoint()
       .toCaptureAnnotationState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.AnnotationEvent,
-      Events.BackgroundEvent,
-      Events.BlankLineEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.FeatureEvent,
-      Events.RuleEvent,
-      Events.ScenarioEvent,
-      Events.SingleLineCommentEvent,
-      Events.StepEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.AnnotationEvent,
+        Events.BackgroundEvent,
+        Events.BlankLineEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.FeatureEvent,
+        Events.RuleEvent,
+        Events.ScenarioEvent,
+        Events.SingleLineCommentEvent,
+        Events.StepEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

@@ -21,11 +21,11 @@ describe('CaptureExampleTableHeadings', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toCaptureExampleTableHeadingsState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.ExampleTableSeparatorRowEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.ExampleTableSeparatorRowEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

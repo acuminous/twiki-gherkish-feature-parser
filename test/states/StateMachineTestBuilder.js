@@ -11,6 +11,10 @@ export default class StateMachineTestBuilder {
     return this;
   }
 
+  assign(props) {
+    Object.assign(this, props);
+  }
+
   interpreting(line, number = 1, indentation = utils.getIndentation(line)) {
     this._source = { line, number, indentation };
     return this;

@@ -18,15 +18,15 @@ describe('DeclareRuleBackgroundState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareRuleBackgroundState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.AnnotationEvent,
-      Events.BlankLineEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.SingleLineCommentEvent,
-      Events.StepEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.AnnotationEvent,
+        Events.BlankLineEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.SingleLineCommentEvent,
+        Events.StepEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

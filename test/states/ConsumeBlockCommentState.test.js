@@ -15,11 +15,11 @@ describe('ConsumeBlockCommentState', () => {
       .checkpoint()
       .toConsumeBlockCommentState();
 
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.BlockCommentDelimiterEvent,
-      Events.TextEvent,
-    ];
+    testBuilder.assign({ machine,
+      expectedEvents: [
+        Events.BlockCommentDelimiterEvent,
+        Events.TextEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

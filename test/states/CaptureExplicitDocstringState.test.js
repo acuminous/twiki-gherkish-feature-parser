@@ -21,12 +21,12 @@ describe('CaptureExplicitDocstringState', () => {
       .alias(States.EndFeatureBackgroundDocstringState)
       .toCaptureExplicitDocstringState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.ExplicitDocstringStopEvent,
-      Events.DocstringTextEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.ExplicitDocstringStopEvent,
+        Events.DocstringTextEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

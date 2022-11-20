@@ -17,18 +17,18 @@ describe('DeclareFeatureState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.AnnotationEvent,
-      Events.BackgroundEvent,
-      Events.BlankLineEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.RuleEvent,
-      Events.ScenarioEvent,
-      Events.SingleLineCommentEvent,
-      Events.TextEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.AnnotationEvent,
+        Events.BackgroundEvent,
+        Events.BlankLineEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.RuleEvent,
+        Events.ScenarioEvent,
+        Events.SingleLineCommentEvent,
+        Events.TextEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

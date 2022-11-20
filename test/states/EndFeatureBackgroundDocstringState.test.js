@@ -21,17 +21,17 @@ describe('EndFeatureBackgroundDocstringState', () => {
       .checkpoint()
       .toEndFeatureBackgroundDocstringState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.AnnotationEvent,
-      Events.BlankLineEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.RuleEvent,
-      Events.ScenarioEvent,
-      Events.SingleLineCommentEvent,
-      Events.StepEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.AnnotationEvent,
+        Events.BlankLineEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.RuleEvent,
+        Events.ScenarioEvent,
+        Events.SingleLineCommentEvent,
+        Events.StepEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

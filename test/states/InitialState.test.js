@@ -13,15 +13,15 @@ describe('InitialState', () => {
     const session = new StubSession();
     const machine = new StateMachine({ featureBuilder, session });
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.AnnotationEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.BlankLineEvent,
-      Events.FeatureEvent,
-      Events.SingleLineCommentEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.AnnotationEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.BlankLineEvent,
+        Events.FeatureEvent,
+        Events.SingleLineCommentEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')

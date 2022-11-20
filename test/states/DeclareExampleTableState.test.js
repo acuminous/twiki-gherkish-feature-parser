@@ -20,14 +20,14 @@ describe('DeclareExampleTableState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareExampleTableState();
 
-    testBuilder.featureBuilder = featureBuilder;
-    testBuilder.machine = machine;
-    testBuilder.expectedEvents = [
-      Events.BlankLineEvent,
-      Events.BlockCommentDelimiterEvent,
-      Events.ExampleTableHeaderRowEvent,
-      Events.SingleLineCommentEvent,
-    ];
+    testBuilder.assign({ machine,
+      featureBuilder,
+      expectedEvents: [
+        Events.BlankLineEvent,
+        Events.BlockCommentDelimiterEvent,
+        Events.ExampleTableHeaderRowEvent,
+        Events.SingleLineCommentEvent,
+      ] });
   });
 
   testBuilder.interpreting('@foo=bar')
