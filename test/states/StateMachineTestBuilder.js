@@ -16,11 +16,11 @@ export default class StateMachineTestBuilder {
     return this;
   }
 
-  shouldTransitionTo(destination) {
+  shouldTransitionTo(StateClass) {
     const source = this._source;
-    it(`${this._printableLine(source)} should cause a transition to ${destination.name}`, () => {
+    it(`${this._printableLine(source)} should cause a transition to ${StateClass.name}`, () => {
       this.machine.interpret(source);
-      eq(this.machine.state, destination.name);
+      ok(this.machine.state instanceof StateClass, `Did not transition to ${StateClass.name}`);
     });
     return this;
   }
@@ -28,9 +28,9 @@ export default class StateMachineTestBuilder {
   shouldNotTransition() {
     const source = this._source;
     it(`${this._printableLine(source)} should not cause a transition`, () => {
-      const current = this.machine.state;
+      const previousState = this.machine.state;
       this.machine.interpret(source);
-      eq(this.machine.state, current);
+      eq(this.machine.state.name, previousState.name);
     });
     return this;
   }
@@ -69,7 +69,7 @@ export default class StateMachineTestBuilder {
     const source = this._source;
     it(`${this._printableLine(source)} should alias ${StateClass.name} with ${StateClass.alias}`, () => {
       this.machine.interpret(source);
-      ok(this.machine[StateClass.handlerAlias]);
+      ok(this.machine[StateClass.handlerAlias], `${StateClass.name} was not aliased with ${StateClass.alias}`);
     });
     return this;
   }
@@ -80,7 +80,7 @@ export default class StateMachineTestBuilder {
       const previousState = this.machine.state;
       this.machine.interpret(source);
       this.machine.unwind();
-      eq(previousState, this.machine.state);
+      eq(previousState.name, this.machine.state.name);
     });
     return this;
   }
@@ -90,7 +90,7 @@ export default class StateMachineTestBuilder {
     it(`${this._printableLine(source)} should not create a checkpoint`, () => {
       const previousState = this.machine.state;
       this.machine.interpret(source);
-      ok(!this.machine._checkpoints.find((checkpoint) => checkpoint.name === previousState));
+      ok(!this.machine.hasCheckpoint(previousState), 'Did not create a checkpoint');
     });
     return this;
   }
@@ -98,11 +98,9 @@ export default class StateMachineTestBuilder {
   shouldUnwind() {
     const source = this._source;
     it(`${this._printableLine(source)} should unwind to the previous checkpoint`, () => {
-      const numberOfCheckpoints = this.machine._checkpoints.length;
-      const previousState = this.machine._checkpoints[numberOfCheckpoints - 1];
+      const checkpoint = this.machine.lastCheckpoint;
       this.machine.interpret(source);
-      eq(previousState.name, this.machine.state);
-      eq(this.machine._checkpoints.length, numberOfCheckpoints - 1);
+      ok(!this.machine.hasCheckpoint(checkpoint), 'Did not unwind to previous checkpoint');
     });
     return this;
   }
@@ -112,7 +110,7 @@ export default class StateMachineTestBuilder {
     it(`${this._printableLine(source)} should dispatch ${new EventClass().description} event`, () => {
       this.machine.interpret(source);
       const { event, context } = this.machine.history[this.machine.history.length - 1];
-      ok(event instanceof EventClass);
+      ok(event instanceof EventClass, `Did not dispatch ${new EventClass().description} event`);
       expectations(context);
     });
     return this;
