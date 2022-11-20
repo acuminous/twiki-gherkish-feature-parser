@@ -1,0 +1,11 @@
+I did not expect an example table at invalid-feature.js:11
+Instead, I expected one of:
+ - a background
+ - a blank line
+ - a block comment delimiter
+ - a feature
+ - a rule
+ - a scenario
+ - a single line comment
+ - a step
+ - an annotation
