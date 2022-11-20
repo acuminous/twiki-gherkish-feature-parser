@@ -53,25 +53,23 @@ npm install @twiki-bdd/gherkish-feature-parser
 
 ## Gherkin Compatability
 
-| Syntax                       | Supported                                        |
-| ---------------------------- | ------------------------------------------------ |
-| Language directive           | No - use the parser "language" option instead    |
-| Feature                      | Yes                                              |
-| Feature descriptions         | Yes                                              |
-| Feature tags/annotations     | Yes                                              |
-| Feature backgrounds          | Yes                                              |
-| Background tags/annotations  | Yes                                              |
-| Rules                        | Yes                                              |
-| Scenario Outlines            | Yes<sup>1</sup> - use "Where:", "Examples:", etc |
-| Scenarios                    | Yes                                              |
-| Scenario descriptions        | Yes                                              |
-| Scenario tags/annotations    | Yes                                              |
-| Steps                        | Yes                                              |
-| Step tags/annotations        | Yes                                              |
-| Given / When / Then keywords | No - twiki does not special case step keywords   |
-| Docstring                    | Yes - use """ or ---                             |
-
-1. Escaping the | character is not currently supported
+| Syntax                       | Supported                                      |
+| ---------------------------- | ---------------------------------------------- |
+| Language directive           | No - use the parser "language" option instead  |
+| Feature                      | Yes                                            |
+| Feature descriptions         | Yes                                            |
+| Feature tags/annotations     | Yes                                            |
+| Feature backgrounds          | Yes                                            |
+| Background tags/annotations  | Yes                                            |
+| Rules                        | Yes                                            |
+| Scenario Outlines            | Yes - use "Where:", "Examples:", etc           |
+| Scenarios                    | Yes                                            |
+| Scenario descriptions        | Yes                                            |
+| Scenario tags/annotations    | Yes                                            |
+| Steps                        | Yes                                            |
+| Step tags/annotations        | Yes                                            |
+| Given / When / Then keywords | No - twiki does not special case step keywords |
+| Docstring                    | Yes - use """ or ---                           |
 
 ## Development
 

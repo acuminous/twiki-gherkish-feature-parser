@@ -16,6 +16,7 @@ describe('ExampleTableDataRowEvent', () => {
     eq(event.test({ line: '| abc |' }), true);
     eq(event.test({ line: '| a c |' }), true);
     eq(event.test({ line: '| a | b | c |' }), true);
+    eq(event.test({ line: '| a | b \\| c | d |' }), true);
     eq(event.test({ line: '| \u00A0a\u00A0 |' }), true);
 
     eq(event.test({ line: '|' }), false);
@@ -38,6 +39,7 @@ describe('ExampleTableDataRowEvent', () => {
 
     session.countExampleHeadings(['a', 'b', 'c']);
     deq(event.interpret({ line: '| a | b | c |' }, session), { examples: ['a', 'b', 'c'] });
+    deq(event.interpret({ line: '| a | b \\| c | d |' }, session), { examples: ['a', 'b \\| c', 'd'] });
   });
 
   it('should report incorrect number of examples', () => {

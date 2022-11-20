@@ -54,5 +54,5 @@ Guideline: Season 2
     | shuttle           | foot                  |
     | shuttle           | rover                 |
     | fighter           | jetpac                |
-    | fighter           | hoverboard            |
+    | fighter           | hover\|board          |
 

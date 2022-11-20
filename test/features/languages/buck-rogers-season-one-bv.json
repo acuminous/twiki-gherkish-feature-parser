@@ -176,7 +176,7 @@
               { "primary transport": "shuttle", "alternative transport": "foot" },
               { "primary transport": "shuttle", "alternative transport": "rover" },
               { "primary transport": "fighter", "alternative transport": "jetpac" },
-              { "primary transport": "fighter", "alternative transport": "hoverboard" }
+              { "primary transport": "fighter", "alternative transport": "hover\\|board" }
             ]
           }
         }
