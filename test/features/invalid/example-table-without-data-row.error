@@ -1,0 +1,4 @@
+I did not expect a blank line at invalid-feature.js:14
+Instead, I expected one of:
+ - an annotation
+ - an example table data row
