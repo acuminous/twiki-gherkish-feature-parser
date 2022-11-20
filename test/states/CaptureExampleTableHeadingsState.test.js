@@ -42,7 +42,7 @@ describe('CaptureExampleTableHeadings', () => {
     .shouldBeUnexpected('an example table');
 
   testBuilder.interpreting('| a | b | c |')
-    .shouldBeUnexpected('an example table header row');
+    .shouldBeUnexpected('an example table data row');
 
   testBuilder.interpreting('|---|---|---|')
     .shouldNotCheckpoint()
