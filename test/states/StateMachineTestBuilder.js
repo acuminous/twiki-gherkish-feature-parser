@@ -43,7 +43,7 @@ export default class StateMachineTestBuilder {
     const source = this._source;
     it(`${this._printableLine(source)} should be unexpected`, () => {
       throws(() => this.machine.interpret(source), (err) => {
-        const eventList = this.expectedEvents.map((EventClass) => ` - ${new EventClass().description}\n`).sort((a, b) => a.localeCompare(b)).join('');
+        const eventList = this.expectedEvents.map((EventClass) => ` - ${EventClass.description}\n`).sort((a, b) => a.localeCompare(b)).join('');
         eq(err.message, `I did not expect ${what} at index.js:1\nInstead, I expected one of:\n${eventList}`);
         return true;
       });
@@ -111,10 +111,10 @@ export default class StateMachineTestBuilder {
 
   shouldDispatch(EventClass, expectations = () => {}) {
     const source = this._source;
-    it(`${this._printableLine(source)} should dispatch ${new EventClass().description} event`, () => {
+    it(`${this._printableLine(source)} should dispatch ${EventClass.description} event`, () => {
       this.machine.interpret(source);
       const { event, context } = this.machine.history[this.machine.history.length - 1];
-      ok(event instanceof EventClass, `Did not dispatch ${new EventClass().description} event`);
+      ok(event instanceof EventClass, `Did not dispatch ${EventClass.description} event`);
       expectations(context);
     });
     return this;
