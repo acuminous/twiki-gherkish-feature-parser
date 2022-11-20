@@ -6,7 +6,7 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('EndRuleBackgroundDocstringState', () => {
+describe('EndRuleBackgroundStepDocstringState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
@@ -19,7 +19,7 @@ describe('EndRuleBackgroundDocstringState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()
       .checkpoint()
-      .toEndRuleBackgroundDocstringState();
+      .toEndRuleBackgroundStepDocstringState();
 
     testBuilder.assign({
       machine,

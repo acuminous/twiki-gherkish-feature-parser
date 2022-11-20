@@ -20,7 +20,7 @@ describe('CaptureImplicitDocstringState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()
       .checkpoint()
-      .alias(States.EndFeatureBackgroundDocstringState)
+      .alias(States.EndFeatureBackgroundStepDocstringState)
       .toCaptureImplicitDocstringState();
 
     testBuilder.assign({

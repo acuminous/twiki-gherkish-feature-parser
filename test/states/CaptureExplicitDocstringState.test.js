@@ -18,7 +18,7 @@ describe('CaptureExplicitDocstringState', () => {
       .beginExplicitDocstring('---', 0);
 
     const machine = new StateMachine({ featureBuilder, session })
-      .alias(States.EndFeatureBackgroundDocstringState)
+      .alias(States.EndFeatureBackgroundStepDocstringState)
       .toCaptureExplicitDocstringState();
 
     testBuilder.assign({
@@ -60,7 +60,7 @@ describe('CaptureExplicitDocstringState', () => {
 
   testBuilder.interpreting('---')
     .shouldNotCheckpoint()
-    .shouldTransitionTo(States.EndFeatureBackgroundDocstringState);
+    .shouldTransitionTo(States.EndFeatureBackgroundStepDocstringState);
 
   testBuilder.interpreting('\u0000')
     .shouldBeUnexpected('the end of the feature');

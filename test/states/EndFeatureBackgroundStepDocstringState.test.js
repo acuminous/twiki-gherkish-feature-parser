@@ -6,7 +6,7 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('EndScenarioDocstringState', () => {
+describe('EndFeatureBackgroundStepDocstringState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
@@ -19,7 +19,7 @@ describe('EndScenarioDocstringState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()
       .checkpoint()
-      .toEndScenarioDocstringState();
+      .toEndFeatureBackgroundStepDocstringState();
 
     testBuilder.assign({
       machine,
@@ -28,8 +28,6 @@ describe('EndScenarioDocstringState', () => {
         Events.AnnotationEvent,
         Events.BlankLineEvent,
         Events.BlockCommentDelimiterEvent,
-        Events.EndEvent,
-        Events.ExampleTableEvent,
         Events.RuleEvent,
         Events.ScenarioEvent,
         Events.SingleLineCommentEvent,
@@ -57,17 +55,13 @@ describe('EndScenarioDocstringState', () => {
     .shouldDispatch(Events.BlankLineEvent);
 
   testBuilder.interpreting('Where:')
-    .shouldNotCheckpoint()
-    .shouldUnwind()
-    .shouldDispatch(Events.ExampleTableEvent);
+    .shouldBeUnexpected('an example table');
 
   testBuilder.interpreting('---')
     .shouldBeUnexpected('the start of an explicit docstring');
 
   testBuilder.interpreting('\u0000')
-    .shouldNotCheckpoint()
-    .shouldUnwind()
-    .shouldDispatch(Events.EndEvent);
+    .shouldBeUnexpected('the end of the feature');
 
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
@@ -75,11 +69,25 @@ describe('EndScenarioDocstringState', () => {
   testBuilder.interpreting('Feature: A feature')
     .shouldBeUnexpected('a feature');
 
+  testBuilder.interpreting('Rule:')
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.RuleEvent, (context) => {
+      eq(context.data.title, '');
+    });
+
   testBuilder.interpreting('Rule: A rule')
     .shouldNotCheckpoint()
     .shouldUnwind()
     .shouldDispatch(Events.RuleEvent, (context) => {
       eq(context.data.title, 'A rule');
+    });
+
+  testBuilder.interpreting('Scenario:')
+    .shouldNotCheckpoint()
+    .shouldUnwind()
+    .shouldDispatch(Events.ScenarioEvent, (context) => {
+      eq(context.data.title, '');
     });
 
   testBuilder.interpreting('Scenario: A scenario')

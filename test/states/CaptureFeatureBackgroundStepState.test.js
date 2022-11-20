@@ -60,7 +60,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
   testBuilder.interpreting('---')
     .shouldCheckpoint()
     .shouldTransitionTo(States.BeginExplicitDocstringState)
-    .shouldAlias(States.EndFeatureBackgroundDocstringState);
+    .shouldAlias(States.EndFeatureBackgroundStepDocstringState);
 
   testBuilder.interpreting('Feature:')
     .shouldBeUnexpected('a feature');
@@ -116,7 +116,7 @@ describe('CaptureFeatureBackgroundStepState', () => {
   testBuilder.interpreting('   some text')
     .shouldCheckpoint()
     .shouldTransitionTo(States.CaptureImplicitDocstringState)
-    .shouldAlias(States.EndFeatureBackgroundDocstringState)
+    .shouldAlias(States.EndFeatureBackgroundStepDocstringState)
     .shouldCapture('docstring text', (feature) => {
       eq(feature.background.steps[0].docstring, 'some text');
     });
