@@ -1,6 +1,5 @@
 I did not expect the end of the feature at test/features/invalid/scenario-with-trailing-annotation.feature:10
 Instead, I expected one of:
- - a background
  - a blank line
  - a block comment delimiter
  - a rule

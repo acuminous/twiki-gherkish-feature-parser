@@ -1,6 +1,5 @@
 I did not expect an example table at test/features/invalid/example-table-with-annotation.feature:11
 Instead, I expected one of:
- - a background
  - a blank line
  - a block comment delimiter
  - a rule
