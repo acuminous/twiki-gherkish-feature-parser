@@ -1,4 +1,4 @@
-I did not expect the end of the feature at invalid-feature.js:9
+I did not expect the end of the feature at test/features/invalid/scenario-with-mismatched-explicit-docstring.feature:9
 Instead, I expected one of:
  - a docstring line
  - the end of an explicit docstring

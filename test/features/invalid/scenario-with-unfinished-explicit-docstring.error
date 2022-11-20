@@ -1,4 +1,4 @@
-I did not expect the end of the feature at invalid-feature.js:6
+I did not expect the end of the feature at test/features/invalid/scenario-with-unfinished-explicit-docstring.feature:6
 Instead, I expected one of:
  - a docstring line
  - the end of an explicit docstring

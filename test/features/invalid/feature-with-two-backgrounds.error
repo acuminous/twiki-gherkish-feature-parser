@@ -1,4 +1,4 @@
-I did not expect a background at invalid-feature.js:11
+I did not expect a background at test/features/invalid/feature-with-two-backgrounds.feature:11
 Instead, I expected one of:
  - a blank line
  - a block comment delimiter

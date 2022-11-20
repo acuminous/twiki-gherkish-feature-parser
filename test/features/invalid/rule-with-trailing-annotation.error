@@ -1,4 +1,4 @@
-I did not expect the end of the feature at invalid-feature.js:4
+I did not expect the end of the feature at test/features/invalid/rule-with-trailing-annotation.feature:4
 Instead, I expected one of:
  - a background
  - a blank line

@@ -1,4 +1,4 @@
-I did not expect a blank line at invalid-feature.js:14
+I did not expect a blank line at test/features/invalid/example-table-without-data-row.feature:14
 Instead, I expected one of:
  - an annotation
  - an example table data row

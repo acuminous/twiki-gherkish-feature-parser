@@ -1,3 +1,3 @@
-I did not expect an example table data row at invalid-feature.js:13
+I did not expect an example table data row at test/features/invalid/example-table-without-separator-row.feature:13
 Instead, I expected one of:
  - an example table separator row

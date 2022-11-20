@@ -1,4 +1,4 @@
-I did not expect the start of an explicit docstring at invalid-feature.js:8
+I did not expect the start of an explicit docstring at test/features/invalid/feature-background-with-consecutive-explicit-docstrings.feature:8
 Instead, I expected one of:
  - a blank line
  - a block comment delimiter
