@@ -18,7 +18,8 @@ describe('DeclareRuleState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareRuleState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

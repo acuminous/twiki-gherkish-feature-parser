@@ -20,7 +20,8 @@ describe('BeginExplicitDocstringState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toBeginExplicitDocstringState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.DocstringTextEvent,

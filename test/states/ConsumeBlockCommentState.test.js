@@ -15,7 +15,8 @@ describe('ConsumeBlockCommentState', () => {
       .checkpoint()
       .toConsumeBlockCommentState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       expectedEvents: [
         Events.BlockCommentDelimiterEvent,
         Events.TextEvent,

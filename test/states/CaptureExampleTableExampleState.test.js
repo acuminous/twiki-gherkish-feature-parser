@@ -23,7 +23,8 @@ describe('CaptureExampleTableExample', () => {
       .checkpoint()
       .toCaptureExampleTableExampleState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

@@ -21,7 +21,8 @@ describe('EndFeatureBackgroundDocstringState', () => {
       .checkpoint()
       .toEndFeatureBackgroundDocstringState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

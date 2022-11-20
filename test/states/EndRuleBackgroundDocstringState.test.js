@@ -21,7 +21,8 @@ describe('EndRuleBackgroundDocstringState', () => {
       .checkpoint()
       .toEndRuleBackgroundDocstringState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

@@ -19,7 +19,8 @@ describe('CaptureScenarioStepState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toCaptureScenarioStepState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

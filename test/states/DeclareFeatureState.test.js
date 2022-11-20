@@ -17,7 +17,8 @@ describe('DeclareFeatureState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

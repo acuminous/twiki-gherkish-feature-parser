@@ -13,7 +13,8 @@ describe('InitialState', () => {
     const session = new StubSession();
     const machine = new StateMachine({ featureBuilder, session });
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

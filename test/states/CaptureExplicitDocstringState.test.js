@@ -21,7 +21,8 @@ describe('CaptureExplicitDocstringState', () => {
       .alias(States.EndFeatureBackgroundDocstringState)
       .toCaptureExplicitDocstringState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.ExplicitDocstringStopEvent,

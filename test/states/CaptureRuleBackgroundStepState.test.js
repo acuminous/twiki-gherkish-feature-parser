@@ -19,7 +19,8 @@ describe('CaptureRuleBackgroundStepState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toCaptureRuleBackgroundStepState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

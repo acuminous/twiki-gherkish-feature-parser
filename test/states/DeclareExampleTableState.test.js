@@ -20,7 +20,8 @@ describe('DeclareExampleTableState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareExampleTableState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.BlankLineEvent,

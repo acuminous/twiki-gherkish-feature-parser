@@ -23,7 +23,8 @@ describe('CaptureImplicitDocstringState', () => {
       .alias(States.EndFeatureBackgroundDocstringState)
       .toCaptureImplicitDocstringState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

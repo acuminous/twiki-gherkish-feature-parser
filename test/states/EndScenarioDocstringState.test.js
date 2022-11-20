@@ -21,7 +21,8 @@ describe('EndScenarioDocstringState', () => {
       .checkpoint()
       .toEndScenarioDocstringState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

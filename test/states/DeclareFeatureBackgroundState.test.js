@@ -18,7 +18,8 @@ describe('DeclareFeatureBackgroundState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareFeatureBackgroundState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

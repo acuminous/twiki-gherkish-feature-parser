@@ -21,7 +21,8 @@ describe('CaptureExampleTableHeadings', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toCaptureExampleTableHeadingsState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.ExampleTableSeparatorRowEvent,

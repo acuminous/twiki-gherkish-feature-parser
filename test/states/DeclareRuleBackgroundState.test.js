@@ -18,7 +18,8 @@ describe('DeclareRuleBackgroundState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareRuleBackgroundState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,

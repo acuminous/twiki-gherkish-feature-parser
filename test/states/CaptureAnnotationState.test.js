@@ -16,7 +16,8 @@ describe('CaptureAnnotationState', () => {
       .checkpoint()
       .toCaptureAnnotationState();
 
-    testBuilder.assign({ machine,
+    testBuilder.assign({
+      machine,
       featureBuilder,
       expectedEvents: [
         Events.AnnotationEvent,
