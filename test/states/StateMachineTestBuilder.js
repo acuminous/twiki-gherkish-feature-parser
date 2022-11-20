@@ -90,7 +90,7 @@ export default class StateMachineTestBuilder {
     it(`${this._printableLine(source)} should not create a checkpoint`, () => {
       const previousState = this.machine.state;
       this.machine.interpret(source);
-      ok(!this.machine.hasCheckpoint(previousState), 'Did not create a checkpoint');
+      ok(!this.machine.hasCheckpoint(previousState), 'Created an unexpected checkpoint');
     });
     return this;
   }
