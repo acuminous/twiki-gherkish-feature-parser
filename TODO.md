@@ -5,3 +5,4 @@
 1. Consistent handler order (single line / scenario)
 1. Remove feature handler from EndScenarioDocstringState
 1. Rename EndRuleBackgroundDocstringState => EndRuleBackgroundStepDocstringState
+1. Rename invalid-feature.js => real.feature
