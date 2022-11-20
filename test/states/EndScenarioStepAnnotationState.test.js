@@ -6,7 +6,7 @@ import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
-describe('EndScenarioStepDocstringState', () => {
+describe('EndScenarioStepAnnotationState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
     const featureBuilder = new FeatureBuilder()
@@ -19,7 +19,7 @@ describe('EndScenarioStepDocstringState', () => {
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()
       .checkpoint()
-      .toEndScenarioStepDocstringState();
+      .toEndScenarioStepAnnotationState();
 
     testBuilder.assign({
       machine,
@@ -28,8 +28,6 @@ describe('EndScenarioStepDocstringState', () => {
         Events.AnnotationEvent,
         Events.BlankLineEvent,
         Events.BlockCommentDelimiterEvent,
-        Events.EndEvent,
-        Events.ExampleTableEvent,
         Events.RuleEvent,
         Events.ScenarioEvent,
         Events.SingleLineCommentEvent,
@@ -39,10 +37,11 @@ describe('EndScenarioStepDocstringState', () => {
 
   testBuilder.interpreting('@foo=bar')
     .shouldNotCheckpoint()
-    .shouldUnwind()
-    .shouldDispatch(Events.AnnotationEvent, (context) => {
-      eq(context.data.name, 'foo');
-      eq(context.data.value, 'bar');
+    .shouldNotTransition()
+    .shouldStashAnnotation((annotations) => {
+      eq(annotations.length, 1);
+      eq(annotations[0].name, 'foo');
+      eq(annotations[0].value, 'bar');
     });
 
   testBuilder.interpreting('Background: A background')
@@ -54,17 +53,13 @@ describe('EndScenarioStepDocstringState', () => {
     .shouldDispatch(Events.BlankLineEvent);
 
   testBuilder.interpreting('Where:')
-    .shouldNotCheckpoint()
-    .shouldUnwind()
-    .shouldDispatch(Events.ExampleTableEvent);
+    .shouldBeUnexpected('an example table');
 
   testBuilder.interpreting('---')
     .shouldBeUnexpected('the start of an explicit docstring');
 
   testBuilder.interpreting('\u0000')
-    .shouldNotCheckpoint()
-    .shouldUnwind()
-    .shouldDispatch(Events.EndEvent);
+    .shouldBeUnexpected('the end of the feature');
 
   testBuilder.interpreting('Feature: A feature')
     .shouldBeUnexpected('a feature');
