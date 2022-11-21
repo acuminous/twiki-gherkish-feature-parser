@@ -2,7 +2,7 @@
   "name": "@twiki-bdd/gherkish-feature-parser",
   "version": "0.1.0",
   "description": "Twiki Gherkish feature parser",
-  "main": "index.js",
+  "main": "lib/index.js",
   "type": "module",
   "scripts": {
     "coverage": "NODE_OPTIONS='--experimental-loader @istanbuljs/esm-loader-hook' nyc --report html --reporter lcov --reporter text-summary npm test",
