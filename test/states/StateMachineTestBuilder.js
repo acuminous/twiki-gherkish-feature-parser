@@ -1,5 +1,6 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws, ok } from 'node:assert';
 import zunit from 'zunit';
+import { UnexpectedEventError } from '../../lib/Errors.js';
 import { utils } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -43,6 +44,7 @@ export default class StateMachineTestBuilder {
     const source = this._source;
     it(`${this._printableLine(source)} should be unexpected`, () => {
       throws(() => this.machine.interpret(source), (err) => {
+        eq(err.code, UnexpectedEventError.code);
         const eventList = this.expectedEvents.map((EventClass) => ` - ${EventClass.description}\n`).sort((a, b) => a.localeCompare(b)).join('');
         eq(err.message, `I did not expect ${what} at index.js:1\nInstead, I expected one of:\n${eventList}`);
         return true;
