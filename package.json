@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "coverage": "NODE_OPTIONS='--experimental-loader @istanbuljs/esm-loader-hook' nyc --report html --reporter lcov --reporter text-summary npm test",
+    "examples": "node examples/simple && node examples/languages",
     "test": "zUnit",
     "lint": "eslint .",
     "prepare": "husky install"
