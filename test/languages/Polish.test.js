@@ -14,6 +14,6 @@ describe('Polish', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Polish.translate('missing'), { message: 'Polish is missing a translation for the "missing" keyword - Please submit a pull request to https://github.com/acuminous/twiki-gherkish-feature-parser' });
+    throws(() => Polish.translate('missing'), { message: 'Polish is missing a translation for the "missing" keyword - Please submit a pull request at https://github.com/acuminous/twiki-gherkish-feature-parser/pulls' });
   });
 });
