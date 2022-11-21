@@ -23,7 +23,8 @@
     "behat",
     "specflow",
     "jbehave",
-    "alternative"
+    "alternative",
+    "typescript"
   ],
   "author": "Stephen Cresswell",
   "license": "ISC",
