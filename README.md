@@ -15,8 +15,7 @@ import * as fs from "node:fs";
 
 const featureFilePath = "./buck-rogers-season-one.feature";
 const featureFile = fs.readFileSync(featureFilePath, "utf-8");
-const options = {};
-const parser = new FeatureParser(options);
+const parser = new FeatureParser();
 const metadata = {
   source: {
     uri: featureFilePath,
@@ -31,13 +30,18 @@ const feature = parser.parse(featureFile, metadata);
 npm install @twiki-bdd/gherkish-feature-parser
 ```
 
-## Parser Options
+## Feature Parser Options
 
 | Option   | Notes                                |
 | -------- | ------------------------------------ |
 | language | A language from the Languages module |
 
-## Supported Languages
+```js
+import { FeatureParser, Languages } from "@twiki-bdd/gherkish-feature-parser";
+const parser = new FeatureParser({ language: Languages.中国人 });
+```
+
+### Supported Languages
 
 - Chinese / 中国人
 - Dutch / Nederlands
