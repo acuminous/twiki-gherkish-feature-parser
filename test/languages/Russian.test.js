@@ -1,6 +1,7 @@
 import zunit from 'zunit';
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import { Languages } from '../../lib/index.js';
+import { MissingTranslationPullRequest } from '../../lib/Errors.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 const { Russian } = Languages;
@@ -14,6 +15,10 @@ describe('Russian', () => {
   });
 
   it('should report missing translations', () => {
-    throws(() => Russian.translate('missing'), { message: 'Russian is missing a translation for the "missing" keyword - Please submit a pull request at https://github.com/acuminous/twiki-gherkish-feature-parser/pulls' });
+    throws(() => Russian.translate('missing'), (err) => {
+      eq(err.code, MissingTranslationPullRequest.code);
+      eq(err.message, 'Russian is missing a translation for the "missing" keyword - Please submit a pull request via https://github.com/acuminous/twiki-gherkish-feature-parser/pulls');
+      return true;
+    });
   });
 });
