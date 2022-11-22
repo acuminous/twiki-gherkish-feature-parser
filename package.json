@@ -37,7 +37,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "nyc": "^15.1.0",
-    "zunit": "^4.0.1"
+    "zunit": "^4.0.2"
   },
   "lint-staged": {
     "**/*.js": "eslint --fix"
