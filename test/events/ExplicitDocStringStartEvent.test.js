@@ -26,7 +26,7 @@ describe('ExplicitDocstringStartEvent', () => {
   });
 
   it('should not recognise delimiter docstrings when already handling an implicit docstring', () => {
-    const session = new Session({ docstring: {} });
+    const session = new Session().beginImplicitDocstring(1);
     const event = new ExplicitDocstringStartEvent();
 
     eq(event.test(new Source({ line: '---' }), session), false);
@@ -34,14 +34,14 @@ describe('ExplicitDocstringStartEvent', () => {
   });
 
   it('should not recognise explicit docstrings when already handling a matching explicit docstring', () => {
-    const session = new Session({ docstring: { delimiter: '---' } });
+    const session = new Session().beginExplicitDocstring('---');
     const event = new ExplicitDocstringStartEvent();
 
     eq(event.test(new Source({ line: '---' }), session), false);
   });
 
   it('should not recognise explicit docstrings when already handling an alternative explicit docstring', () => {
-    const session = new Session({ docstring: { delimiter: '---' } });
+    const session = new Session().beginExplicitDocstring('---');
     const event = new ExplicitDocstringStartEvent();
 
     eq(event.test(new Source({ line: '"""' }), session), false);

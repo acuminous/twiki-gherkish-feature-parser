@@ -8,7 +8,7 @@ const { ExplicitDocstringStopEvent } = Events;
 describe('ExplicitDocstringStopEvent', () => {
 
   it('should test explicit --- docstrings', () => {
-    const session = new Session({ docstring: { delimiter: '---' } });
+    const session = new Session().beginExplicitDocstring('---');
     const event = new ExplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: '---' }), session), true);
@@ -23,7 +23,7 @@ describe('ExplicitDocstringStopEvent', () => {
   });
 
   it('should test explicit """ docstrings', () => {
-    const session = new Session({ docstring: { delimiter: '"""' } });
+    const session = new Session().beginExplicitDocstring('"""');
     const event = new ExplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: '"""' }), session), true);
@@ -38,7 +38,7 @@ describe('ExplicitDocstringStopEvent', () => {
   });
 
   it('should interpret explicit --- docstrings', () => {
-    const session = new Session({ docstring: { delimiter: '---' } });
+    const session = new Session().beginExplicitDocstring('---');
     const event = new ExplicitDocstringStopEvent();
 
     eq(event.interpret(new Source({ line: '---' }), session), undefined);

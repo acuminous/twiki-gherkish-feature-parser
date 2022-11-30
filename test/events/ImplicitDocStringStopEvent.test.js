@@ -8,28 +8,28 @@ const { ImplicitDocstringStopEvent } = Events;
 describe('ImplicitDocstringStopEvent', () => {
 
   it('should recognise flat text', () => {
-    const session = new Session({ docstring: { indentation: 3 } });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: 'some text', indentation: 0 }), session), true);
   });
 
   it('should recognise end of feature', () => {
-    const session = new Session({ docstring: { indentation: 3 } });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: '\u0000' }), session), true);
   });
 
   it('should recognise a completely blank line', () => {
-    const session = new Session({ docstring: { indentation: 3 } });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: '', indentation: 0 }), session), true);
   });
 
   it('should not recognise indented text', () => {
-    const session = new Session({ docstring: { indentation: 3 } });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: '   some text', indentation: 3 }), session), false);
@@ -43,14 +43,14 @@ describe('ImplicitDocstringStopEvent', () => {
   });
 
   it('should not recognise indented text when not processing an explicit docstring', () => {
-    const session = new Session({ docstring: { delimiter: '---' } });
+    const session = new Session().beginExplicitDocstring('---');
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.test(new Source({ line: '   some text', indentation: 3 }), session), false);
   });
 
   it('should interpret flat text', () => {
-    const session = new Session({ docstring: { indentation: 3 } });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new ImplicitDocstringStopEvent();
 
     eq(event.interpret(new Source({ line: 'some text', indentation: 0 }), session), undefined);

@@ -8,21 +8,21 @@ const { DocstringTextEvent } = Events;
 describe('DocstringTextEvent', () => {
 
   it('should test docstrings', () => {
-    const session = new Session({ docstring: {} });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new DocstringTextEvent();
 
-    eq(event.test(new Source({ line: 'some text' }), session), true);
-    eq(event.test(new Source({ line: ' some text ' }), session), true);
+    eq(event.test(new Source({ line: '   some text' }), session), true);
+    eq(event.test(new Source({ line: '    some text ' }), session), true);
 
     session.endDocstring();
     eq(event.test(new Source({ line: ' some text ' }), session), false);
   });
 
   it('should interpret docstrings', () => {
-    const session = new Session({ docstring: {} });
+    const session = new Session().beginImplicitDocstring(3);
     const event = new DocstringTextEvent();
 
-    deq(event.interpret(new Source({ line: 'some text' }), session), { text: 'some text' });
-    deq(event.interpret(new Source({ line: ' some text ' }), session), { text: ' some text ' });
+    deq(event.interpret(new Source({ line: '   some text' }), session), { text: 'some text' });
+    deq(event.interpret(new Source({ line: '    some text ' }), session), { text: ' some text ' });
   });
 });
