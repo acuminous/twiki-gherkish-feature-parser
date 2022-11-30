@@ -1,6 +1,6 @@
 {
   "name": "@twiki-bdd/gherkish-feature-parser",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Twiki Gherkish feature parser",
   "main": "index.js",
   "types": "index.d.ts",
