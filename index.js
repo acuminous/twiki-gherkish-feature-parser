@@ -1,4 +1,4 @@
-import { FeatureParser, Language, Languages, Errors } from './lib/index.js';
+import { Errors, FeatureParser, Language, Languages } from './lib/index.js';
 
 export {
   Errors,
