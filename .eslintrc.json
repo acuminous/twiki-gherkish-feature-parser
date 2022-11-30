@@ -10,6 +10,7 @@
     "class-methods-use-this": 0,
     "import/extensions": 0,
     "prefer-destructuring": 0,
+    "lines-between-class-members": 0,
     "max-len": 0,
     "no-control-regex": 0,
     "no-param-reassign": ["error", { "ignorePropertyModificationsFor": ["session"] }],
