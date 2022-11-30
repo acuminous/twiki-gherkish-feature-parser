@@ -55,7 +55,7 @@ declare class TwikiError extends Error {
 
 export namespace Errors {
   export class UnexpectedEventError extends TwikiError {
-    public static code: string;
+    static code: string;
   }
 
   export class MissingEventHandlerBug extends TwikiError {
@@ -67,11 +67,11 @@ export namespace Errors {
   }
 
   export class UnexpectedNumberOfExamplesError extends TwikiError {
-    public static code: string;
+    static code: string;
   }
 
   export class MissingCheckpointBug extends TwikiError {
-    public static code: string;
+    static code: string;
   }
 
   export class MissingHandlerBug extends TwikiError {
