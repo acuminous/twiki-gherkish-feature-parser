@@ -1,5 +1,5 @@
 import zunit from 'zunit';
-import { strictEqual as eq, deepStrictEqual as deq } from 'node:assert';
+import { strictEqual as eq, deepStrictEqual as deq, ok } from 'node:assert';
 import { Events, Session, Source } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -40,6 +40,6 @@ describe('ImplicitDocstringStartEvent', () => {
     const event = new ImplicitDocstringStartEvent();
 
     deq(event.interpret(new Source({ line: ' some text', indentation: 1 }), session), { text: 'some text' });
-    eq(session.docstring.indentation, 1);
+    ok(session.isProcessingImplicitDocstring());
   });
 });
