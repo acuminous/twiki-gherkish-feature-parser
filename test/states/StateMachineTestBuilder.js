@@ -66,7 +66,7 @@ export default class StateMachineTestBuilder {
     const source = this._source;
     it(`${this._printableLine(source)} should stash an annotation`, () => {
       this.machine.interpret(source);
-      expectations(this.featureBuilder._annotations);
+      expectations(this.featureBuilder.stashedAnnotations);
     });
     return this;
   }
