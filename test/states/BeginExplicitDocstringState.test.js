@@ -1,7 +1,6 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
-import StubSession from '../stubs/StubSession.js';
+import { FeatureBuilder, StateMachine, States, Events, Session } from '../../lib/index.js';
 import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -14,7 +13,7 @@ describe('BeginExplicitDocstringState', () => {
       .createBackground({ title: 'Meh' })
       .createStep({ text: 'Meh' });
 
-    const session = new StubSession()
+    const session = new Session()
       .beginExplicitDocstring('---', 0);
 
     const machine = new StateMachine({ featureBuilder, session })

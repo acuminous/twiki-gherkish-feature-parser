@@ -1,7 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { StateMachine, FeatureBuilder, Events, States } from '../../lib/index.js';
-import StubSession from '../stubs/StubSession.js';
+import { StateMachine, FeatureBuilder, Events, States, Session } from '../../lib/index.js';
+
 import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -15,7 +15,7 @@ describe('ConsumeExampleTableSeparatorRowState', () => {
       .createStep({ text: 'First step' })
       .createExampleTable({ headings: ['a', 'b', 'c'] });
 
-    const session = new StubSession()
+    const session = new Session()
       .countExampleHeadings(['a', 'b', 'c']);
 
     const machine = new StateMachine({ session, featureBuilder })

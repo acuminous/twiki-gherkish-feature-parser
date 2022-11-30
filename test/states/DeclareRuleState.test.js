@@ -1,7 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, States, Events } from '../../lib/index.js';
-import StubSession from '../stubs/StubSession.js';
+import { FeatureBuilder, StateMachine, States, Events, Session } from '../../lib/index.js';
+
 import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -13,7 +13,7 @@ describe('DeclareRuleState', () => {
       .createFeature({ title: 'Meh' })
       .createRule({ title: 'Meh' });
 
-    const session = new StubSession();
+    const session = new Session();
 
     const machine = new StateMachine({ featureBuilder, session })
       .toDeclareRuleState();

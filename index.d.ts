@@ -1,6 +1,6 @@
 export class FeatureParser {
   constructor(options?: FeatureParserOptionsType);
-  parse(document: string, metadata:FeatureParserMetadataType ): any;
+  parse(document: string, metadata?:FeatureParserMetadataType ): any;
 }
 
 export type FeatureParserOptionsType = {
@@ -8,8 +8,8 @@ export type FeatureParserOptionsType = {
 }
 
 export type FeatureParserMetadataType = {
-  source: {
-    uri: string;
+  source?: {
+    uri?: string;
   }
 }
 

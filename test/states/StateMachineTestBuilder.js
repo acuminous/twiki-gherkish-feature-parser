@@ -1,7 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws, ok } from 'node:assert';
 import zunit from 'zunit';
 import { UnexpectedEventError } from '../../lib/Errors.js';
-import { utils } from '../../lib/index.js';
+import { Source } from '../../lib/index.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
 
@@ -16,8 +16,8 @@ export default class StateMachineTestBuilder {
     Object.assign(this, props);
   }
 
-  interpreting(line, number = 1, indentation = utils.getIndentation(line)) {
-    this._source = { line, number, indentation };
+  interpreting(line) {
+    this._source = new Source({ line, lineNumber: 1, uri: 'buck-rogers.feature' });
     return this;
   }
 
@@ -46,7 +46,7 @@ export default class StateMachineTestBuilder {
       throws(() => this.machine.interpret(source), (err) => {
         if (err.code !== UnexpectedEventError.code) throw err;
         const eventList = this.expectedEvents.map((EventClass) => ` - ${EventClass.description}\n`).sort((a, b) => a.localeCompare(b)).join('');
-        eq(err.message, `I did not expect ${what} at index.js:1\nInstead, I expected one of:\n${eventList}`);
+        eq(err.message, `I did not expect ${what} at buck-rogers.feature:1\nInstead, I expected one of:\n${eventList}`);
         return true;
       });
     });

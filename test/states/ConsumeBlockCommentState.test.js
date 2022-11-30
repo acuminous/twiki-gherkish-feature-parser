@@ -1,7 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { StateMachine, Events } from '../../lib/index.js';
-import StubSession from '../stubs/StubSession.js';
+import { StateMachine, Events, Session } from '../../lib/index.js';
+
 import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -9,7 +9,7 @@ const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after,
 describe('ConsumeBlockCommentState', () => {
 
   const testBuilder = new StateMachineTestBuilder().beforeEach(() => {
-    const session = new StubSession();
+    const session = new Session();
     const machine = new StateMachine({ session })
       .toStubState()
       .checkpoint()

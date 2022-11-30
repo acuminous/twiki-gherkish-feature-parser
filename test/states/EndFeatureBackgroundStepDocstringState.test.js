@@ -1,7 +1,7 @@
 import { strictEqual as eq, deepStrictEqual as deq, throws } from 'node:assert';
 import zunit from 'zunit';
-import { FeatureBuilder, StateMachine, Events } from '../../lib/index.js';
-import StubSession from '../stubs/StubSession.js';
+import { FeatureBuilder, StateMachine, Events, Session } from '../../lib/index.js';
+
 import StateMachineTestBuilder from './StateMachineTestBuilder.js';
 
 const { describe, it, xdescribe, xit, odescribe, oit, before, beforeEach, after, afterEach } = zunit;
@@ -14,7 +14,7 @@ describe('EndFeatureBackgroundStepDocstringState', () => {
       .createBackground({ title: 'Meh' })
       .createStep({ text: 'First step' });
 
-    const session = new StubSession();
+    const session = new Session();
 
     const machine = new StateMachine({ featureBuilder, session })
       .toStubState()
